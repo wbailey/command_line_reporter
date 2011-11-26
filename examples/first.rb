@@ -4,33 +4,47 @@ class Example
   include CommandLineReporter
 
   def initialize
-    self.clr_complete_string = 'done'
+    self.formatter = 'progress'
   end
 
   def run
-    x,y,z = 0,0,0
+    x = 0
 
-    report(:message => 'calculating first expression') do
-      x = 2 + 2
-      sleep 1
+    report do
+      10.times do
+        x += 1
+        formatter.progress
 
-      2.times do
-        report(:message => 'calculating second expression') do
-          y = 10 - x
-          sleep 1
-
-          10.times do |i|
-            report(:message => 'pixelizing', :type => 'inline', :complete => "#{i*10}%") do
-              z = x + y
-              sleep 1
-            end
-          end
+        10.times do
+          x += 1
+          formatter.progress
         end
       end
     end
 
-    puts '-' * 20
-    %w(x y z).each {|v| puts "#{v}: #{eval v}"}
+    y = 0
+
+    report do
+      10.times do
+        y += 1
+        sleep 1
+        formatter.progress("#{y*10+10}%")
+      end
+    end
+
+    report do
+      3.times do
+        formatter.progress("\\")
+        sleep 1
+        formatter.progress("/")
+        sleep 1
+        formatter.progress("-")
+        sleep 1
+      end
+    end
+
+    puts "x: #{x}"
+    puts "y: #{y}"
   end
 end
 
