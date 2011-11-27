@@ -1,4 +1,0 @@
-=== 4.4.6 / 2010-12-01
-
-* This release deprecates/retires this gem and brings autotest back
-  under ZenTest.
