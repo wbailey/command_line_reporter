@@ -1,0 +1,105 @@
+== 0.2.9 2010-12-09
+
+* 1 minor improvement
+  * Remove -w flag but allow custom options
+
+== 0.2.8 2010-12-02
+
+* 2 minor improvements
+  * Update README due to autotest naming disagreement
+  * Switch from Jeweler to Bundler for development
+
+== 0.2.7 2010-10-29
+
+* 1 minor improvement
+  * Fix image path for cygwin (Patrick Aikens)
+
+== 0.2.6 2010-09-24
+
+* 1 minor improvement
+  * Accept cygwin as host_os
+
+== 0.2.5 2010-09-02
+
+* 2 minor improvements
+  * Remove dependency on autotest
+  * Loosen dependency on rspec
+
+== 0.2.4 2010-04-28
+
+* 1 minor improvement
+  * Add support for sticky error notifications (Ben Ritcey)
+  
+== 0.2.3 2010-03-03
+
+* 1 minor improvement
+  * Move the Result class into the Autotest namespace
+
+== 0.2.2 2010-02-27
+
+* 1 minor improvement
+  * Add important note about autotest and Rails to README
+
+== 0.2.1 2010-02-18
+
+* 1 minor improvement
+  * Better detection of the Windows platform (Charles Roper)
+
+== 0.2.0 2010-02-03
+
+* 3 major improvements
+  * Change dependency from "ZenTest" to lightweight "autotest"
+  * Add support for more platforms (Martin Vielsmaier)
+  * Add support for bundled icon sets
+* 2 minor improvements
+  * Update README for development to reflect changes on Github
+  * New icon set "ampelmaennchen"
+
+== 0.1.7 2009-10-09
+
+* 2 minor improvements
+  * Configurable location for custom icons (J. Edward Dewyea)
+  * Update README
+
+== 0.1.6 2009-08-12
+
+* 2 minor improvements
+  * Reset the postinstall text color to previous (Konstantin Haase)
+  * Ruby 1.9 compatibility
+
+== 0.1.5 2009-07-27
+
+* 1 major improvement
+  * More reliable growlnotify call
+
+== 0.1.4 2009-07-23
+
+* 1 major improvement
+  * Support for Windows (Karl O'Keeffe)
+
+== 0.1.3 2009-07-22
+
+* 1 major improvement
+  * Better result analysis and more readable notifications
+* 3 minor improvement
+  * Move Cucumber notification to :ran_features hook (Karl O'Keeffe)
+  * Add one_notification_per_run configuration option
+  * Notification for undefined Cucumber scenarios/steps
+
+== 0.1.2 2009-06-12
+
+* 3 major improvements
+  * Add priorities to notifications (Michael Moen)
+  * Add clear_terminal configuration option (Michael Moen)
+  * Add show_modified_files configuration option (Graham Savage)
+
+== 0.1.1 2009-06-02
+
+* 1 major improvement
+  * Suppress Cucumber notification if not used
+
+== 0.1.0 2009-05-28
+
+* Initial release
+  * Growl notifications for Test::Unit, RSpec and Cucumber (workaround)
+  * Formerly part of autotest-mac which is now deprecated

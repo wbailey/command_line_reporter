@@ -1,0 +1,76 @@
+#!/usr/bin/env ruby -w
+
+require 'multiruby'
+
+root_dir = Multiruby.root_dir
+
+def setenv dir
+  bin  = "#{dir}/bin"
+  gem  = Dir["#{dir}/lib/ruby/gems/*"].first
+
+  ENV['PATH'] = bin + File::PATH_SEPARATOR + ENV['PATH']
+  ENV['GEM_HOME'] = gem
+  ENV['GEM_PATH'] = gem
+end
+
+##
+# multiruby -1 1.8.7 ruby_args...
+
+if ARGV.first == "-1" then
+  ARGV.shift
+  vers = Dir["#{root_dir}/install/#{ARGV.shift}*"]
+
+  abort "ambiguous version: #{vers.map { |p| File.basename p }.inspect}" if
+    vers.size != 1
+
+  dir = vers.first
+  setenv dir
+
+  exec "#{dir}/bin/ruby", *ARGV
+end
+
+versions = Multiruby.build_and_install
+versions = ENV['VERSIONS'].split(/:/) if ENV.has_key? 'VERSIONS'
+
+if ENV.has_key? 'EXCLUDED_VERSIONS' then
+  excludes = Regexp.union(*ENV['EXCLUDED_VERSIONS'].split(/:/))
+  versions = versions.delete_if { |v| v =~ excludes }
+end
+
+# safekeep original PATH
+original_path = ENV['PATH']
+
+results = {}
+versions.each do |version|
+  dir  = "#{root_dir}/install/#{version}"
+  ruby = "#{dir}/bin/ruby"
+
+  ruby.sub!(/bin.ruby/, 'bin/rbx') if version =~ /rubinius/
+
+  puts
+  puts "VERSION = #{version}"
+  cmd = [ruby, ARGV].flatten.map { |s| s =~ /\"/ ? "'#{s}'" : s }.join(' ')
+  cmd.sub!(/#{ENV['HOME']}/, '~')
+  puts "CMD     = #{cmd}"
+  puts
+
+  setenv dir
+
+  system ruby, *ARGV
+  puts
+  puts "RESULT = #{$?}"
+  results[version] = $?
+
+  # restore the path to original state
+  ENV['PATH'] = original_path
+end
+
+passed, failed = results.keys.partition { |v| results[v] == 0 }
+
+puts
+puts "TOTAL RESULT = #{failed.size} failures out of #{results.size}"
+puts
+puts "Passed: #{passed.join(", ")}"
+puts "Failed: #{failed.join(", ")}"
+
+exit failed.size

@@ -1,0 +1,23 @@
+#!/usr/local/bin/ruby -swI .
+
+require 'zentest'
+
+$TESTING = true # for ZenWeb and any other testing infrastructure code
+
+if defined? $v then
+  puts "#{File.basename $0} v#{ZenTest::VERSION}"
+  exit 0
+end
+
+if defined? $h then
+  ZenTest.usage_with_exit
+end
+
+code = ZenTest.fix(*ARGV)
+if defined? $e then
+  require 'test/unit'
+  eval code
+else
+  print code
+end
+

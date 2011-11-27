@@ -1,0 +1,251 @@
+= Autotest Growl
+
+* Author: Sven Schwyn (http://www.bitcetera.com)
+* Homepage: http://www.bitcetera.com/products/autotest-growl
+* Issues and forum: https://forge.bitcetera.com/projects/show/autotest-growl
+
+== DESCRIPTION:
+
+This gem aims to improve support for Growl notifications by autotest. It
+comes  with a nice and colorful icon sets and supports several testing
+frameworks on different platforms.
+
+Furthermore the terminal running autotest is cleared on every cycle (unless
+configured otherwise). Don't worry though, it's still possible to scroll up
+to see the output of previous cycles - at least when using the Terminal.app
+bundled with Mac OS X.
+
+== REQUIREMENTS:
+
+* any ZenTest compatible test suite
+* Growl >= 1.1.5 on Mac OS X   --OR--
+* Growl for Windows >= 2.0b18 on Windows   --OR--
+* libnotify >= 0.4.5 on Linux
+
+== INSTALL:
+
+First of all, you have to decide whether you want to use the comprehensive
+ZenTest gem or the lightweight autotest-standalone gem and install either 
+of them. (See "Autotest" below for more on this.)
+
+  sudo gem install ZenTest   --OR--
+  sudo gem install autotest-standalone
+
+Now install this gem:
+
+  sudo gem install autotest-growl
+
+Then add the following line to your ~/.autotest file:
+
+  require 'autotest/growl'
+
+Growl must be installed on your computer. You can download it from:
+
+Mac OS X: http://growl.info
+Windows:  http://growlforwindows.com
+
+On Linux you can use libnotify instead, however, some of the features 
+won't work. The binary notify-send must be in your PATH:
+
+Linux:    http://www.galago-project.org
+
+If you like this gem, please consider to recommend me on Working with
+Rails, thank you!
+
+http://workingwithrails.com/recommendation/new/person/11706-sven-schwyn
+
+== AUTOTEST:
+
+You can use any ZenTest-compatible test suite with this gem, which basically
+boils down to either of the following two sets of gems.
+
+Comprehensive test suite by Ryan Davis:
+* ZenTest
+* autotest-rails (for Ruby on Rails compatibility)
+
+Lightweight test suite by Michael Grosser:
+* autotest-standalone
+* autotest-rails-pure (for Ruby on Rails compatibility)
+* zentest-without-autotest (for full ZenTest compatibility)
+
+Note: Due to a naming disagreement, starting from version 4.4.6 the autotest
+gem is no longer a lightweight fork but only an empty gem which requires 
+ZenTest. Switch to the autotest-standalone gem if you want to stick with the
+lightweight approach.
+
+== CONFIGURATION:
+
+=== Priorities
+
+The priority of a notification is set according to the actual result so you
+can  configure Growl to style the notifications differently based on these
+priorities:
+
+* 2 for error or failed
+* 0 for info
+* -1 for pending, undefined or unknown
+* -2 for passed
+
+=== Icons
+
+Two icon sets are bundled with this gem:
+
+* ruby (default): The original Ruby logo dressed in traffic light colors.
+* ampelmaennchen: The famous traffic light man from the now extinct GDR.
+
+To choose an icon set, add the following to your ~/.autotest:
+
+  Autotest::Growl::image_dir = 'ampelmaennchen'
+
+Using your own icon set is pretty simple. Images should be named as
+follows: passed.png, pending.png, failed.png, error.png and info.png.
+
+Place these images in a directory of your choosing and specify its
+location in your ~/.autotest, example:
+
+  Autotest::Growl::image_dir = File.join(ENV['HOME'], '.autotest-growl')
+
+=== Don't Clear the Terminal
+
+Add the following to your ~/.autotest if you don't want the terminal to
+be cleared before running a test:
+
+  Autotest::Growl::clear_terminal = false
+
+=== Hide the Label
+
+If you prefer the Growl notifications not to show labels such as "LABEL:
+All tests have passed", add the following to your ~/.autotest:
+
+  Autotest::Growl::hide_label = true
+
+=== One Notification per Run
+
+Allow only one test and one feature notification per run by adding the
+following to your ~/.autotest:
+
+  Autotest::Growl::one_notification_per_run = true
+
+=== Make Failure and Error Notifications Sticky
+
+If you don't want to miss any failure or error notifications while you 
+get a cup of coffee, make them stay on your display until you explicitly
+click them away. Simply add the following to your ~/.autotest:
+
+  Autotest::Growl::sticky_failure_notifications = true
+
+=== Custom Options
+
+You can pass any custom option to the Growl binary. For instance to 
+set a non-standard port for remote notifications, add the following to
+your ~/.autotest:
+
+  Autotest::Growl::custom_options = '--port 54321'
+
+=== Show Modified Files
+
+Add the following to your ~/.autotest if you would like to receive a Growl
+notification listing the files modified before tests are re-run.
+
+  Autotest::Growl::show_modified_files = true
+
+== TROUBLESHOOTING:
+
+=== Autotest Binary Not Present
+
+Make sure you have either the ZenTest gem or the autotest-standalone gem
+installed. This dependency has been dropped as of autotest-growl-0.2.5 in
+order to allow any compatible test suite.
+
+=== Unreliable Growl Notifications on Mac OS X
+
+Under some circumstances, Growl notifications seem to be swallowed randomly
+on Mac OS X. If this happens to you, try the following.
+
+Add this to your ~/.autotest:
+
+  Autotest::Growl::remote_notification = true
+  
+Now open "System Preferences -> Growl -> Network" and set the checkboxes
+"Listen for incoming notifications" and "Allow remote application 
+registration”. Try whether remote notifications work with the following
+test:
+
+  find /Library/Ruby /usr -name growlnotify -exec {} -H localhost -n autotest -m ok \;
+  
+If you get a NSPortTimeoutException, you should restart Growl and check
+whether a firewall is blocking the connection. Once the notification is 
+displayed, go back to the System Preferences and disable the checkbox
+"Allow remote application registration" again.
+
+=== Duplicate Notifications
+
+Some people reported problems with duplicate notifications on some versions
+of Mac OS X 10.5. If you experience this oddity, add the following to your
+~/.autotest:
+
+  Autotest::Growl::custom_options = '-w'
+
+=== No Notifications on Mac OS X 10.5
+
+If you are still on Leopard and notifications don't work for you, get your
+hands dirty and remove the "-n Autotest" argument from growl.rb. Make sure
+you submit a bug or comment on a related and existing bug, too. 
+
+== DEVELOPMENT:
+
+You can install the bleeding edge version as follows:
+
+  git clone git://github.com/svoop/autotest-growl.git
+  cd autotest-growl
+  bundle install
+  rake build
+  rake install
+
+Please submit issues on:
+
+https://forge.bitcetera.com/projects/show/autotest-growl
+
+To contribute code, fork the project on Github, add your code and submit a
+pull request:
+
+http://github.com/guides/fork-a-project-and-submit-your-modifications
+
+== CONTRIBUTIONS:
+
+Thanks to the following folks who have contributed to this project:
+
+* Michael Moen
+* Graham Savage
+* Karl O'Keeffe
+* Konstantin Haase
+* J. Edward Dewyea
+* Martin Vielsmaier
+* Charles Roper
+* Ben Ritcey
+* Patrick Aikens
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2010 Sven Schwyn
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
