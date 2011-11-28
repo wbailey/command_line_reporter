@@ -50,7 +50,7 @@ class Example
   include CommandLineReporter
 
   def initialize
-    formatter = 'progress'
+    self.formatter = 'progress'
   end
 
   def run
