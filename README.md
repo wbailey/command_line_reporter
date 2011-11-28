@@ -190,12 +190,7 @@ The following are the allowed values of the options hash argument to the _report
 
 ### To Do
 
-1. Add the progress level to the top level mixin so that there is no need to address by the
+1. Add the progress method to the top level mixin so that there is no need to invoke through the
    formatter.
 2. Add a _preface_ and _epilogue_ methods so that beginning and ending aspects of the report may be
    added without using _puts_ and _print_.
-
-### Contributions
-
-Wes Bailey ([Exposing Gotchas](http://exposinggotchas.blogspot.com/ "Exposing Gotchas"))
-
