@@ -36,12 +36,11 @@ class Example
   include CommandLineReporter
 
   def initialize
-    self.formatter = 'progress'
+    formatter = 'progress'
   end
 
   def run
     x = 0
-
     report do
       10.times do
         x += 1
@@ -54,19 +53,79 @@ end
 Example.new.run
 ```
 
-This simply produces 10 dots (.) in succession
+This simply produces 10 dots (.) in succession:
 
-```ruby
-[~/scratch]$ be ruby example.rb
+```bash
+[~/scratch]$ ruby example.rb
 ..........
 ```
 
-### Formatters
+This certainly can be accomplished quite easily with _print_ and _puts_ but the declaritive nature
+of the syntax clearly indicates the intention.
 
-1. Progress
-1. Nested
+A more complex example is using the nested formatter:
 
-### Progress Formatter
+```ruby
+require 'command_line_reporter'
 
-Using this formatter is very easy and the output is the plain old dot.  For a detailed example of
-the usage check out the examples directory
+class Example
+  include CommandLineReporter
+
+  def initialize
+    self.formatter = 'nested'
+  end
+
+  def run
+    x,y,z = 0,0,0
+
+    report(:message => 'calculating first expression') do
+      x = 2 + 2
+      2.times do
+        report(:message => 'calculating second expression') do
+          y = 10 - x
+          10.times do |i|
+            report(:message => 'pixelizing', :type => 'inline', :complete => "#{i*10+10}%") do
+              z = x + y
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+Example.new.run
+
+```
+
+This produces the more complex output:
+
+```bash
+[~/scratch]$ ruby example.rb
+calculating first expression
+  calculating second expression
+    pixelizing...10%
+    pixelizing...20%
+    pixelizing...30%
+    pixelizing...40%
+    pixelizing...50%
+    pixelizing...60%
+    pixelizing...70%
+    pixelizing...80%
+    pixelizing...90%
+    pixelizing...100%
+  complete
+  calculating second expression
+    pixelizing...10%
+    pixelizing...20%
+    pixelizing...30%
+    pixelizing...40%
+    pixelizing...50%
+    pixelizing...60%
+    pixelizing...70%
+    pixelizing...80%
+    pixelizing...90%
+    pixelizing...100%
+  complete
+complete
+```
