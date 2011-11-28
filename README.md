@@ -34,8 +34,8 @@ There are several methods the mixin provides that do not depend on the formatter
   * Simple string indicating the formatter you want your application to use.  At present the 2
     formatters are:
 
-  1. Progress - indicated by the string '_progress_'
-  1. Nested - indicated by the string '_nested_'
+    1. Progress - indicated by the string '_progress_'
+    1. Nested - indicated by the string '_nested_'
 
    The default is _nested_
 
