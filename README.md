@@ -31,8 +31,13 @@ There are several methods the mixin provides that do not depend on the formatter
     reporter.  Any ruby code is allowed.  See the examples that follow in the formatter sections for
     details.
 1. _formatter=(string)_
-  * Simple string indicating the formatter you want your application to use.  The default is
-    _nested_
+  * Simple string indicating the formatter you want your application to use.  At present the 2
+    formatters are:
+
+  1. Progress - indicated by the string '_progress_'
+  1. Nested - indicated by the string '_nested_'
+
+   The default is _nested_
 
 ### Progress Formatter
 
