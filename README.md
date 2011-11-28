@@ -176,7 +176,14 @@ complete
 
 The following are the allowed values of the options hash argument to the _report_ method:
 
-* _message_     - The string that is displayed as the first part of the message to the user
-* _complete_    - The string that completes the message to the user
-* _type_        - Define as 'inline' if you want the message and complete strings on the same line
+* _message_ - The string that is displayed as the first part of the message to the user
+* _complete_ - The string that completes the message to the user
+* _type_ - Define as 'inline' if you want the message and complete strings on the same line
 * _indent_size_ - The number of spaces to indent the current level
+
+### To Do
+
+1. Add the progress level to the top level mixin so that there is no need to address by the
+   formatter.
+2. Add a _preface_ and _epilogue_ methods so that beginning and ending aspects of the report may be
+   added without using _puts_ and _print_.
