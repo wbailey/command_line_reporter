@@ -30,9 +30,7 @@ describe CommandLineReporter do
 
   describe '#report' do
     it 'uses the nested formatter as default' do
-      subject.report do
-        # nothing
-      end
+      subject.report { }
       subject.formatter.class.should == CommandLineReporter::NestedFormatter
     end
   end
