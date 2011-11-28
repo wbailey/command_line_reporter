@@ -8,15 +8,18 @@ ruby like way of reporting progress to the user throught the command line interf
 
 The gem provides a mixin that can be included in your scripts.
 
-    include CommandLineReporter
+```ruby
+include CommandLineReporter
+```
 
 #### Methods
 
 There are several methods the mixin provides:
 
-1. _report_
-1. _formatter=_
-1. _progress_
+1. _report(hash) {block}_
+
+1. _formatter=(string)_
+1. _progress(string)_
 
 ### Formatters
 
