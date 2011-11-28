@@ -31,8 +31,6 @@ There are several methods the mixin provides that do not depend on the formatter
 1. _formatter=(string)_
   * Simple string indicating the formatter you want your application to use.  The default is
     _nested_
-1. _progress(string)_
-  * This method is supported by the Progress formatter.
 
 ### Progress Formatter
 
