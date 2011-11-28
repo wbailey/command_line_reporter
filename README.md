@@ -6,6 +6,8 @@ ruby like way of reporting progress to the user throught the command line interf
 
 ### Installation
 
+It is up on rubygems.org so add it to your bundle or do it the old fashioned way:
+
 ```bash
 gem install command_line_reporter
 ```
@@ -187,3 +189,8 @@ The following are the allowed values of the options hash argument to the _report
    formatter.
 2. Add a _preface_ and _epilogue_ methods so that beginning and ending aspects of the report may be
    added without using _puts_ and _print_.
+
+### Contributions
+
+Wes Bailey ([Exposing Gotchas](http://exposinggotchas.blogspot.com/ "Exposing Gotchas"))
+
