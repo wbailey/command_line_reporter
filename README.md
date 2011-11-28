@@ -18,15 +18,16 @@ The gem provides a mixin that can be included in your scripts.
 include CommandLineReporter
 ```
 
-#### Methods
+#### Standard Methods
 
-There are several methods the mixin provides:
+There are several methods the mixin provides that do not depend on the formatter used:
 
 1. _report(hash) {block}_
   * The first argument is a hash that defines the options for the method. See the details in the
     formatter section for allowed values.
   * The second argument is a block of ruby code that you want executed within the context of the
-    reporter.  Any ruby code is allowed.  See the examples section for details.
+    reporter.  Any ruby code is allowed.  See the examples that follow in the formatter sections for
+    details.
 1. _formatter=(string)_
   * Simple string indicating the formatter you want your application to use.  The default is
     _nested_
@@ -34,6 +35,8 @@ There are several methods the mixin provides:
   * This method is supported by the Progress formatter.
 
 ### Progress Formatter
+
+#### Example
 
 ```ruby
 require 'command_line_reporter'
@@ -64,6 +67,29 @@ This simply produces 10 dots (.) in succession:
 ```bash
 [~/scratch]$ ruby example.rb
 ..........
+```
+
+#### Indicator
+
+The indicator is the string that is displayed in the command line interface that indicates progress.
+The default is the dot (.) but any string is allowed.  In fact one can use the erase character to
+get crafty with displaying percent complete in place.
+
+#### Methods
+
+* _indicator(string)_ - This overrides the default value of the dot (.) being used for all calls to
+   the report method.
+
+```ruby
+formatter.indicator('*')
+```
+
+* _progress(string)_ - Call this method to invoke the output to the command line interface.  The
+   string overrides the indicator for this call only.
+
+```ruby
+formatter.progress
+formatter.progress("^H^H^H10%")
 ```
 
 ### Nested Formatter
