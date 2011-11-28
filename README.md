@@ -173,11 +173,25 @@ complete
 #### Instance Methods
 
 * _message_string(string)_ - This defines the string that is displayed as the first part of the
-  message to the user. The default value is "_working_". 
+  message to the user. The default value is "_working_".
+
+```ruby
+formatter.message_string('working')
+```
+
 * _complete_string(string)_ - This defines the string that completes the message to the user for the
   report.  The default value is "_complete_".
+
+```ruby
+formatter.complete_string('done')
+```
+
 * _indent_size(int)_ - The number of spaces to indent for a single indentation level.  The default
   value is 2 spaces.
+
+```ruby
+formatter.indent_size(4)
+```
 
 #### Report Options
 
@@ -187,6 +201,12 @@ The following are the allowed values of the options hash argument to the _report
 * _complete_ - The string that completes the message to the user
 * _type_ - Define as 'inline' if you want the message and complete strings on the same line
 * _indent_size_ - The number of spaces to indent the current level
+
+```ruby
+report(:message => 'running', :complete => 'finished', :type => 'inline', :indent_size => 8) do
+  # code here
+end
+```
 
 ### To Do
 
