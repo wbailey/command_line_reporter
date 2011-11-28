@@ -4,6 +4,12 @@ This gem provides an simple way to add RSpec like formatting of the output of yo
 eliminates the need to litter your code with *puts* statements instead providing a cleaner, more
 ruby like way of reporting progress to the user throught the command line interface.
 
+### Installation
+
+```bash
+gem install command_line_reporter
+```
+
 ### Usage
 
 The gem provides a mixin that can be included in your scripts.
@@ -27,7 +33,7 @@ There are several methods the mixin provides:
 1. _progress(string)_
   * This method is supported by the Progress formatter.
 
-### Example
+### Progress Formatter
 
 ```ruby
 require 'command_line_reporter'
@@ -59,6 +65,8 @@ This simply produces 10 dots (.) in succession:
 [~/scratch]$ ruby example.rb
 ..........
 ```
+
+### Nested Formatter
 
 This certainly can be accomplished quite easily with _print_ and _puts_ but the declaritive nature
 of the syntax clearly indicates the intention.
@@ -100,7 +108,7 @@ Example.new.run
 
 This produces the more complex output:
 
-```bash
+```
 [~/scratch]$ ruby example.rb
 calculating first expression
   calculating second expression
