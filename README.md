@@ -46,11 +46,6 @@ class Example
       10.times do
         x += 1
         formatter.progress
-
-        10.times do
-          x += 1
-          formatter.progress
-        end
       end
     end
   end
@@ -59,7 +54,14 @@ end
 Example.new.run
 ```
 
-#### Formatters
+This simply produces 10 dots (.) in succession
+
+```ruby
+[~/scratch]$ be ruby example.rb
+..........
+```
+
+### Formatters
 
 1. Progress
 1. Nested
