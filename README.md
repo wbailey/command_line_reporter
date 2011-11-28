@@ -73,7 +73,7 @@ The indicator is the string that is displayed in the command line interface that
 The default is the dot (.) but any string is allowed.  In fact one can use the erase character to
 get crafty with displaying percent complete in place.
 
-#### Methods
+#### Instance Methods
 
 * _indicator(string)_ - This overrides the default value of the dot (.) being used for all calls to
    the report method.
@@ -92,10 +92,11 @@ formatter.progress("^H^H^H10%")
 
 ### Nested Formatter
 
-This certainly can be accomplished quite easily with _print_ and _puts_ but the declaritive nature
-of the syntax clearly indicates the intention.
+The nested formatter concept is inspired by the documentation formatter in RSpec.  The idea is to be
+able to create nested grouping levels of output that are very readable as the code is being
+executed.
 
-A more complex example is using the nested formatter:
+#### Example
 
 ```ruby
 require 'command_line_reporter'
@@ -161,3 +162,21 @@ calculating first expression
   complete
 complete
 ```
+
+#### Instance Methods
+
+* _message_string(string)_ - This defines the string that is displayed as the first part of the
+  message to the user. The default value is "_working_". 
+* _complete_string(string)_ - This defines the string that completes the message to the user for the
+  report.  The default value is "_complete_".
+* _indent_size(int)_ - The number of spaces to indent for a single indentation level.  The default
+  value is 2 spaces.
+
+#### Report Options
+
+The following are the allowed values of the options hash argument to the _report_ method:
+
+* _message_ - The string that is displayed as the first part of the message to the user
+* _complete_ - The string that completes the message to the user
+* _type_ - Define as 'inline' if you want the message and complete strings on the same line
+* _indent_size_ - The number of spaces to indent the current level
