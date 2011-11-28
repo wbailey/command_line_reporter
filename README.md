@@ -17,11 +17,49 @@ include CommandLineReporter
 There are several methods the mixin provides:
 
 1. _report(hash) {block}_
-
+  * The first argument is a hash that defines the options for the method. See the details in the
+    formatter section for allowed values.
+  * The second argument is a block of ruby code that you want executed within the context of the
+    reporter.  Any ruby code is allowed.  See the examples section for details.
 1. _formatter=(string)_
+  * Simple string indicating the formatter you want your application to use.  The default is
+    _nested_
 1. _progress(string)_
+  * This method is supported by the Progress formatter.
 
-### Formatters
+### Example
+
+```ruby
+require 'command_line_reporter'
+
+class Example
+  include CommandLineReporter
+
+  def initialize
+    self.formatter = 'progress'
+  end
+
+  def run
+    x = 0
+
+    report do
+      10.times do
+        x += 1
+        formatter.progress
+
+        10.times do
+          x += 1
+          formatter.progress
+        end
+      end
+    end
+  end
+end
+
+Example.new.run
+```
+
+#### Formatters
 
 1. Progress
 1. Nested
