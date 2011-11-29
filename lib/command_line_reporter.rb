@@ -16,26 +16,18 @@ module CommandLineReporter
     title = options[:title] || 'Report'
     width = options[:width] || 100
     align = options[:align] || 'left'
-    spacing = "\n" * (options[:spacing] || 1)
-    timestamp = options[:timestamp] || false
 
-    case align
-    when 'left'
-      puts title
-    when 'right'
-      puts title.rjust(width)
-    when 'center'
-      puts title.rjust((width - title.size)/2 + title.size)
+    # This also ensures that width is a Fixnum
+    raise ArgumentError if title.size > width
+
+    puts_aligned_text(title, align, width)
+
+    if options[:timestamp]
+      text = Time.now.strftime('%Y-%m-%d - %l:%M:%S%p')
+      puts_aligned_text(text, align, width)
     end
 
-    if timestamp
-      date = Time.now.strftime('%Y-%m-%d')
-      time = Time.now.strftime('%l:%M:%S%p')
-      padding = width - date.size - time.size
-      puts date + (' ' * padding) + time
-    end
-
-    puts spacing
+    puts "\n" * (options[:spacing] || 1)
   end
 
   def formatter=(type = 'nested')
@@ -47,4 +39,20 @@ module CommandLineReporter
   rescue
     raise ArgumentError, 'Invalid formatter specified'
   end
+
+  private
+
+  def puts_aligned_text(text, align, width)
+    case align
+    when 'left'
+      puts text
+    when 'right'
+      puts text.rjust(width)
+    when 'center'
+      puts text.rjust((width - text.size)/2 + text.size)
+    else
+      raise ArgumentError
+    end
+  end
+
 end

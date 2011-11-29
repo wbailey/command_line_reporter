@@ -25,11 +25,23 @@ describe CommandLineReporter do
         }.should_not raise_exception ArgumentError
       end
 
+      it 'does not allow a title > width' do
+        lambda {
+          subject.header(:title => 'xxxxxxxxxxx', :width => 5)
+        }.should raise_exception ArgumentError
+      end
+
       it 'accepts width as an option' do
         lambda {
           subject.should_receive(:puts).exactly(2).times
-          subject.header(:width => '100')
+          subject.header(:width => 100)
         }.should_not raise_exception ArgumentError
+      end
+
+      it 'ensure width is a number' do
+        lambda {
+          subject.header(:width => '100')
+        }.should raise_exception ArgumentError
       end
 
       it 'accepts align as an option' do
@@ -37,6 +49,12 @@ describe CommandLineReporter do
           subject.should_receive(:puts).exactly(2).times
           subject.header(:align => 'center')
         }.should_not raise_exception ArgumentError
+      end
+
+      it 'ensure align is a valid value' do
+        lambda {
+          subject.header(:align => :asdf)
+        }.should raise_exception ArgumentError
       end
 
       it 'accepts spacing as an option' do
@@ -111,18 +129,29 @@ describe CommandLineReporter do
     end
 
     context 'timestamp subheading' do
-      it 'adds using the default width' do
+      before :each do
+        @regex = /\d{4}-\d{2}-\d{2} - (\d| )\d:\d{2}:\d{2}[AP]M/
+      end
+
+      it 'is added with default justification' do
         subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with(/\d{4}-\d{2}-\d{2} {80} *\d?\d:\d{2}:\d{2}[AP]M/)
+        subject.should_receive(:puts).with(/^#{@regex}/)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :timestamp => true)
       end
 
-      it 'adds using the specified width' do
-        subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with(/\d{4}-\d{2}-\d{2} {60} *\d?\d:\d{2}:\d{2}[AP]M/)
+      it 'added with right justification' do
+        subject.should_receive(:puts).with(/^ *title$/)
+        subject.should_receive(:puts).with(/^ *#{@regex}$/)
         subject.should_receive(:puts).with("\n")
-        subject.header(:title => 'title', :timestamp => true, :width => 80)
+        subject.header(:title => 'title', :align => 'right', :timestamp => true, :width => 80)
+      end
+
+      it 'added with center justification' do
+        subject.should_receive(:puts).with(/^ *title *$/)
+        subject.should_receive(:puts).with(/^ *#{@regex} *$/)
+        subject.should_receive(:puts).with("\n")
+        subject.header(:title => 'title', :align => 'center', :timestamp => true, :width => 80)
       end
     end
   end
