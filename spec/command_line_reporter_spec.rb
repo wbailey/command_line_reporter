@@ -111,10 +111,18 @@ describe CommandLineReporter do
     end
 
     context 'timestamp subheading' do
-      it 'adds a timestamp line' do
+      it 'adds using the default width' do
         subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with(/\d{4}-\d{2}-\d{2} *\d{2}:\d{2}:\d{2}/)
+        subject.should_receive(:puts).with(/\d{4}-\d{2}-\d{2} {82}\d{2}:\d{2}:\d{2}/)
+        subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :timestamp => true)
+      end
+
+      it 'adds using the specified width' do
+        subject.should_receive(:puts).with('title')
+        subject.should_receive(:puts).with(/\d{4}-\d{2}-\d{2} {62}\d{2}:\d{2}:\d{2}/)
+        subject.should_receive(:puts).with("\n")
+        subject.header(:title => 'title', :timestamp => true, :width => 80)
       end
     end
   end
