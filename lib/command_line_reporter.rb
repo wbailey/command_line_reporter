@@ -30,7 +30,7 @@ module CommandLineReporter
 
     if timestamp
       date = Time.now.strftime('%Y-%m-%d')
-      time = Time.now.strftime('%H:%M:%I')
+      time = Time.now.strftime('%l:%M:%S%p')
       padding = width - date.size - time.size
       puts date + (' ' * padding) + time
     end
