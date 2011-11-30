@@ -13,59 +13,59 @@ describe CommandLineReporter do
   describe '#header' do
     context 'argument validation' do
       it 'does not accept an invalid option' do
-        lambda {
+        running {
           subject.header(:asdf => 'tests')
         }.should raise_exception ArgumentError
       end
 
-      it 'accepts a title as an option' do
-        lambda {
+      it 'accepts a title' do
+        running {
           subject.should_receive(:puts).exactly(2).times
           subject.header(:title => 'test')
         }.should_not raise_exception ArgumentError
       end
 
       it 'does not allow a title > width' do
-        lambda {
+        running {
           subject.header(:title => 'xxxxxxxxxxx', :width => 5)
         }.should raise_exception ArgumentError
       end
 
-      it 'accepts width as an option' do
-        lambda {
+      it 'accepts width' do
+        running {
           subject.should_receive(:puts).exactly(2).times
           subject.header(:width => 100)
         }.should_not raise_exception ArgumentError
       end
 
       it 'ensure width is a number' do
-        lambda {
+        running {
           subject.header(:width => '100')
         }.should raise_exception ArgumentError
       end
 
-      it 'accepts align as an option' do
-        lambda {
+      it 'accepts align' do
+        running {
           subject.should_receive(:puts).exactly(2).times
           subject.header(:align => 'center')
         }.should_not raise_exception ArgumentError
       end
 
       it 'ensure align is a valid value' do
-        lambda {
+        running {
           subject.header(:align => :asdf)
         }.should raise_exception ArgumentError
       end
 
-      it 'accepts spacing as an option' do
-        lambda {
+      it 'accepts spacing' do
+        running {
           subject.should_receive(:puts).exactly(2).times
           subject.header(:spacing => 2)
         }.should_not raise_exception ArgumentError
       end
 
-      it 'accepts timestamp as an option' do
-        lambda {
+      it 'accepts timestamp' do
+        running {
           subject.should_receive(:puts).exactly(3).times
           subject.header(:timestamp => true)
         }.should_not raise_exception ArgumentError
@@ -154,11 +154,68 @@ describe CommandLineReporter do
         subject.header(:title => 'title', :align => 'center', :timestamp => true, :width => 80)
       end
     end
+
+    context 'horizontal rule' do
+      it 'uses dashes by default' do
+        subject.should_receive(:puts)
+        subject.should_receive(:puts).with('-' * 100)
+        subject.should_receive(:puts)
+        subject.header(:rule => true)
+      end
+
+      it 'uses = as the rule character' do
+        subject.should_receive(:puts)
+        subject.should_receive(:puts).with('=' * 100)
+        subject.should_receive(:puts)
+        subject.header(:rule => '=')
+      end
+    end
+  end
+
+  describe '#horizontal_rule' do
+    context 'argument validation' do
+      it 'does not allow invalid options' do
+        running {
+          subject.horizontal_rule(:asdf => true)
+        }.should raise_exception ArgumentError
+      end
+
+      it 'accepts char' do
+        running {
+          subject.should_receive(:puts)
+          subject.horizontal_rule(:char => '*')
+        }.should_not raise_exception ArgumentError
+      end
+
+      it 'accepts width' do
+        running {
+          subject.should_receive(:puts)
+          subject.horizontal_rule(:width => 10)
+        }.should_not raise_exception ArgumentError
+      end
+    end
+
+    context 'drawing' do
+      it 'writes a 100 yard dash by default' do
+        subject.should_receive(:puts).with('-' * 100)
+        subject.horizontal_rule
+      end
+
+      it 'writes a 100 yard asterisk' do
+        subject.should_receive(:puts).with('*' * 100)
+        subject.horizontal_rule(:char => '*')
+      end
+
+      it 'writes a 50 yard equals' do
+        subject.should_receive(:puts).with('=' * 50)
+        subject.horizontal_rule(:char => '=', :width => 50)
+      end
+    end
   end
 
   describe '#formatter=' do
     it 'only allows allowed formatters' do
-      lambda {
+      running {
         subject.formatter = 'asfd'
       }.should raise_exception ArgumentError
     end
