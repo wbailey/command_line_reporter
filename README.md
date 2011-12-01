@@ -53,7 +53,11 @@ There are several methods the mixin provides that do not depend on the formatter
 * _datetime(hash)_
   * _:align_ - 'left'|'center'|'right' alignment of the timestamp.  _Default: 'left'_
   * _:width_ - The width of the string in characters.  _Default: 100_
-  * _:format_ - Any allowed format of #strftime#.  _Default: %Y-%m-%d %H:%I:%S%p_
+  * _:format_ - Any allowed format from #strftime#.  _Default: %Y-%m-%d %H:%I:%S%p_
+* _aligned(string, hash)_
+  * _text_ - String to display
+  * _:align_ - 'left'|'right'|'center' align the string text.  _Default: 'left'_
+  * _:width_ - The width in characters of the string text.  _Default: 100_
 
 ### Progress Formatter
 
