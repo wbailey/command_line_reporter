@@ -48,6 +48,12 @@ There are several methods the mixin provides that do not depend on the formatter
 1. _horizontal_rule(hash)_
   * _:char_ - The character used to build the rule.  _Default: '-'_
   * _:width_ - The width in characters of the rule.  _Default: 100_
+1. _vertical_spacing(int)_
+  * Number of blank lines to output.  _Default: 1_
+1. _datetime(hash)_
+  * _:align_ - 'left'|'center'|'right' alignment of the timestamp.  _Default: 'left'_
+  * _:width_ - The width of the string in characters.  _Default: 100_
+  * _:format_ - Any allowed format of #strftime#.  _Default: %Y-%m-%d %H:%I:%S%p_
 
 ### Progress Formatter
 
