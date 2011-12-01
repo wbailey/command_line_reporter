@@ -24,16 +24,16 @@ include CommandLineReporter
 
 There are several methods the mixin provides that do not depend on the formatter used:
 
-1. _header(hash)_
-  * _:title_ - The title text for the header.  _Default: 'Report'_
-  * _:width_ - The width in characters for the header.  _Default: 100_
-  * _:align_ - 'left', 'right', 'center'.  _Default: 'left'_
-  * _:spacing_ - Number of vertical lines to leave as spacing after the
-    header.  _Default: 1_
-  * _:timestamp_ - Include a line indicating the timestamp below the
-    header text.  Either true|false.  _Default: false_
-  * _:rule_ - true|false indicates whther to include a horizontal rule.
-    _Default: false_
+1. _header(hash)_ and _footer(hash)_
+  * _:title_ - The title text for the section.  _Default: 'Report'_
+  * _:width_ - The width in characters for the section.  _Default: 100_
+  * _:align_ - 'left'|'right'|'center' align the title text.  _Default: 'left'_
+  * _:spacing_ - Number of vertical lines to leave as spacing
+    after|before the header|footer.  _Default: 1_
+  * _:timestamp_ - Include a line indicating the timestamp below|above the
+    header|footer text.  Either true|false.  _Default: false_
+  * _:rule_ - true|false indicates whether to include a horizontal rule
+    below|above the header|footer.  _Default: false_
 1. _report(hash) {block}_
   * The first argument is a hash that defines the options for the method. See the details in the
     formatter section for allowed values.
