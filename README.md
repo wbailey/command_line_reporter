@@ -217,10 +217,10 @@ formatter.indent_size(4)
 
 The following are the allowed values of the options hash argument to the _report_ method:
 
-* _message_ - The string that is displayed as the first part of the message to the user
-* _complete_ - The string that completes the message to the user
-* _type_ - Define as 'inline' if you want the message and complete strings on the same line
-* _indent_size_ - The number of spaces to indent the current level
+* _:message_ - The string that is displayed as the first part of the message to the user
+* _:complete_ - The string that completes the message to the user
+* _:type_ - Define as 'inline' if you want the message and complete strings on the same line
+* _:indent_size_ - The number of spaces to indent the current level
 
 ```ruby
 report(:message => 'running', :complete => 'finished', :type => 'inline', :indent_size => 8) do
