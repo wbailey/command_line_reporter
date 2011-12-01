@@ -28,12 +28,12 @@ There are several methods the mixin provides that do not depend on the formatter
   * _:title_ - The title text for the section.  _Default: 'Report'_
   * _:width_ - The width in characters for the section.  _Default: 100_
   * _:align_ - 'left'|'right'|'center' align the title text.  _Default: 'left'_
-  * _:spacing_ - Number of vertical lines to leave as spacing
-    after|before the header|footer.  _Default: 1_
-  * _:timestamp_ - Include a line indicating the timestamp below|above the
-    header|footer text.  Either true|false.  _Default: false_
-  * _:rule_ - true|false indicates whether to include a horizontal rule
-    below|above the header|footer.  _Default: false_
+  * _:spacing_ - Number of vertical lines to leave as spacing after|before the header|footer.
+    _Default: 1_
+  * _:timestamp_ - Include a line indicating the timestamp below|above the header|footer text.
+    Either true|false.  _Default: false_
+  * _:rule_ - true|false indicates whether to include a horizontal rule below|above the
+    header|footer.  _Default: false_
 1. _report(hash) {block}_
   * The first argument is a hash that defines the options for the method. See the details in the
     formatter section for allowed values.
@@ -41,11 +41,13 @@ There are several methods the mixin provides that do not depend on the formatter
     reporter.  Any ruby code is allowed.  See the examples that follow in the formatter sections for
     details.
 1. _formatter=(string)_
-  * Simple string indicating the formatter you want your application to use.  At present the 2
-    formatters are:
-    2. Progress - indicated by the string '_progress_'
-    2. Nested - indicated by the string '_nested_'
-    The default is _nested_.
+  * Factory method indicating the formatter you want your application to use.  At present the 2
+    formatters are (_Default: 'nested'_):
+  * 'progress' - Use the progress formatter
+  * 'nested' - Use the nested (or documentation) formatter
+1. _horizontal_rule(hash)_
+  * _:char_ - The character used to build the rule.  _Default: '-'_
+  * _:width_ - The width in characters of the rule.  _Default: 100_
 
 ### Progress Formatter
 
