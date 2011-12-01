@@ -31,9 +31,9 @@ There are several methods the mixin provides that do not depend on the formatter
   * _:spacing_ - Number of vertical lines to leave as spacing after the
     header.  _Default: 1_
   * _:timestamp_ - Include a line indicating the timestamp below the
-    header text.  Either ^true|false^.  _Default: false_
-  * _:rule_ - ^true|false^ indicates whther to include a horizontal
-    rule.  _Default: false_
+    header text.  Either true|false.  _Default: false_
+  * _:rule_ - true|false indicates whther to include a horizontal rule.
+    _Default: false_
 1. _report(hash) {block}_
   * The first argument is a hash that defines the options for the method. See the details in the
     formatter section for allowed values.
