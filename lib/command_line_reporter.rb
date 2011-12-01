@@ -3,49 +3,10 @@ Dir[File.join(File.dirname(__FILE__), '*_formatter.rb')].each {|r| require r}
 module CommandLineReporter
   attr_reader :formatter
 
-  def report(options = {}, &block)
-    self.formatter.format(options, block)
-  rescue NoMethodError
-    self.formatter = 'nested'
-    retry
-  end
-
-  def header(options)
-    allowed_options_keys = [:title, :width, :align, :spacing, :timestamp, :rule]
-
-    raise ArgumentError unless (options.keys - allowed_options_keys).empty?
-
-    title = options[:title] || 'Report'
-    width = options[:width] || 100
-    align = options[:align] || 'left'
-    lines = options[:spacing] || 1
-
-    # This also ensures that width is a Fixnum
-    raise ArgumentError if title.size > width
-
-    justified_text(title, align, width)
-
-    datetime_text(align, width) if options[:timestamp]
-
-    horizontal_rule(:char => options[:rule], :width => width) if options[:rule]
-
-    vertical_spacing(lines)
-  end
-
-  def horizontal_rule(options = {})
-    allowed_options_keys = [:char, :width]
-
-    raise ArgumentError unless (options.keys - allowed_options_keys).empty?
-
-    char = options[:char].is_a?(String) ? options[:char] : '-'
-    width = options[:width] || 100
-
-    puts char * width
-  end
-
-  def vertical_spacing(lines = 1)
-    puts "\n" * lines
-  end
+  DEFAULTS = {
+    :width => 100,
+    :align => 'left',
+  }
 
   def formatter=(type = 'nested')
     name = type.capitalize + 'Formatter'
@@ -57,14 +18,68 @@ module CommandLineReporter
     raise ArgumentError, 'Invalid formatter specified'
   end
 
-  private
+  def header(options = {})
+    validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule)
 
-  def datetime_text(align = 'left', width = 100)
-    text = Time.now.strftime('%Y-%m-%d - %l:%M:%S%p')
-    justified_text(text, align, width)
+    title = options[:title] || 'Report'
+    width = options[:width] || DEFAULTS[:width]
+    align = options[:align] || DEFAULTS[:align]
+    lines = options[:spacing] || 1
+
+    # This also ensures that width is a Fixnum
+    raise ArgumentError if title.size > width
+
+    aligned(title, {:align => align, :width => width})
+
+    datetime(:align => align, :width => width) if options[:timestamp]
+
+    horizontal_rule(:char => options[:rule], :width => width) if options[:rule]
+
+    vertical_spacing(lines)
   end
 
-  def justified_text(text, align = 'left', width = 100)
+  def report(options = {}, &block)
+    self.formatter.format(options, block)
+  rescue NoMethodError
+    self.formatter = 'nested'
+    retry
+  end
+
+  def horizontal_rule(options = {})
+    validate_options(options, :char, :width)
+
+    char = options[:char].is_a?(String) ? options[:char] : '-'
+    width = options[:width] || DEFAULTS[:width]
+
+    puts char * width
+  end
+
+  def vertical_spacing(lines = 1)
+    puts "\n" * lines
+  rescue
+    raise ArgumentError
+  end
+
+  def datetime(options = {})
+    validate_options(options, :align, :width, :format)
+
+    format = options[:format] || '%Y-%m-%d - %l:%M:%S%p'
+    align = options[:align] || DEFAULTS[:align]
+    width = options[:width] || DEFAULTS[:width]
+
+    text = Time.now.strftime(format)
+
+    raise Exception if text.size > width
+
+    aligned(text, {:align => align, :width => width})
+  end
+
+  def aligned(text, options = {})
+    validate_options(options, :align, :width)
+
+    align = options[:align] || DEFAULTS[:align]
+    width = options[:width] || DEFAULTS[:width]
+
     case align
     when 'left'
       puts text
@@ -77,4 +92,9 @@ module CommandLineReporter
     end
   end
 
+  private
+
+  def validate_options(options, *allowed_keys)
+    raise ArgumentError unless (options.keys - allowed_keys).empty?
+  end
 end

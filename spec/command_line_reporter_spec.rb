@@ -10,65 +10,107 @@ describe CommandLineReporter do
 
   subject { use_class.new }
 
+  before :each do
+    @timestamp_regex = /\d{4}-\d{2}-\d{2} - (\d| )\d:\d{2}:\d{2}[AP]M/
+  end
+
+  describe '#formatter=' do
+    it 'only allows allowed formatters' do
+      expect {
+        subject.formatter = 'asfd'
+      }.to raise_error ArgumentError
+    end
+
+    it 'specifies the progress formatter' do
+      subject.formatter = 'progress'
+      subject.formatter.class.should == CommandLineReporter::ProgressFormatter
+    end
+
+    it 'specifies the nested formatter' do
+      subject.formatter = 'nested'
+      subject.formatter.class.should == CommandLineReporter::NestedFormatter
+    end
+  end
+
+  describe '#report' do
+    it 'uses the nested formatter as default' do
+      capture_stdout {
+        subject.report { }
+      }
+
+      subject.formatter.class.should == CommandLineReporter::NestedFormatter
+    end
+
+    it 'uses the progress formatter' do
+      capture_stdout {
+        subject.formatter = 'progress'
+        subject.report { }
+      }
+
+      subject.formatter.class.should == CommandLineReporter::ProgressFormatter
+    end
+  end
+
   describe '#header' do
     context 'argument validation' do
+
       it 'does not accept an invalid option' do
-        running {
+        expect {
           subject.header(:asdf => 'tests')
-        }.should raise_exception ArgumentError
+        }.to raise_error ArgumentError
       end
 
       it 'accepts a title' do
-        running {
-          subject.should_receive(:puts).exactly(2).times
+        expect {
+          subject.should_receive(:puts).any_number_of_times
           subject.header(:title => 'test')
-        }.should_not raise_exception ArgumentError
+        }.to_not raise_error ArgumentError
       end
 
       it 'does not allow a title > width' do
-        running {
+        expect {
           subject.header(:title => 'xxxxxxxxxxx', :width => 5)
-        }.should raise_exception ArgumentError
+        }.to raise_error ArgumentError
       end
 
       it 'accepts width' do
-        running {
-          subject.should_receive(:puts).exactly(2).times
+        expect {
+          subject.should_receive(:puts).any_number_of_times
           subject.header(:width => 100)
-        }.should_not raise_exception ArgumentError
+        }.to_not raise_error ArgumentError
       end
 
       it 'ensure width is a number' do
-        running {
+        expect {
           subject.header(:width => '100')
-        }.should raise_exception ArgumentError
+        }.to raise_error ArgumentError
       end
 
       it 'accepts align' do
-        running {
-          subject.should_receive(:puts).exactly(2).times
+        expect {
+          subject.should_receive(:puts).any_number_of_times
           subject.header(:align => 'center')
-        }.should_not raise_exception ArgumentError
+        }.to_not raise_error ArgumentError
       end
 
       it 'ensure align is a valid value' do
-        running {
+        expect {
           subject.header(:align => :asdf)
-        }.should raise_exception ArgumentError
+        }.to raise_error ArgumentError
       end
 
       it 'accepts spacing' do
-        running {
-          subject.should_receive(:puts).exactly(2).times
+        expect {
+          subject.should_receive(:puts).any_number_of_times
           subject.header(:spacing => 2)
-        }.should_not raise_exception ArgumentError
+        }.to_not raise_error ArgumentError
       end
 
       it 'accepts timestamp' do
-        running {
-          subject.should_receive(:puts).exactly(3).times
+        expect {
+          subject.should_receive(:puts).any_number_of_times
           subject.header(:timestamp => true)
-        }.should_not raise_exception ArgumentError
+        }.to_not raise_error ArgumentError
       end
     end
 
@@ -129,27 +171,23 @@ describe CommandLineReporter do
     end
 
     context 'timestamp subheading' do
-      before :each do
-        @regex = /\d{4}-\d{2}-\d{2} - (\d| )\d:\d{2}:\d{2}[AP]M/
-      end
-
       it 'is added with default justification' do
         subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with(/^#{@regex}/)
+        subject.should_receive(:puts).with(/^#{@timestamp_regex}/)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :timestamp => true)
       end
 
       it 'added with right justification' do
         subject.should_receive(:puts).with(/^ *title$/)
-        subject.should_receive(:puts).with(/^ *#{@regex}$/)
+        subject.should_receive(:puts).with(/^ *#{@timestamp_regex}$/)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :align => 'right', :timestamp => true, :width => 80)
       end
 
       it 'added with center justification' do
         subject.should_receive(:puts).with(/^ *title *$/)
-        subject.should_receive(:puts).with(/^ *#{@regex} *$/)
+        subject.should_receive(:puts).with(/^ *#{@timestamp_regex} *$/)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :align => 'center', :timestamp => true, :width => 80)
       end
@@ -175,23 +213,23 @@ describe CommandLineReporter do
   describe '#horizontal_rule' do
     context 'argument validation' do
       it 'does not allow invalid options' do
-        running {
+        expect {
           subject.horizontal_rule(:asdf => true)
-        }.should raise_exception ArgumentError
+        }.to raise_error ArgumentError
       end
 
       it 'accepts char' do
-        running {
+        expect {
           subject.should_receive(:puts)
           subject.horizontal_rule(:char => '*')
-        }.should_not raise_exception ArgumentError
+        }.to_not raise_error ArgumentError
       end
 
       it 'accepts width' do
-        running {
+        expect {
           subject.should_receive(:puts)
           subject.horizontal_rule(:width => 10)
-        }.should_not raise_exception ArgumentError
+        }.to_not raise_error ArgumentError
       end
     end
 
@@ -213,30 +251,117 @@ describe CommandLineReporter do
     end
   end
 
-  describe '#formatter=' do
-    it 'only allows allowed formatters' do
-      running {
-        subject.formatter = 'asfd'
-      }.should raise_exception ArgumentError
+  describe '#vertical_spacing' do
+    it 'accepts a fixnum as a valid argument' do
+      expect {
+        subject.vertical_spacing('asdf')
+      }.to raise_error ArgumentError
     end
 
-    it 'specifies the progress formatter' do
-      subject.formatter = 'progress'
-      subject.formatter.class.should == CommandLineReporter::ProgressFormatter
-    end
-
-    it 'specifies the nested formatter' do
-      subject.formatter = 'nested'
-      subject.formatter.class.should == CommandLineReporter::NestedFormatter
+    it 'prints carriage returns for the number of lines' do
+      subject.should_receive(:puts).with("\n" * 3)
+      subject.vertical_spacing(3)
     end
   end
 
-  describe '#report' do
-    it 'uses the nested formatter as default' do
-      $stdout = StringIO.new
-      subject.report { }
-      $stdout = STDOUT
-      subject.formatter.class.should == CommandLineReporter::NestedFormatter
+  describe '#datetime' do
+    context 'argument validation' do
+      it 'does not allow invalid options' do
+        expect {
+          subject.datetime(:asdf => true)
+        }.to raise_error ArgumentError
+      end
+
+      it 'accepts align' do
+        expect {
+          subject.should_receive(:puts)
+          subject.datetime(:align => 'left')
+        }.to_not raise_error ArgumentError
+      end
+
+      it 'accepts width' do
+        expect {
+          subject.should_receive(:puts)
+          subject.datetime(:width => 70)
+        }.to_not raise_error ArgumentError
+      end
+
+      it 'accepts format' do
+        expect {
+          subject.should_receive(:puts)
+          subject.datetime(:format => '%m/%d/%Y')
+        }.to_not raise_error ArgumentError
+      end
+
+      it 'does not allow invalid width' do
+        expect {
+          subject.datetime(:align => 'right', :width => 'asdf')
+        }.to raise_error
+      end
+
+      it 'does not allow invalid align' do
+        expect {
+          subject.datetime(:align => 1234)
+        }.to raise_error
+      end
+
+      it 'does not allow a timestamp format larger than the width' do
+        expect {
+          subject.datetime(:width => 8)
+        }.to raise_error
+      end
+    end
+
+    context 'display' do
+      it 'a default format - left aligned' do
+        subject.should_receive(:puts).with(/^#{@timestamp_regex} *$/)
+        subject.datetime
+      end
+
+      it 'a default format - right aligned' do
+        subject.should_receive(:puts).with(/^ *#{@timestamp_regex}$/)
+        subject.datetime(:align => 'right')
+      end
+
+      it 'a default format - center aligned' do
+        subject.should_receive(:puts).with(/^ *#{@timestamp_regex} *$/)
+        subject.datetime(:align => 'center')
+      end
+
+      it 'a modified format' do
+        subject.should_receive(:puts).with(/^\d{2}\/\d{2}\/\d{2} *$/)
+        subject.datetime(:format => '%y/%m/%d')
+      end
+    end
+  end
+
+  describe '#aligned' do
+    context 'argument validation' do
+      it 'accepts align' do
+        expect {
+          subject.should_receive(:puts).any_number_of_times
+          subject.aligned('test', :align => 'left')
+        }.to_not raise_error
+      end
+
+      it 'does not allow invalid align values' do
+        expect {
+          subject.aligned('test', :align => 1234)
+        }.to raise_error ArgumentError
+      end
+
+      it 'accepts width' do
+        expect {
+          subject.should_receive(:puts).any_number_of_times
+          subject.aligned('test', :width => 40)
+        }.to_not raise_error
+      end
+
+      it 'does not allow invalid width values' do
+        expect {
+          subject.aligned('test', :align => 'right', :width => 'asdf')
+        }.to raise_error
+      end
     end
   end
 end
