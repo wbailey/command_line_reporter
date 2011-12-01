@@ -19,23 +19,7 @@ module CommandLineReporter
   end
 
   def header(options = {})
-    validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule)
-
-    title = options[:title] || 'Report'
-    width = options[:width] || DEFAULTS[:width]
-    align = options[:align] || DEFAULTS[:align]
-    lines = options[:spacing] || 1
-
-    # This also ensures that width is a Fixnum
-    raise ArgumentError if title.size > width
-
-    aligned(title, {:align => align, :width => width})
-
-    datetime(:align => align, :width => width) if options[:timestamp]
-
-    horizontal_rule(:char => options[:rule], :width => width) if options[:rule]
-
-    vertical_spacing(lines)
+    section(:header, options)
   end
 
   def report(options = {}, &block)
@@ -43,6 +27,10 @@ module CommandLineReporter
   rescue NoMethodError
     self.formatter = 'nested'
     retry
+  end
+
+  def footer(options = {})
+    section(:footer, options)
   end
 
   def horizontal_rule(options = {})
@@ -96,5 +84,30 @@ module CommandLineReporter
 
   def validate_options(options, *allowed_keys)
     raise ArgumentError unless (options.keys - allowed_keys).empty?
+  end
+
+  def section(type, options)
+    validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule)
+
+    title = options[:title] || 'Report'
+    width = options[:width] || DEFAULTS[:width]
+    align = options[:align] || DEFAULTS[:align]
+    lines = options[:spacing] || 1
+
+    # This also ensures that width is a Fixnum
+    raise ArgumentError if title.size > width
+
+    if type == :footer
+      vertical_spacing(lines)
+      horizontal_rule(:char => options[:rule], :width => width) if options[:rule]
+    end
+
+    aligned(title, {:align => align, :width => width})
+    datetime(:align => align, :width => width) if options[:timestamp]
+
+    if type == :header
+      horizontal_rule(:char => options[:rule], :width => width) if options[:rule]
+      vertical_spacing(lines)
+    end
   end
 end

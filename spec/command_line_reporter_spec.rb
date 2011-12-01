@@ -119,37 +119,37 @@ describe CommandLineReporter do
         @title = 'test11test'
       end
 
-      it 'creates a left justified header by default' do
+      it 'left aligns title by default' do
         subject.should_receive(:puts).with(@title)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => @title) { }
       end
 
-      it 'creates a left justified header' do
+      it 'left aligns title' do
         subject.should_receive(:puts).with(@title)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'left') { }
       end
 
-      it 'creates a right justified header using default width' do
+      it 'right aligns title using default width' do
         subject.should_receive(:puts).with(' ' * 90 + @title)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'right')
       end
 
-      it 'creates a right justified header using specified width' do
+      it 'right aligns title using specified width' do
         subject.should_receive(:puts).with(' ' * 40 + @title)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'right', :width => 50)
       end
 
-      it 'creates a center aligned header using default width' do
+      it 'center aligns title using default width' do
         subject.should_receive(:puts).with(' ' * 45 + @title)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'center')
       end
 
-      it 'creates a center aligned header using default width' do
+      it 'center aligns title using specified width' do
         subject.should_receive(:puts).with(' ' * 35 + @title)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'center', :width => 80)
@@ -171,21 +171,21 @@ describe CommandLineReporter do
     end
 
     context 'timestamp subheading' do
-      it 'is added with default justification' do
+      it 'is added with default alignment' do
         subject.should_receive(:puts).with('title')
         subject.should_receive(:puts).with(/^#{@timestamp_regex}/)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :timestamp => true)
       end
 
-      it 'added with right justification' do
+      it 'added with right alignment' do
         subject.should_receive(:puts).with(/^ *title$/)
         subject.should_receive(:puts).with(/^ *#{@timestamp_regex}$/)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :align => 'right', :timestamp => true, :width => 80)
       end
 
-      it 'added with center justification' do
+      it 'added with center alignment' do
         subject.should_receive(:puts).with(/^ *title *$/)
         subject.should_receive(:puts).with(/^ *#{@timestamp_regex} *$/)
         subject.should_receive(:puts).with("\n")
@@ -361,6 +361,151 @@ describe CommandLineReporter do
         expect {
           subject.aligned('test', :align => 'right', :width => 'asdf')
         }.to raise_error
+      end
+    end
+  end
+
+  describe '#footer' do
+    context 'argument validation' do
+      it 'accepts title' do
+        expect {
+          subject.should_receive(:puts).any_number_of_times
+          subject.footer(:title => 'test')
+        }.to_not raise_error
+      end
+
+      it 'accepts align' do
+        expect {
+          subject.should_receive(:puts).any_number_of_times
+          subject.footer(:align => 'right')
+        }.to_not raise_error ArgumentError
+      end
+
+      it 'does not accept invalid align' do
+        expect {
+          subject.header(:align => 1234)
+        }.to raise_error ArgumentError
+      end
+
+      it 'accepts width' do
+        expect {
+          subject.should_receive(:puts).any_number_of_times
+          subject.footer(:width => 50)
+        }.to_not raise_error
+      end
+
+      it 'does not accept invalid width' do
+        expect {
+          subject.footer(:width => 'asdf')
+        }.to raise_error ArgumentError
+      end
+
+      it 'does not allow title > width' do
+        expect {
+          subject.footer(:title => 'testtesttest', :width => 6)
+        }.to raise_error ArgumentError
+      end
+
+      it 'accepts spacing' do
+        expect {
+          subject.should_receive(:puts).any_number_of_times
+          subject.footer(:spacing => 3)
+        }.to_not raise_error
+      end
+    end
+
+    context 'alignment' do
+      before :each do
+        @title = 'test12test'
+      end
+
+      it 'left aligns the title by default' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with(@title)
+        subject.footer(:title => @title)
+      end
+
+      it 'left aligns the title' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with(@title)
+        subject.footer(:title => @title, :align => 'left')
+      end
+
+      it 'right aligns the title' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with(' ' * 90 + @title)
+        subject.footer(:title => @title, :align => 'right')
+      end
+
+      it 'right aligns the title using width' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with(' ' * 40 + @title)
+        subject.footer(:title => @title, :align => 'right', :width => 50)
+      end
+
+      it 'center aligns the title' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with(' ' * 45 + @title)
+        subject.footer(:title => @title, :align => 'center')
+      end
+
+      it 'center aligns the title using width' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with(' ' * 35 + @title)
+        subject.footer(:title => @title, :align => 'center', :width => 80)
+      end
+    end
+
+    context 'spacing' do
+      it 'defaults to a single line of spacing between report' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with('title')
+        subject.footer(:title => 'title')
+      end
+
+      it 'uses the defined spacing between report' do
+        subject.should_receive(:puts).with("\n" * 3)
+        subject.should_receive(:puts).with('title')
+        subject.footer(:title => 'title', :spacing => 3)
+      end
+    end
+
+    context 'timestamp subheading' do
+      it 'is added with default alignment' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with('title')
+        subject.should_receive(:puts).with(/^#{@timestamp_regex}/)
+        subject.footer(:title => 'title', :timestamp => true)
+      end
+
+      it 'added with right alignment' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with(/^ *title$/)
+        subject.should_receive(:puts).with(/^ *#{@timestamp_regex}$/)
+        subject.header(:title => 'title', :align => 'right', :timestamp => true, :width => 80)
+      end
+
+      it 'added with center alignment' do
+        subject.should_receive(:puts).with("\n")
+        subject.should_receive(:puts).with(/^ *title *$/)
+        subject.should_receive(:puts).with(/^ *#{@timestamp_regex} *$/)
+        subject.header(:title => 'title', :align => 'center', :timestamp => true, :width => 80)
+      end
+    end
+
+    context 'horizontal rule' do
+      it 'uses dashes by default' do
+        subject.should_receive(:puts)
+        subject.should_receive(:puts).with('-' * 100)
+        subject.should_receive(:puts)
+        subject.footer(:rule => true)
+      end
+
+      it 'uses = as the rule character' do
+        subject.should_receive(:puts)
+        subject.should_receive(:puts).with('=' * 100)
+        subject.should_receive(:puts)
+        subject.footer(:rule => '=')
       end
     end
   end
