@@ -24,7 +24,7 @@ include CommandLineReporter
 
 There are several methods the mixin provides that do not depend on the formatter used:
 
-1. _header(hash)_ and _footer(hash)_
+* _header(hash)_ and _footer(hash)_
   * _:title_ - The title text for the section.  _Default: 'Report'_
   * _:width_ - The width in characters for the section.  _Default: 100_
   * _:align_ - 'left'|'right'|'center' align the title text.  _Default: 'left'_
@@ -34,23 +34,23 @@ There are several methods the mixin provides that do not depend on the formatter
     Either true|false.  _Default: false_
   * _:rule_ - true|false indicates whether to include a horizontal rule below|above the
     header|footer.  _Default: false_
-1. _report(hash) {block}_
+* _report(hash) {block}_
   * The first argument is a hash that defines the options for the method. See the details in the
     formatter section for allowed values.
   * The second argument is a block of ruby code that you want executed within the context of the
     reporter.  Any ruby code is allowed.  See the examples that follow in the formatter sections for
     details.
-1. _formatter=(string)_
+* _formatter=(string)_
   * Factory method indicating the formatter you want your application to use.  At present the 2
     formatters are (_Default: 'nested'_):
   * 'progress' - Use the progress formatter
   * 'nested' - Use the nested (or documentation) formatter
-1. _horizontal_rule(hash)_
+* _horizontal_rule(hash)_
   * _:char_ - The character used to build the rule.  _Default: '-'_
   * _:width_ - The width in characters of the rule.  _Default: 100_
-1. _vertical_spacing(int)_
+* _vertical_spacing(int)_
   * Number of blank lines to output.  _Default: 1_
-1. _datetime(hash)_
+* _datetime(hash)_
   * _:align_ - 'left'|'center'|'right' alignment of the timestamp.  _Default: 'left'_
   * _:width_ - The width of the string in characters.  _Default: 100_
   * _:format_ - Any allowed format of #strftime#.  _Default: %Y-%m-%d %H:%I:%S%p_
