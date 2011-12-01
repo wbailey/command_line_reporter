@@ -24,6 +24,8 @@ include CommandLineReporter
 
 There are several methods the mixin provides that do not depend on the formatter used:
 
+1. _header(hash)_
+  * *:title* - The title text for the header
 1. _report(hash) {block}_
   * The first argument is a hash that defines the options for the method. See the details in the
     formatter section for allowed values.
@@ -212,5 +214,3 @@ end
 
 1. Add the progress method to the top level mixin so that there is no need to invoke through the
    formatter.
-2. Add a _header and _footer_ methods so that beginning and ending aspects of the report may be
-   added without using _puts_ and _print_.
