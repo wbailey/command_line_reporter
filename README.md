@@ -230,5 +230,6 @@ end
 
 ### To Do
 
-1. Add the progress method to the top level mixin so that there is no need to invoke through the
+* Add the ability to format tables in a simple manner
+* Add the progress method to the top level mixin so that there is no need to invoke through the
    formatter.
