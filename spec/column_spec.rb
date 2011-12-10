@@ -66,7 +66,7 @@ describe Column do
     end
 
     it 'applies left border with padding' do
-      subject.text_rows.should  == @result.map {|r| "| #{r.ljust(8)} |"}
+      subject.screen_rows.should  == @result.map {|r| "| #{r.ljust(8)} |"}
     end
   end
 end

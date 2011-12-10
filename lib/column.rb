@@ -17,7 +17,7 @@ class Column
     self.freeze
   end
 
-  def text_rows
+  def screen_rows
     chunk(self.size).map!{|s| apply_border(s)}
   end
 
