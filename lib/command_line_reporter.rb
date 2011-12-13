@@ -23,10 +23,8 @@ module CommandLineReporter
   end
 
   def report(options = {}, &block)
+    self.formatter ||= 'nested'
     self.formatter.format(options, block)
-  rescue NoMethodError
-    self.formatter = 'nested'
-    retry
   end
 
   def footer(options = {})
