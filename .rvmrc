@@ -1,2 +1,2 @@
-rvm --install ruby-1.9.2-p180
-rvm --create --install use ruby-1.9.2-p180@command_line_reporter
+rvm --install ruby-1.9.2-p290
+rvm --create --install use ruby-1.9.2-p290@command_line_reporter
