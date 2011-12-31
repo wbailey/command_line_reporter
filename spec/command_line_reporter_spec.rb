@@ -521,10 +521,9 @@ describe CommandLineReporter do
   describe '#table' do
     it 'instantiates the table class' do
       subject.should_receive(:puts).any_number_of_times
-      subject.table do
-        puts 'hi'
-      end
-      subject.instance_variable_get(:@table).should_not be_nil
+      subject.should_receive(:table).once
+      subject.table { }
+      # subject.instance_variable_get(:@table).should_not be_nil
     end
 
     it 'requires a row to be defined' do
@@ -538,10 +537,35 @@ describe CommandLineReporter do
       subject.instance_variable_get(:@table).width.should == 50
     end
 
-    it 'does not accept invalid options' do
+    it 'rejects invalid options' do
       expect {
         subject.table(:asdf => '100') { }
       }.to raise_error ArgumentError
+    end
+  end
+
+  describe '#row' do
+    it 'instantiates a row class' do
+      subject.should_receive(:table).once
+      subject.should_receive(:row).once
+      subject.should_receive(:puts).any_number_of_times
+
+      subject.table do
+        subject.row do
+        end
+      end
+    end
+
+    it 'requires a column to be defined' do
+
+    end
+
+    it 'accepts valid options' do
+
+    end
+
+    it 'rejects invalid options' do
+
     end
   end
 end

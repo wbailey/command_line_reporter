@@ -86,6 +86,16 @@ module CommandLineReporter
     @table.to_s
   end
 
+  def row(options = {})
+    @row = Row.new(options)
+    @table.add_row(@row)
+  end
+
+  def column(text, options = {})
+    col = Column.new(text, options)
+    @row.add(col)
+  end
+
   private
 
   def validate_options(options, *allowed_keys)
