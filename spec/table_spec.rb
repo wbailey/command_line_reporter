@@ -47,8 +47,10 @@ describe Table do
   end
 
   context 'rows' do
-    # it 'tracks rows' do
-    #   Table.new.add_row
-    # end
+    it 'allows addition' do
+      cols = [Column.new('test1'), Column.new('test2')]
+      row = Row.new(cols)
+      Table.new.add_row(row)
+    end
   end
 end

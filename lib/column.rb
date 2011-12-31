@@ -18,7 +18,7 @@ class Column
   end
 
   def screen_rows
-    chunk(self.size).map!{|s| apply_border(s)}
+    chunk(self.size).map{|s| apply_border(s)}
   end
 
   private

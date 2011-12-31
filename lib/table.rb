@@ -1,4 +1,9 @@
+require 'row'
+require 'forwardable'
+
 class Table
+  extend Forwardable
+
   attr_accessor :width, :padding, :border
 
   def initialize(options = {})
@@ -9,5 +14,9 @@ class Table
     self.padding = (options[:padding] || 1).to_i
 
     raise ArgumentError unless self.width > 0 && self.padding > 0
+
+    @rows = []
   end
+
+  def_delegator :@rows, :push, :add_row
 end

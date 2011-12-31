@@ -509,4 +509,31 @@ describe CommandLineReporter do
       end
     end
   end
+
+  describe '#table' do
+    it 'instantiates the table class' do
+      subject.should_receive(:puts).any_number_of_times
+      subject.table do
+        puts 'hi'
+      end
+      subject.instance_variable_get(:@table).should_not be_nil
+    end
+
+    it 'requires a row to be defined' do
+      expect {
+        subject.table
+      }.to raise_error LocalJumpError
+    end
+
+    it 'accepts valid options' do
+      subject.table(:width => 50) { }
+      subject.instance_variable_get(:@table).width.should == 50
+    end
+
+    it 'does not accept invalid options' do
+      expect {
+        subject.table(:asdf => '100') { }
+      }.to raise_error ArgumentError
+    end
+  end
 end

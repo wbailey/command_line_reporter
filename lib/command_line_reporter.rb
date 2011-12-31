@@ -1,3 +1,5 @@
+require 'table'
+
 Dir[File.join(File.dirname(__FILE__), '*_formatter.rb')].each {|r| require r}
 
 module CommandLineReporter
@@ -78,6 +80,12 @@ module CommandLineReporter
     else
       raise ArgumentError
     end
+  end
+
+  def table(options = {})
+    @table = Table.new(options)
+    yield
+    @table.to_s
   end
 
   private
