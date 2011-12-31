@@ -49,6 +49,14 @@ describe CommandLineReporter do
 
       subject.formatter.class.should == CommandLineReporter::ProgressFormatter
     end
+
+    it 'does not mask other application errors when a formatter is not set' do
+      capture_stdout {
+        subject.report {
+          lambda {self.some_method_that_does_not_exist}.should raise_error(NoMethodError)
+        }
+      }
+    end
   end
 
   describe '#header' do
