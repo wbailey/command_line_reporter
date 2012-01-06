@@ -533,8 +533,9 @@ describe CommandLineReporter do
     end
 
     it 'accepts valid options' do
-      subject.table(:width => 50) { }
-      subject.instance_variable_get(:@table).width.should == 50
+      expect {
+        subject.table(:width => 50) { }
+      }.to_not raise_error
     end
 
     it 'rejects invalid options' do
@@ -546,7 +547,6 @@ describe CommandLineReporter do
 
   describe '#row' do
     it 'instantiates a row class' do
-      subject.should_receive(:table).once
       subject.should_receive(:row).once
       subject.should_receive(:puts).any_number_of_times
 
@@ -555,17 +555,38 @@ describe CommandLineReporter do
         end
       end
     end
+  end
 
-    it 'requires a column to be defined' do
+  describe '#column' do
+    it 'instantiates multiple columns' do
+      subject.should_receive(:column).exactly(3).times
+      subject.should_receive(:puts).any_number_of_times
 
+      subject.table do
+        subject.row do
+          subject.column('asdf')
+          subject.column('qwer')
+          subject.column('zxcv')
+        end
+      end
     end
 
     it 'accepts valid options' do
-
+      subject.table do
+        subject.row do
+          subject.column('asdf', :width => 30)
+        end
+      end
     end
 
     it 'rejects invalid options' do
-
+      expect {
+        subject.table do
+          subject.row do
+            subject.column('asdf', :asdf => 30)
+          end
+        end
+      }.to raise_error ArgumentError
     end
   end
 end

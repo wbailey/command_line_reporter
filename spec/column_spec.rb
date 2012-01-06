@@ -3,6 +3,12 @@ require 'column'
 
 describe Column do
   context 'creation' do
+    it 'rejects invalid options' do
+      expect {
+        Column.new('test', :asdf => '1234')
+      }.to raise_error ArgumentError
+    end
+
     it 'defaults options hash' do
       expect {
         Column.new('test')

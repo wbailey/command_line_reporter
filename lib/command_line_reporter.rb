@@ -87,7 +87,8 @@ module CommandLineReporter
   end
 
   def row(options = {})
-    @row = Row.new(options)
+    @row = Row.new
+    yield
     @table.add_row(@row)
   end
 

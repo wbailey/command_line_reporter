@@ -1,11 +1,17 @@
+require 'options_validator'
+
 class Column
-  attr_accessor :width, :text, :padding, :align, :border, :size
+  include OptionsValidator
+
+  VALID_OPTIONS = [:width, :padding, :border, :align]
+  attr_accessor :text, :size, *VALID_OPTIONS
 
   def initialize(text, options = {})
-    raise ArgumentError unless (options.keys - [:width, :padding, :align, :border]).empty?
+    self.validate(options)
+
+    self.text = text
 
     self.width = options[:width] || 10
-    self.text = text
     self.padding = options[:padding] || 1
     self.align = options[:align] || 'left'
     self.border = options[:border] || ''

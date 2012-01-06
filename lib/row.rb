@@ -6,8 +6,8 @@ class Row
 
   attr_accessor :columns
 
-  def initialize(columns = [])
-    self.columns = columns
+  def initialize
+    self.columns = []
   end
 
   def_delegator :@columns, :push, :add

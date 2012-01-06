@@ -4,31 +4,24 @@ class Example
   include CommandLineReporter
 
   def run
-    x,y,z = 0,0,0
+    records = [
+      %w/asdf qwer zxcv/,
+      %w/uip jkl bnm/,
+    ]
 
-    header(:title => 'Simple Report Example', :align => 'center', :timestamp => true, :rule => true)
+    header(:title => 'Simple Report Example', :align => 'center', :timestamp => true, :rule => false)
 
-    report(:message => 'calculating sums') do
-      x = 2 + 2
-      y = 10 - x
-      z = x + y
-    end
-
-    table(:width => 80, :align => 'center', :outline => false) do
-      row do
-        column('asdf', :width => 30, :align => 'center')
-        column('qwer')
-        column('zxcv')
-      end
-      row(:align => 'right') do
-        column('12')
-        column('14')
-        column('19')
+    table(:width => 90, :border => false) do
+      records.each do |record|
+        row do
+          record.each do |val|
+            column(val, :align => 'left')
+          end
+        end
       end
     end
 
     footer(:title => 'Values', :width => 15)
-    %w(x y z).each {|v| aligned("#{v}: #{eval v}")}
   end
 end
 
