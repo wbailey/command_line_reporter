@@ -25,22 +25,33 @@ class Table
   def_delegator :@rows, :push, :add_row
 
   def to_s
-    border_line
-    first_char = self.border ? '|' : ' '
-    self.rows.each do|row|
-      row.columns.each do |col|
-        last_char, compress_by = (row.columns.last == col) ? ['|', 2] : ['', 1]
-        last_char = '' unless self.border
-        print "#{first_char}#{col.text.ljust(col.width - compress_by)}#{last_char}"
+    if self.border
+      header = '+' + self.rows[0].columns.map {|c| '-' * (c.size + 2)}.join('+') + '+'
+
+      puts header
+      self.rows.each do |row|
+        puts '|' + row.columns.map {|c| to_cell(c) }.join('|') + '|'
+        puts header
       end
-      print "\n"
-      border_line
+    else
+      self.rows.each do |row|
+        puts row.columns.map {|c| to_cell(c)}.join(' ')
+      end
     end
   end
 
   private
 
-  def border_line
-    puts '+' + ('-' * (self.width - 2)) + '+' if self.border
+  def to_cell(c)
+    text = case c.align
+       when 'left'
+         c.text.ljust(c.size)
+       when 'right'
+         c.text.rjust(c.size)
+       when 'center'
+         spacing = (c.size - c.text.size)/2
+         c.text.ljust(c.size - spacing).rjust(c.size)
+       end
+    " #{text} "
   end
 end
