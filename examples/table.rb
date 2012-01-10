@@ -11,15 +11,16 @@ class Example
 
     header(:title => 'Simple Report Example', :align => 'center', :timestamp => true, :rule => false)
 
+    align = %w/left right center/
+
     2.times do |j|
       table(:width => 90, :border => j % 2 == 0) do
         10.times do
           i = 0
           row do
             i += 10
-            align = %w/left right center/[rand(3)]
             3.times do
-              column('x' * rand(50), :align => align , :width => i)
+              column('x' * rand(48), :align => align[rand(3)], :width => 50)
             end
           end
         end

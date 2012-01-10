@@ -6,17 +6,18 @@ class Column
   VALID_OPTIONS = [:width, :padding, :border, :align]
   attr_accessor :text, :size, *VALID_OPTIONS
 
-  def initialize(text, options = {})
+  def initialize(text = nil, options = {})
     self.validate(options)
 
     self.text = text
 
     self.width = options[:width] || 10
-    self.padding = options[:padding] || 1
     self.align = options[:align] || 'left'
-    self.border = options[:border] || ''
+    self.border = options[:border] || false
+    self.padding = options[:padding] || (self.border ? 1 : 0)
 
-    raise ArgumentError unless self.width > 0 && self.padding > 0
+    raise ArgumentError unless self.width > 0
+    raise ArgumentError unless self.padding.to_s.match(/^\d+$/)
 
     self.size = self.width - 2 * self.padding
 
@@ -24,7 +25,11 @@ class Column
   end
 
   def screen_rows
-    chunk(self.size).map{|s| apply_border(s)}
+    if self.text.nil? || self.text.empty?
+      [' ' * self.width]
+    else
+      chunk(self.size).map{|s| to_cell(s)}
+    end
   end
 
   private
@@ -34,10 +39,16 @@ class Column
     self.text.scan(r) + self.text.split(r).reject(&:empty?)
   end
 
-  def apply_border(str)
-    case self.align
+  def to_cell(str)
+    cell = case self.align
     when 'left'
-      "" + self.border + str.rjust(padding + str.size).ljust(self.width) +  self.border
+      self.text.ljust(self.size)
+    when 'right'
+      self.text.rjust(self.size)
+    when 'center'
+      self.text.ljust((self.size - self.text.size)/2.0 + self.text.size).rjust(self.size)
     end
+
+    ' ' * self.padding + cell + ' ' * self.padding
   end
 end

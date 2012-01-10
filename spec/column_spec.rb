@@ -33,8 +33,14 @@ describe Column do
       Column.new('asdf').text.should == 'asdf'
     end
 
-    it 'defaults the padding' do
-      Column.new('test').padding.should == 1
+    context 'defaults the padding' do
+      it 'without border' do
+        Column.new('test').padding.should == 0
+      end
+
+      it 'with border' do
+        Column.new('test', :border => true).padding.should == 1
+      end
     end
 
     it 'accepts the padding' do
@@ -64,15 +70,49 @@ describe Column do
     end
   end
 
-  context 'manages chunks' do
-    subject { Column.new('asdf asdfasdf qwerqwer qwer', {:border => '|'}) }
+  describe '#screen_rows' do
+    context 'no wrapping' do
+      context 'no padding' do
+        it 'gives a single row' do
+          c = Column.new('x' * 5)
+          c.screen_rows.size == 1
+        end
 
-    before :each do
-      @result = ['asdf asd', 'fasdf qw', 'erqwer q', 'wer']
-    end
+        it 'handles empty text' do
+          c = Column.new
+          c.screen_rows[0].should == ' ' * 10
+        end
 
-    it 'applies left border with padding' do
-      subject.screen_rows.should  == @result.map {|r| "| #{r.ljust(8)} |"}
+        it 'left justifies' do
+          c = Column.new('x' * 10, :width => 20)
+          c.screen_rows[0].should == 'x' * 10 + ' ' * 10
+        end
+
+        it 'right justifies' do
+          c = Column.new('x' * 10, :align => 'right', :width => 20)
+          c.screen_rows[0].should == ' ' * 10 + 'x' * 10
+        end
+
+        it 'center justifies' do
+          c = Column.new('x' * 10, :align => 'center', :width => 20)
+          c.screen_rows[0].should == ' ' * 5 + 'x' * 10 + ' ' * 5
+        end
+      end
+
+      context 'accounts for padding' do
+        it 'left justifies' do
+          c = Column.new('x' * 10, :padding => 5, :width => 30)
+          c.screen_rows[0].should == ' ' * 5 + 'x' * 10 + ' ' * 15
+        end
+        it 'right justifies' do
+          c = Column.new('x' * 10, :align => 'right', :padding => 5, :width => 30)
+          c.screen_rows[0].should == ' ' * 15 + 'x' * 10 + ' ' * 5
+        end
+        it 'right justifies' do
+          c = Column.new('x' * 10, :align => 'center', :padding => 5, :width => 30)
+          c.screen_rows[0].should == ' ' * 10 + 'x' * 10 + ' ' * 10
+        end
+      end
     end
   end
 end
