@@ -25,33 +25,8 @@ class Table
   def_delegator :@rows, :push, :add_row
 
   def to_s
-    if self.border
-      header = '+' + self.rows[0].columns.map {|c| '-' * (c.size + 2)}.join('+') + '+'
-
-      puts header
-      self.rows.each do |row|
-        puts '|' + row.columns.map {|c| to_cell(c) }.join('|') + '|'
-        puts header
-      end
-    else
-      self.rows.each do |row|
-        puts row.columns.map {|c| to_cell(c)}.join(' ')
-      end
-    end
-  end
-
-  private
-
-  def to_cell(c)
-    text = case c.align
-       when 'left'
-         c.text.ljust(c.size)
-       when 'right'
-         c.text.rjust(c.size)
-       when 'center'
-         spacing = (c.size - c.text.size)/2
-         c.text.ljust(c.size - spacing).rjust(c.size)
-       end
-    " #{text} "
+    return if self.rows.size == 0 # we got here with nothing to print to the screen
+    puts self.rows[0].seperator if self.border
+    self.rows.each {|row| row.to_s(self.border)}
   end
 end

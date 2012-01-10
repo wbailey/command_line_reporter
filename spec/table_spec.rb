@@ -55,45 +55,67 @@ describe Table do
     end
   end
 
-  context 'prints' do
-    before :each do
-      @rows = [Row.new, Row.new]
-      @rows[0].add Column.new('asdf')
-      @rows[0].add Column.new('qwer')
-      @rows[0].add Column.new('zxcv')
-      @rows[1].add Column.new('yuip')
-      @rows[1].add Column.new('hjkl')
-      @rows[1].add Column.new('bnmm')
+  context 'prints to screen' do
+    context 'no wrapping' do
+      before :each do
+        @rows = [Row.new, Row.new]
+        @rows[0].add Column.new('asdf')
+        @rows[0].add Column.new('qwer', :align => 'center')
+        @rows[0].add Column.new('zxcv', :align => 'right')
+        @rows[1].add Column.new('yuip')
+        @rows[1].add Column.new('hjkl', :align => 'center')
+        @rows[1].add Column.new('bnmm', :align => 'right')
+        @six_spaces = ' {6,6}'
+        @three_spaces = ' {3,3}'
+      end
+
+      it 'having a single column' do
+        c = Column.new('asdf')
+        r = Row.new
+        t = Table.new
+        t.should_receive(:puts).with(/^asdf#{@six_spaces} $/)
+        r.add(c)
+        t.add_row(r)
+        t.to_s
+      end
+
+      it 'having a single row and three columns' do
+        t = Table.new
+        t.add_row(@rows[0])
+        t.should_receive(:puts).with(/^asdf#{@six_spaces} #{@three_spaces}qwer#{@three_spaces} #{@six_spaces}zxcv $/)
+        t.to_s
+      end
+
+      it 'having multiple rows and three columns' do
+        t = Table.new
+        t.should_receive(:puts).with(/^asdf#{@six_spaces} #{@three_spaces}qwer#{@three_spaces} #{@six_spaces}zxcv $/)
+        t.should_receive(:puts).with(/^yuip#{@six_spaces} #{@three_spaces}hjkl#{@three_spaces} #{@six_spaces}bnmm $/)
+        t.add_row(@rows[0])
+        t.add_row(@rows[1])
+        t.to_s
+      end
     end
 
-    it 'a basic unformatted table' do
-      subject = Table.new
+    context 'with wrapping' do
+      before :each do
+        @rows = [Row.new, Row.new]
+        @rows[0].add Column.new('x' * 25, :align => 'left', :width => 10)
+        @rows[0].add Column.new('qwer', :align => 'center')
+        @rows[0].add Column.new('zxcv', :align => 'right')
+        @rows[1].add Column.new('yuip')
+        @rows[1].add Column.new('hjkl', :align => 'center')
+        @rows[1].add Column.new('bnmm', :align => 'right')
+      end
 
-      subject.should_receive(:print).with(/^asdf/).once
-      subject.should_receive(:print).with(/^qwer/).once
-      subject.should_receive(:print).with(/^zxcv/).once
-      subject.should_receive(:print).with(/^yuip/).once
-      subject.should_receive(:print).with(/^hjkl/).once
-      subject.should_receive(:print).with(/^bnmm/).once
-      subject.should_receive(:puts).twice
-
-      subject.add_row(@rows[0])
-      subject.add_row(@rows[1])
-
-      subject.to_s
-    end
-
-    it 'a basic table with border' do
-      subject = Table.new(:border => true)
-      seperator = '-' * 100
-
-      subject.should_receive(:puts).with(/^-{100}/).once
-      subject.should_receive(:print).any_number_of_times
-      subject.should_receive(:puts)
-
-      subject.add_row(@rows[0])
-
-      subject.to_s
+      # it 'having a single column' do
+      #   c = Column.new('x' * 25, :align => 'left', :width => 10)
+      #   r = Row.new
+      #   t = Table.new
+      #   t.should_receive(:puts).with(/x{10,10}/, /x{10,10}/, /x{5,5}/)
+      #   r.add(c)
+      #   t.add_row(r)
+      #   t.to_s
+      # end
     end
   end
 end

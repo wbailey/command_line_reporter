@@ -16,11 +16,11 @@ class Example
     2.times do |j|
       table(:width => 90, :border => j % 2 == 0) do
         10.times do
-          i = 0
           row do
-            i += 10
+            i = 0
             3.times do
-              column('x' * rand(48), :align => align[rand(3)], :width => 50)
+              i += 10
+              column('x' * rand(10), :align => align[rand(3)], :width => i)
             end
           end
         end
