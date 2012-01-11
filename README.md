@@ -23,7 +23,7 @@ The gem provides a mixin that can be included in your scripts.
 include CommandLineReporter
 ```
 
-#### Standard Methods
+##### Standard Methods
 
 There are several methods the mixin provides that do not depend on the formatter used:
 
