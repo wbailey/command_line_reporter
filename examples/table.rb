@@ -50,6 +50,14 @@ class Example
         column('Quantum Field', :width => 15)
       end
     end
+    table(:border => true) do
+      row do
+         column('asdf', :width => 5)
+      end
+      row do
+         column('qwer')
+      end
+    end
   end
 end
 

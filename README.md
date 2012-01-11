@@ -283,8 +283,9 @@ By default the table does not include a border and the data is left aligned in t
 
 #### Borders, Alignment, Padding and Wrapping
 
-Tables have the capability of doing a lot of convenient things that make formatting the data easy.  You
-can provide borders around the 
+Tables have the capability of doing a lot of convenient things that make formatting the data easy.
+This fictitious example shows how to use the combination of options on _table_ and _column_ to
+achieve desired alignment and effects.
 
 ```ruby
 require 'command_line_reporter'
@@ -308,9 +309,62 @@ class Example
     end
   end
 end
+```
 
+This randomly produces a table with a border that has 3 rows and 3 columns.  Each column gets wider
+by 10 characters.  The alignment of the column is demonstrated and you can see where some data
+elements have padding around them.
+
+```bash
++------------+----------------------+--------------------------------+
+| xxxxxxxxxx |    xxxxxxxxxxxxxx    |   xxxxxxxxxxxxxxxxxxxxxxxxxx   | 
+|     xxxxxx |       xxxxxxxxx      |   xxxxxx                       | 
++------------+----------------------+--------------------------------+
+| xxxxxxxxxx |    xxxxxxxxxxxxxx    |   xxxxxxxxxxxxxxxxxxxxxxxxxx   | 
+| xxxxxxxxxx |    xxxxxxxxxxxxxx    |        xxxxxxxxxxxxxxxxx       | 
+| xxxxxxxxxx |    xxxxxxxxxxxxxx    |                                | 
+| xxxxxxx    |    xxxx              |                                | 
++------------+----------------------+--------------------------------+
+| xxxxxxxxxx |         xxxx         |            xxxxxxxxxxxxxxxxxxx | 
+| xxxxxx     |                      |                                | 
++------------+----------------------+--------------------------------+
+```
+
+In this particular run of the example you see the first row, first column has the data right
+aligned.  The second column is center aligned with a padding of 3 characters.  The last column is
+left aligned with a padding of 2 characters.  Remember this was all generated randomly to illustrate
+the features.
+
+The best feature is wrapping.  If the text you are display in a cell is larger than the width it was
+given, it will automatically wrap it for you.  Padding and alignment are preserved.  It also
+properly handles the case where the data in one cell causes the wrapping but other cells my not have
+the same number of lines to wrap.
 
 ### To Do
 
+* Make it so you only have to specify the properties of a column once.  Right now if you do
+
+```ruby
+table(:border => true) do
+  row do
+     column('asdf', :width => 5)
+  end
+  row do
+     column('qwer')
+  end
+end
+```
+
+It will not preserve the definition in the first row, rather it will just use the default width for
+a column which gives the undersired result illustrated below:
+
+```bash
++-------+
+| asdf  | 
++-------+
+| qwer       | 
++-------+
+```
+
 * Add the progress method to the top level mixin so that there is no need to invoke through the
-   formatter.
+  formatter.
