@@ -3,6 +3,8 @@ require 'table'
 Dir[File.join(File.dirname(__FILE__), '*_formatter.rb')].each {|r| require r}
 
 module CommandLineReporter
+  include OptionsValidator
+
   attr_reader :formatter
 
   DEFAULTS = {
@@ -89,7 +91,7 @@ module CommandLineReporter
   def row(options = {})
     @row = Row.new
     yield
-    @table.add_row(@row)
+    @table.add(@row)
   end
 
   def column(text, options = {})
@@ -98,10 +100,6 @@ module CommandLineReporter
   end
 
   private
-
-  def validate_options(options, *allowed_keys)
-    raise ArgumentError unless (options.keys - allowed_keys).empty?
-  end
 
   def section(type, options)
     validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule)

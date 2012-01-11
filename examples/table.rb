@@ -20,7 +20,7 @@ class Example
             i = 0
             3.times do
               i += 10
-              column('x' * rand(10), :align => align[rand(3)], :width => i)
+              column('x' * (1 + rand(49)), :align => align[rand(3)], :width => i)
             end
           end
         end

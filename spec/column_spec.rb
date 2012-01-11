@@ -33,14 +33,8 @@ describe Column do
       Column.new('asdf').text.should == 'asdf'
     end
 
-    context 'defaults the padding' do
-      it 'without border' do
-        Column.new('test').padding.should == 0
-      end
-
-      it 'with border' do
-        Column.new('test', :border => true).padding.should == 1
-      end
+    it 'defaults the padding' do
+      Column.new('test').padding.should == 0
     end
 
     it 'accepts the padding' do
@@ -111,6 +105,42 @@ describe Column do
         it 'right justifies' do
           c = Column.new('x' * 10, :align => 'center', :padding => 5, :width => 30)
           c.screen_rows[0].should == ' ' * 10 + 'x' * 10 + ' ' * 10
+        end
+      end
+    end
+
+    context 'with wrapping' do
+      context 'no padding' do
+        it 'left justifies' do
+          c = Column.new('x' * 25, :width => 10)
+          c.screen_rows.should == ['x' * 10, 'x' * 10, 'x' * 5 + ' ' * 5]
+        end
+
+        it 'left justifies' do
+          c = Column.new('x' * 25, :align => 'right', :width => 10)
+          c.screen_rows.should == ['x' * 10, 'x' * 10, ' ' * 5 + 'x' * 5]
+        end
+
+        it 'left justifies' do
+          c = Column.new('x' * 25, :align => 'center', :width => 10)
+          c.screen_rows.should == ['x' * 10, 'x' * 10, ' ' * 3 + 'x' * 5 + ' ' * 2]
+        end
+      end
+
+      context 'account for padding' do
+        it 'left justifies' do
+          c = Column.new('x' * 25, :padding => 2, :width => 20)
+          c.screen_rows.should == [' ' * 2 + 'x' * 16 + ' ' * 2, ' ' * 2 + 'x' * 9 + ' ' * 9]
+        end
+
+        it 'right justifies' do
+          c = Column.new('x' * 25, :padding => 2, :align => 'right', :width => 20)
+          c.screen_rows.should == [' ' * 2 + 'x' * 16 + ' ' * 2, ' ' * 9 + 'x' * 9 + ' ' * 2]
+        end
+
+        it 'center justifies' do
+          c = Column.new('x' * 25, :padding => 2, :align => 'center', :width => 20)
+          c.screen_rows.should == [' ' * 2 + 'x' * 16 + ' ' * 2,  ' ' * 6 + 'x' * 9 + ' ' * 5]
         end
       end
     end

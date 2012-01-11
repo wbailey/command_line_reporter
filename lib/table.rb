@@ -1,17 +1,14 @@
 require 'row'
-require 'forwardable'
 require 'options_validator'
 
 class Table
-  extend Forwardable
-
   include OptionsValidator
 
   VALID_OPTIONS = [:width, :border, :padding]
   attr_accessor :rows, *VALID_OPTIONS
 
   def initialize(options = {})
-    self.validate(options)
+    self.validate_options(options, *VALID_OPTIONS)
 
     self.width = (options[:width] || 100).to_i
     self.border = options[:border] || false
@@ -22,11 +19,17 @@ class Table
     @rows = []
   end
 
-  def_delegator :@rows, :push, :add_row
+  def add(row)
+    row.border = self.border
+    self.rows << row
+  end
 
   def to_s
     return if self.rows.size == 0 # we got here with nothing to print to the screen
     puts self.rows[0].seperator if self.border
-    self.rows.each {|row| row.to_s(self.border)}
+    self.rows.each do |row|
+      row.to_s
+      puts self.rows[0].seperator if self.border
+    end
   end
 end
