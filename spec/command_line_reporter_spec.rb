@@ -534,7 +534,7 @@ describe CommandLineReporter do
 
     it 'accepts valid options' do
       expect {
-        subject.table(:width => 50) { }
+        subject.table(:border => true) { }
       }.to_not raise_error
     end
 

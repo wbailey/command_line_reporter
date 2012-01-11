@@ -4,6 +4,9 @@ This gem provides an simple way to add RSpec like formatting of the output of yo
 eliminates the need to litter your code with *puts* statements instead providing a cleaner, more
 ruby like way of reporting progress to the user throught the command line interface.
 
+With the release of Version 2.0, it is now possible to produce tables with and without borders.  See
+the section on *Tables* for more examples.
+
 ### Installation
 
 It is up on rubygems.org so add it to your bundle or do it the old fashioned way:
@@ -58,6 +61,18 @@ There are several methods the mixin provides that do not depend on the formatter
   * _text_ - String to display
   * _:align_ - 'left'|'right'|'center' align the string text.  _Default: 'left'_
   * _:width_ - The width in characters of the string text.  _Default: 100_
+* _table(hash) {block}_
+  * The first argument is a hash that defines properties of the table.
+    * _:border_ - true|false indicates whether to include borders around the table cells
+  * The second argument is a block which includes calls the to the _row_ method
+* _row {block}_
+  * Only argument is a block with calls to _column_ allowed
+* _column(string, hash)_
+  * _text_ - String to display in the table cell
+  * _options_ - The options to define the column
+    * :width
+    * :padding
+    * :align
 
 ### Progress Formatter
 
