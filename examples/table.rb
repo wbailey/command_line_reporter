@@ -9,7 +9,7 @@ class Example
       %w/uip jkl bnm/,
     ]
 
-    header(:title => 'Simple Report Example', :align => 'center', :timestamp => true, :rule => false)
+    header(:title => 'Simple Report Example', :align => 'center', :timestamp => true, :rule => true)
 
     align = %w/left right center/
 
@@ -27,7 +27,28 @@ class Example
       end
     end
 
-    footer(:title => 'Values', :width => 15)
+    table(:border => false) do
+      row do
+        column('Name', :width => 20)
+        column('Address', :width => 30)
+        column('City', :width => 15)
+      end
+    end
+
+    horizontal_rule(:width => 65)
+
+    table(:border => false) do
+      row do
+        column('Wes Bailey', :width => 20)
+        column('1 Appian Way', :width => 30)
+        column('Belmont', :width => 15)
+      end
+      row do
+        column('Richard Feynman', :width => 20)
+        column('1 Golden Gate', :width => 30)
+        column('Heaven', :width => 15)
+      end
+    end
   end
 end
 

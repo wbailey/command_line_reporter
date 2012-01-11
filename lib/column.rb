@@ -34,18 +34,18 @@ class Column
   private
 
   def to_cell(str)
-    cell = if str.empty?
-      ' ' * self.size
-    else
-      case self.align
-      when 'left'
-        str.ljust(self.size)
-      when 'right'
-        str.rjust(self.size)
-      when 'center'
-        str.ljust((self.size - str.size)/2.0 + str.size).rjust(self.size)
-      end
-    end
+    cell =  if str.empty?
+              ' ' * self.size
+            else
+              case self.align
+              when 'left'
+                str.ljust(self.size)
+              when 'right'
+                str.rjust(self.size)
+              when 'center'
+                str.ljust((self.size - str.size)/2.0 + str.size).rjust(self.size)
+              end
+            end
 
     ' ' * self.padding + cell + ' ' * self.padding
   end

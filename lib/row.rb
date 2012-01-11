@@ -13,16 +13,12 @@ class Row
 
   def_delegator :@columns, :push, :add
 
-  def screen_count
-    @sc ||= self.columns.inject(0) {|max,column| column.screen_rows.size > max ? column.screen_rows.size : max}
-  end
-
-  def seperator
+  def separator
     @sep ||= '+' + self.columns.map {|c| '-' * (c.size + 2)}.join('+') + '+'
   end
 
   def to_s
-    self.screen_count.times do |sr|
+    screen_count.times do |sr|
       line = (self.border) ? '| ' : ''
       self.columns.size.times do |mc|
         col = self.columns[mc]
@@ -54,5 +50,11 @@ class Row
       end
       puts line
     end
+  end
+
+  private
+
+  def screen_count
+    @sc ||= self.columns.inject(0) {|max,column| column.screen_rows.size > max ? column.screen_rows.size : max}
   end
 end
