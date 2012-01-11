@@ -70,9 +70,9 @@ There are several methods the mixin provides that do not depend on the formatter
 * _column(string, hash)_
   * _text_ - String to display in the table cell
   * _options_ - The options to define the column
-    * :width
-    * :padding
-    * :align
+    * :width - defines the width of the column
+    * :padding - The number of spaces to put on both the left and right of the text.
+    * :align - Allowed values are left|right|center
 
 ### Progress Formatter
 
@@ -243,8 +243,74 @@ report(:message => 'running', :complete => 'finished', :type => 'inline', :inden
 end
 ```
 
+### Tables
+
+#### No Frills Example
+
+```ruby
+require 'command_line_reporter'
+
+class Example
+  include CommandLineReporter
+
+  def run
+    table do
+      row do
+        column('Wes Bailey', :width => 20)
+        column('1 Appian Way', :width => 30)
+        column('Belmont', :width => 15)
+      end
+      row do
+        column('Richard Feynman', :width => 20)
+        column('1 Golden Gate', :width => 30)
+        column('Quantum Field', :width => 15)
+      end
+    end
+  end
+end
+
+Example.new.run
+```
+
+This produces the very simple output with 2 rows and 3 columns of data:
+
+```bash
+Wes Bailey           1 Appian Way                   Belmont         
+Richard Feynman      1 Golden Gate                  Quantum Field   
+```
+
+By default the table does not include a border and the data is left aligned in the columns.
+
+#### Borders, Alignment, Padding and Wrapping
+
+Tables have the capability of doing a lot of convenient things that make formatting the data easy.  You
+can provide borders around the 
+
+```ruby
+require 'command_line_reporter'
+
+class Example
+  include CommandLineReporter
+
+  def run
+    align = %w/left right center/
+
+    table(:border => true) do
+      3.times do
+        row do
+          i = 0
+          3.times do
+            i += 10
+            column('x' * (1 + rand(49)), :align => align[rand(3)], :width => i, :padding => rand(5))
+          end
+        end
+      end
+    end
+  end
+end
+
+
 ### To Do
 
-* Add the ability to format tables in a simple manner
 * Add the progress method to the top level mixin so that there is no need to invoke through the
    formatter.

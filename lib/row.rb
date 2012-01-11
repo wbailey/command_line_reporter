@@ -14,7 +14,7 @@ class Row
   def_delegator :@columns, :push, :add
 
   def separator
-    @sep ||= '+' + self.columns.map {|c| '-' * (c.size + 2)}.join('+') + '+'
+    @sep ||= '+' + self.columns.map {|c| '-' * (c.width + 2)}.join('+') + '+'
   end
 
   def to_s

@@ -14,13 +14,14 @@ class Example
     align = %w/left right center/
 
     2.times do |j|
-      table(:width => 90, :border => j % 2 == 0) do
-        10.times do
+      table(:border => j % 2 == 0) do
+        3.times do
           row do
             i = 0
             3.times do
               i += 10
-              column('x' * (1 + rand(49)), :align => align[rand(3)], :width => i)
+              column('x' * (0 + rand(50)), :align => align[rand(3)], :width => i, :padding => rand(5))
+              # column('x' * (1 + rand(49)), :align => align[rand(3)], :width => i)
             end
           end
         end
@@ -46,7 +47,7 @@ class Example
       row do
         column('Richard Feynman', :width => 20)
         column('1 Golden Gate', :width => 30)
-        column('Heaven', :width => 15)
+        column('Quantum Field', :width => 15)
       end
     end
   end
