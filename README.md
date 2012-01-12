@@ -245,7 +245,7 @@ end
 
 ### Tables
 
-#### No Frills Example
+Examples are always helpful so let's look at the following:
 
 ```ruby
 require 'command_line_reporter'
@@ -254,18 +254,23 @@ class Example
   include CommandLineReporter
 
   def run
-    table do
-      row do
-        column('Wes Bailey', :width => 20)
-        column('1 Appian Way', :width => 30)
-        column('Belmont', :width => 15)
-      end
-      row do
-        column('Richard Feynman', :width => 20)
-        column('1 Golden Gate', :width => 30)
-        column('Quantum Field', :width => 15)
-      end
-    end
+    table(:border => true) do
+     row do
+       column('NAME', :width => 20)
+       column('ADDRESS', :width => 30, :align => 'right', :padding => 5)
+       column('CITY', :width => 15)
+     end
+     row do
+       column('Ceaser')
+       column('1 Appian Way')
+       column('Rome')
+     end
+     row do
+       column('Richard Feynman')
+       column('1 Golden Gate')
+       column('Quantum Field')
+     end
+   end
   end
 end
 
@@ -275,17 +280,19 @@ Example.new.run
 This produces the very simple output with 2 rows and 3 columns of data:
 
 ```bash
-Wes Bailey           1 Appian Way                   Belmont         
-Richard Feynman      1 Golden Gate                  Quantum Field   
++----------------------+--------------------------------+-----------------+
+| NAME                 |                   ADDRESS      | CITY            | 
++----------------------+--------------------------------+-----------------+
+| Ceaser               |              1 Appian Way      | Rome            | 
++----------------------+--------------------------------+-----------------+
+| Richard Feynman      |             1 Golden Gate      | Quantum Field   | 
++----------------------+--------------------------------+-----------------+
 ```
 
-By default the table does not include a border and the data is left aligned in the columns.
-
-#### Borders, Alignment, Padding and Wrapping
-
-Tables have the capability of doing a lot of convenient things that make formatting the data easy.
-This fictitious example shows how to use the combination of options on _table_ and _column_ to
-achieve desired alignment and effects.
+Notice how the properties of the columns for the second and third rows have been inherited from the
+first like in HTML.  This makes it a lot easier to write in freeform.  What if you have data to
+iterate over and have text that is wider than the column width you have selected?  Not a problem as
+the following example demonstrates all of the combinations of the various options:
 
 ```ruby
 require 'command_line_reporter'
@@ -294,15 +301,13 @@ class Example
   include CommandLineReporter
 
   def run
-    align = %w/left right center/
-
     table(:border => true) do
       3.times do
         row do
           i = 0
           3.times do
             i += 10
-            column('x' * (1 + rand(49)), :align => align[rand(3)], :width => i, :padding => rand(5))
+            column('x' * (0 + rand(50)), :align => %w[left right center][rand(3)], :width => i, :padding => rand(5))
           end
         end
       end
@@ -330,41 +335,16 @@ elements have padding around them.
 +------------+----------------------+--------------------------------+
 ```
 
-In this particular run of the example you see the first row, first column has the data right
-aligned.  The second column is center aligned with a padding of 3 characters.  The last column is
-left aligned with a padding of 2 characters.  Remember this was all generated randomly to illustrate
-the features.
+This is all generated randomly to illustrate the features but you get the idea of how to use
+alignment, width and padding.
 
-The best feature is wrapping.  If the text you are display in a cell is larger than the width it was
-given, it will automatically wrap it for you.  Padding and alignment are preserved.  It also
+The best feature is *wrapping*.  If the text you are display in a cell is larger than the width it
+was given, it will automatically wrap it for you.  Padding and alignment are preserved.  It palso
 properly handles the case where the data in one cell causes the wrapping but other cells my not have
 the same number of lines to wrap.
 
 ### To Do
 
-* Make it so you only have to specify the properties of a column once.  Right now if you do
-
-```ruby
-table(:border => true) do
-  row do
-     column('asdf', :width => 5)
-  end
-  row do
-     column('qwer')
-  end
-end
-```
-
-It will not preserve the definition in the first row, rather it will just use the default width for
-a column which gives the undersired result illustrated below:
-
-```bash
-+-------+
-| asdf  | 
-+-------+
-| qwer       | 
-+-------+
-```
-
+* Add the ability for a column to span across others
 * Add the progress method to the top level mixin so that there is no need to invoke through the
   formatter.

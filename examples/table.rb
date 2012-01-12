@@ -4,61 +4,43 @@ class Example
   include CommandLineReporter
 
   def run
-    # records = [
-    #   %w/asdf qwer zxcv/,
-    #   %w/uip jkl bnm/,
-    # ]
+    header(:title => 'TABLE EXAMPLES - Borders, Wrapping, Alignment and Padding', :align => 'center', :width => 70)
 
-    # header(:title => 'Simple Report Example', :align => 'center', :timestamp => true, :rule => true)
+    2.times do |j|
+      header(:title => "Table #{j}", :align => 'center', :width => 65)
 
-    # align = %w/left right center/
-
-    # 2.times do |j|
-    #   table(:border => j % 2 == 0) do
-    #     3.times do
-    #       row do
-    #         i = 0
-    #         3.times do
-    #           i += 10
-    #           column('x' * (0 + rand(50)), :align => align[rand(3)], :width => i, :padding => rand(5))
-    #           # column('x' * (1 + rand(49)), :align => align[rand(3)], :width => i)
-    #         end
-    #       end
-    #     end
-    #   end
-    # end
-
-    # table(:border => false) do
-    #   row do
-    #     column('Name', :width => 20)
-    #     column('Address', :width => 30)
-    #     column('City', :width => 15)
-    #   end
-    # end
-
-    # horizontal_rule(:width => 65)
-
-    table(:border => false) do
-      row do
-        column('Wes Bailey', :width => 20)
-        column('1 Appian Way', :width => 30)
-        column('Belmont', :width => 15)
+      table(:border => j % 2 == 0) do
+        3.times do
+          row do
+            i = 0
+            3.times do
+              i += 10
+              column('x' * (0 + rand(50)), :align => %w[left right center][rand(3)], :width => i, :padding => rand(5))
+            end
+          end
+        end
       end
-      row do
-        column('Richard Feynman')
-        column('1 Golden Gate', :align => 'right')
-        column('Quantum Field')
-      end
+
+      vertical_spacing(2)
     end
 
-    horizontal_rule
+    header(:title => 'A simple example of how column properties are inhereted from the first row')
 
     table(:border => true) do
       row do
-         column('asdf', :width => 5)
+        column('NAME', :width => 20)
+        column('ADDRESS', :width => 30, :align => 'right', :padding => 5)
+        column('CITY', :width => 15)
       end
       row do
-         column('qwer')
+        column('Ceaser')
+        column('1 Appian Way')
+        column('Rome')
+      end
+      row do
+        column('Richard Feynman')
+        column('1 Golden Gate')
+        column('Quantum Field')
       end
     end
   end
