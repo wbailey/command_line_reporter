@@ -19,8 +19,6 @@ class Column
     raise ArgumentError unless self.padding.to_s.match(/^\d+$/)
 
     self.size = self.width - 2 * self.padding
-
-    # self.freeze
   end
 
   def screen_rows

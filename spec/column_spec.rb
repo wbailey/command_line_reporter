@@ -46,22 +46,6 @@ describe Column do
         Column.new('test', :padding => 'asdf')
       }.to raise_error ArgumentError
     end
-
-    # it 'is immutable' do
-    #   c = Column.new('test')
-
-    #   expect {
-    #     c.text = 'asdf'
-    #   }.to raise_error RuntimeError, /frozen object/
-
-    #   expect {
-    #     c.width = 123
-    #   }.to raise_error RuntimeError, /frozen object/
-
-    #   expect {
-    #     c.padding = 123
-    #   }.to raise_error RuntimeError, /frozen object/
-    # end
   end
 
   describe '#screen_rows' do
