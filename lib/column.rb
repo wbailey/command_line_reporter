@@ -20,7 +20,7 @@ class Column
 
     self.size = self.width - 2 * self.padding
 
-    self.freeze
+    # self.freeze
   end
 
   def screen_rows

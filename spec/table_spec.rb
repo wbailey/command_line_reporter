@@ -23,7 +23,23 @@ describe Table do
       cols = [Column.new('test1'), Column.new('test2')]
       row = Row.new
       cols.each {|c| row.add(c)}
-      Table.new.add(row)
+      expect {
+        Table.new.add(row)
+      }.to_not raise_error
+    end
+
+    it 'normalizes all column width and sizes' do
+      cols = [Column.new('asdf', :width => 5), Column.new('qwer')]
+      row = Row.new
+      row.add(cols[0])
+      t = Table.new
+      t.add(row)
+      row = Row.new
+      row.add(cols[1])
+      t.add(row)
+      output = capture_stdout {
+        t.to_s
+      }
     end
   end
 end

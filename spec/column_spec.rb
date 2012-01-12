@@ -47,21 +47,21 @@ describe Column do
       }.to raise_error ArgumentError
     end
 
-    it 'is immutable' do
-      c = Column.new('test')
+    # it 'is immutable' do
+    #   c = Column.new('test')
 
-      expect {
-        c.text = 'asdf'
-      }.to raise_error RuntimeError, /frozen object/
+    #   expect {
+    #     c.text = 'asdf'
+    #   }.to raise_error RuntimeError, /frozen object/
 
-      expect {
-        c.width = 123
-      }.to raise_error RuntimeError, /frozen object/
+    #   expect {
+    #     c.width = 123
+    #   }.to raise_error RuntimeError, /frozen object/
 
-      expect {
-        c.padding = 123
-      }.to raise_error RuntimeError, /frozen object/
-    end
+    #   expect {
+    #     c.padding = 123
+    #   }.to raise_error RuntimeError, /frozen object/
+    # end
   end
 
   describe '#screen_rows' do

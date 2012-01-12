@@ -5,7 +5,7 @@ class Table
   include OptionsValidator
 
   VALID_OPTIONS = [:border]
-  attr_accessor :rows, *VALID_OPTIONS
+  attr_accessor :rows, :widths, *VALID_OPTIONS
 
   def initialize(options = {})
     self.validate_options(options, *VALID_OPTIONS)
@@ -17,6 +17,17 @@ class Table
 
   def add(row)
     row.border = self.border
+
+    if self.rows[0]
+      # Recalculate the column to ensure all the widths and sizes align with the first row
+      row.columns.each_with_index do |c,i|
+        c.width = self.widths[i]
+        c.size = self.widths[i] - 2 * c.padding
+      end
+    else
+      self.widths = row.columns.map(&:width)
+    end
+
     self.rows << row
   end
 
