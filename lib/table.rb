@@ -4,13 +4,14 @@ require 'options_validator'
 class Table
   include OptionsValidator
 
-  VALID_OPTIONS = [:border]
+  VALID_OPTIONS = [:border, :formatter]
   attr_accessor :rows, *VALID_OPTIONS
 
   def initialize(options = {})
     self.validate_options(options, *VALID_OPTIONS)
 
     self.border = options[:border] || false
+    self.formatter = options[:formatter]
 
     @rows = []
   end
@@ -35,10 +36,18 @@ class Table
   def to_s
     return if self.rows.size == 0 # we got here with nothing to print to the screen
 
-    puts self.rows[0].separator if self.border
+    if self.formatter
+      self.formatter.puts self.rows[0].separator if self.border
+    else
+      puts self.rows[0].separator if self.border
+    end
     self.rows.each do |row|
       row.to_s
-      puts self.rows[0].separator if self.border
+      if self.formatter
+        self.formatter.puts self.rows[0].separator if self.border
+      else
+        puts self.rows[0].separator if self.border
+      end
     end
   end
 end

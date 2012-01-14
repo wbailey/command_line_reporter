@@ -281,11 +281,11 @@ This produces the very simple output with 2 rows and 3 columns of data:
 
 ```bash
 +----------------------+--------------------------------+-----------------+
-| NAME                 |                   ADDRESS      | CITY            | 
+| NAME                 |                   ADDRESS      | CITY            |
 +----------------------+--------------------------------+-----------------+
-| Ceaser               |              1 Appian Way      | Rome            | 
+| Ceaser               |              1 Appian Way      | Rome            |
 +----------------------+--------------------------------+-----------------+
-| Richard Feynman      |             1 Golden Gate      | Quantum Field   | 
+| Richard Feynman      |             1 Golden Gate      | Quantum Field   |
 +----------------------+--------------------------------+-----------------+
 ```
 
@@ -322,16 +322,16 @@ elements have padding around them.
 
 ```bash
 +------------+----------------------+--------------------------------+
-| xxxxxxxxxx |    xxxxxxxxxxxxxx    |   xxxxxxxxxxxxxxxxxxxxxxxxxx   | 
-|     xxxxxx |       xxxxxxxxx      |   xxxxxx                       | 
+| xxxxxxxxxx |    xxxxxxxxxxxxxx    |   xxxxxxxxxxxxxxxxxxxxxxxxxx   |
+|     xxxxxx |       xxxxxxxxx      |   xxxxxx                       |
 +------------+----------------------+--------------------------------+
-| xxxxxxxxxx |    xxxxxxxxxxxxxx    |   xxxxxxxxxxxxxxxxxxxxxxxxxx   | 
-| xxxxxxxxxx |    xxxxxxxxxxxxxx    |        xxxxxxxxxxxxxxxxx       | 
-| xxxxxxxxxx |    xxxxxxxxxxxxxx    |                                | 
-| xxxxxxx    |    xxxx              |                                | 
+| xxxxxxxxxx |    xxxxxxxxxxxxxx    |   xxxxxxxxxxxxxxxxxxxxxxxxxx   |
+| xxxxxxxxxx |    xxxxxxxxxxxxxx    |        xxxxxxxxxxxxxxxxx       |
+| xxxxxxxxxx |    xxxxxxxxxxxxxx    |                                |
+| xxxxxxx    |    xxxx              |                                |
 +------------+----------------------+--------------------------------+
-| xxxxxxxxxx |         xxxx         |            xxxxxxxxxxxxxxxxxxx | 
-| xxxxxx     |                      |                                | 
+| xxxxxxxxxx |         xxxx         |            xxxxxxxxxxxxxxxxxxx |
+| xxxxxx     |                      |                                |
 +------------+----------------------+--------------------------------+
 ```
 
@@ -342,6 +342,29 @@ The best feature is *wrapping*.  If the text you are display in a cell is larger
 was given, it will automatically wrap it for you.  Padding and alignment are preserved.  It palso
 properly handles the case where the data in one cell causes the wrapping but other cells my not have
 the same number of lines to wrap.
+
+### Null Formatter
+
+The null formatter produces no output at all, but it can be dropped in place of the other formatters.
+This allows you to easily quiet verbose output when you don't want it:
+
+```ruby
+require 'command_line_reporter'
+
+class Example
+  include CommandLineReporter
+
+  def initialize
+    if ENV['quiet'] == 'true'
+      self.formatter = 'null'
+    else
+      self.formatter = 'nested'
+    end
+  end
+
+  ...
+end
+```
 
 ### To Do
 

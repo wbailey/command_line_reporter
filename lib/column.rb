@@ -3,7 +3,7 @@ require 'options_validator'
 class Column
   include OptionsValidator
 
-  VALID_OPTIONS = [:width, :padding, :align]
+  VALID_OPTIONS = [:width, :padding, :align, :formatter]
   attr_accessor :text, :size, *VALID_OPTIONS
 
   def initialize(text = nil, options = {})
@@ -14,6 +14,7 @@ class Column
     self.width = options[:width] || 10
     self.align = options[:align] || 'left'
     self.padding = options[:padding] || 0
+    self.formatter = options[:formatter]
 
     raise ArgumentError unless self.width > 0
     raise ArgumentError unless self.padding.to_s.match(/^\d+$/)
