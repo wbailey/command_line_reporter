@@ -30,6 +30,7 @@ class Example
     formatter.puts  "Ready to exit"
     # but Kernel.puts is unchanged
     puts "Done!"
+    puts x
   end
 
 end

@@ -7,6 +7,7 @@ module CommandLineReporter
     attr_accessor :indicator, :indent_size, :complete_string, :message_string
 
     def format(options, block)
+      block.call
     end
 
     def progress(override = nil)

@@ -39,6 +39,12 @@ describe CommandLineReporter::NullFormatter do
         10.times {subject.progress}
       })
     end
+
+    it 'runs any supplied block' do
+      x = 0
+      subject.format({}, lambda{x=4})
+      x.should == 4
+    end
   end
 
   describe '#progress' do
