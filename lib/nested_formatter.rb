@@ -17,15 +17,15 @@ module CommandLineReporter
       complete_str = options[:complete] || self.complete_string
 
       if options[:type] == 'inline'
-        print "#{message_str}..."
+        Kernel.print "#{message_str}..."
       else
-        puts message_str
+        Kernel.puts message_str
         complete_str = padding + complete_str
       end
 
       block.call
 
-      puts complete_str
+      Kernel.puts complete_str
 
       indent_level :decr
     end
@@ -40,6 +40,10 @@ module CommandLineReporter
 
     def indent_size
       @indent_size ||= 2
+    end
+
+    def puts(string)
+      Kernel.puts string
     end
 
     private

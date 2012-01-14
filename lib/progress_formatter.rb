@@ -9,15 +9,19 @@ module CommandLineReporter
     def format(options, block)
       self.indicator = options[:indicator] if options[:indicator]
       block.call
-      puts
+      Kernel.puts
     end
 
     def progress(override = nil)
-      print override || self.indicator
+      Kernel.print override || self.indicator
     end
 
     def indicator
       @indicator ||= '.'
+    end
+
+    def puts(string)
+      Kernel.puts string
     end
   end
 end

@@ -4,11 +4,12 @@ require 'forwardable'
 class Row
   extend Forwardable
 
-  attr_accessor :columns, :border
+  attr_accessor :columns, :border, :formatter
 
   def initialize(options = {})
     self.columns = []
     self.border = false
+    self.formatter = options[:formatter]
   end
 
   def_delegator :@columns, :push, :add
@@ -30,7 +31,7 @@ class Row
         # c1.screen_rows.size == 5
         # c2.screen_rows.size == 2
         #
-        # So when we don't have a screen row for c2 we need to fill the screen with the 
+        # So when we don't have a screen row for c2 we need to fill the screen with the
         # proper number of blanks so the layout looks like (parenthesis on the right just
         # indicate screen row index)
         #
@@ -48,7 +49,7 @@ class Row
         end
         line << ' ' + ((self.border) ? '| ' : '')
       end
-      puts line
+      self.formatter ? self.formatter.puts(line) : puts(line)
     end
   end
 

@@ -10,7 +10,12 @@ module CommandLineReporter
   DEFAULTS = {
     :width => 100,
     :align => 'left',
+    :formatter => CommandLineReporter::NestedFormatter.instance
   }
+
+  def formatter
+    @formatter || DEFAULTS[:formatter]
+  end
 
   def formatter=(type = 'nested')
     name = type.capitalize + 'Formatter'
@@ -41,11 +46,11 @@ module CommandLineReporter
     char = options[:char].is_a?(String) ? options[:char] : '-'
     width = options[:width] || DEFAULTS[:width]
 
-    puts char * width
+    self.formatter.puts char * width
   end
 
   def vertical_spacing(lines = 1)
-    puts "\n" * lines
+    self.formatter.puts "\n" * lines
   rescue
     raise ArgumentError
   end
@@ -72,30 +77,30 @@ module CommandLineReporter
 
     case align
     when 'left'
-      puts text
+      self.formatter.puts text
     when 'right'
-      puts text.rjust(width)
+      self.formatter.puts text.rjust(width)
     when 'center'
-      puts text.rjust((width - text.size)/2 + text.size)
+      self.formatter.puts text.rjust((width - text.size)/2 + text.size)
     else
       raise ArgumentError
     end
   end
 
   def table(options = {})
-    @table = Table.new(options)
+    @table = Table.new(options.merge(:formatter => self.formatter))
     yield
     @table.to_s
   end
 
   def row(options = {})
-    @row = Row.new
+    @row = Row.new(options.merge(:formatter => self.formatter))
     yield
     @table.add(@row)
   end
 
   def column(text, options = {})
-    col = Column.new(text, options)
+    col = Column.new(text, options.merge(:formatter => self.formatter))
     @row.add(col)
   end
 
