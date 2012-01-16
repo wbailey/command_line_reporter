@@ -1,3 +1,4 @@
+require 'stringio'
 require 'table'
 
 Dir[File.join(File.dirname(__FILE__), '*_formatter.rb')].each {|r| require r}
@@ -11,6 +12,14 @@ module CommandLineReporter
     :width => 100,
     :align => 'left',
   }
+
+  def suppress_output
+    $stdout = StringIO.new
+  end
+
+  def restore_output
+    $stdout = STDOUT
+  end
 
   def formatter=(type = 'nested')
     name = type.capitalize + 'Formatter'
@@ -85,7 +94,7 @@ module CommandLineReporter
   def table(options = {})
     @table = Table.new(options)
     yield
-    @table.to_s
+    @table.output
   end
 
   def row(options = {})

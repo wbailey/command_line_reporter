@@ -15,7 +15,21 @@ class Example
     end
 
     footer(:title => 'Values', :width => 15)
-    %w(x y z).each {|v| aligned("#{v}: #{eval v}")}
+
+    table do
+      row do
+        column('x', :width => 5, :align => 'right')
+        column(x.to_s, :width => 10)
+      end
+      row do
+        column('y')
+        column(y.to_s)
+      end
+      row do
+        column('z')
+        column(z.to_s)
+      end
+    end
   end
 end
 

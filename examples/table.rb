@@ -24,7 +24,7 @@ class Example
       vertical_spacing(2)
     end
 
-    header(:title => 'A simple example of how column properties are inhereted from the first row')
+    header(:title => 'A simple example of how column properties are inherited from the first row')
 
     table(:border => true) do
       row do

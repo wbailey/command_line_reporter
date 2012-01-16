@@ -38,7 +38,7 @@ describe Table do
       row.add(cols[1])
       t.add(row)
       output = capture_stdout {
-        t.to_s
+        t.output
       }
     end
   end

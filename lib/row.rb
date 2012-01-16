@@ -17,7 +17,7 @@ class Row
     @sep ||= '+' + self.columns.map {|c| '-' * (c.width + 2)}.join('+') + '+'
   end
 
-  def to_s
+  def output
     screen_count.times do |sr|
       line = (self.border) ? '| ' : ''
       self.columns.size.times do |mc|

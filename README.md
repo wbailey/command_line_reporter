@@ -2,7 +2,7 @@
 
 This gem provides an simple way to add RSpec like formatting of the output of your ruby scripts.  It
 eliminates the need to litter your code with *puts* statements instead providing a cleaner, more
-ruby like way of reporting progress to the user throught the command line interface.
+ruby like way of reporting progress to the user through the command line interface.
 
 With the release of Version 2.0, it is now possible to produce tables with and without borders.  See
 the section on *Tables* for more examples.
@@ -290,7 +290,7 @@ This produces the very simple output with 2 rows and 3 columns of data:
 ```
 
 Notice how the properties of the columns for the second and third rows have been inherited from the
-first like in HTML.  This makes it a lot easier to write in freeform.  What if you have data to
+first like in HTML.  This makes it a lot easier to write in free-form.  What if you have data to
 iterate over and have text that is wider than the column width you have selected?  Not a problem as
 the following example demonstrates all of the combinations of the various options:
 

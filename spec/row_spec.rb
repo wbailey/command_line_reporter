@@ -18,7 +18,7 @@ describe Row do
     end
   end
 
-  describe '#to_s' do
+  describe '#output' do
     before :each do
       @cols = [
         Column.new('asdf'),
@@ -41,46 +41,46 @@ describe Row do
 
     context 'no border' do
       context 'no wrap' do
-        it 'prints a single column' do
+        it 'outputs a single column' do
           subject.add(@cols[0])
           subject.should_receive(:puts).with(/^asdf#{@six_pieces}/)
-          subject.to_s
+          subject.output
         end
-        it 'prints three columns' do
+        it 'outputs three columns' do
           subject.add(@cols[0])
           subject.add(@cols[1])
           subject.add(@cols[2])
           subject.should_receive(:puts).with(/^asdf#{@six_spaces}#{@one_space}#{@three_spaces}qwer#{@three_spaces}#{@one_space}#{@six_spaces}zxcv $/)
-          subject.to_s
+          subject.output
         end
       end
 
       context 'with wrapping' do
-        it 'prints a single column' do
+        it 'outputs a single column' do
           subject.add(@cols[3])
           subject.should_receive(:puts).with(/^#{@ten_xs}#{@one_space}$/)
           subject.should_receive(:puts).with(/^#{@ten_xs}#{@one_space}$/)
           subject.should_receive(:puts).with(/^#{@five_xs}#{@six_spaces}$/)
-          subject.to_s
+          subject.output
         end
 
-        it 'prints multiple columns of the same size' do
+        it 'outputs multiple columns of the same size' do
           subject.add(@cols[3])
           subject.add(@cols[4])
           subject.should_receive(:puts).with(/^#{@ten_xs}#{@one_space}#{@ten_xs}#{@one_space}$/)
           subject.should_receive(:puts).with(/^#{@ten_xs}#{@one_space}#{@ten_xs}#{@one_space}$/)
           subject.should_receive(:puts).with(/^#{@five_xs}#{@nine_spaces}#{@five_xs}#{@three_spaces}$/)
-          subject.to_s
+          subject.output
         end
 
-        it 'prints multiple columns with different size' do
+        it 'outputs multiple columns with different sizes' do
           subject.add(@cols[5])
           subject.add(@cols[3])
           subject.should_receive(:puts).with(/^#{@ten_xs}#{@one_space}#{@ten_xs}#{@one_space}$/)
           subject.should_receive(:puts).with(/^#{@ten_xs}#{@one_space}#{@ten_xs}#{@one_space}$/)
           subject.should_receive(:puts).with(/^#{@ten_xs}#{@one_space}#{@five_xs}#{@six_spaces}$/)
           subject.should_receive(:puts).with(/^#{@five_xs} {5,17}$/)
-          subject.to_s
+          subject.output
         end
       end
     end
