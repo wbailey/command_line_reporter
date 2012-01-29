@@ -98,6 +98,13 @@ There are several methods the mixin provides that do not depend on the formatter
 * Add the progress method to the top level mixin so that there is no need to invoke through the
   formatter.
 
+### Contributors
+
+* Thanks to [Mike Gunderloy](https://github.com/ffmike) for suggesting the need for suppressing
+  output and putting together a fantastic pull request and discussion
+* Thanks to [Jason Rogers](https://github.com/jacaetevha) and [Peter
+  Suschlik](https://github.com/splattael) for their contributions as well on items I missed
+
 ### License
 
 Copyright (c) 2011-2012 Wes Bailey
