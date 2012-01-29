@@ -33,7 +33,7 @@ end
 The [Wiki](https://github.com/wbailey/command_line_reporter/wiki) has all of the documentation
 necessary for getting you started.
 
-### Standard Methods
+### API Reference
 
 There are several methods the mixin provides that do not depend on the formatter used:
 
