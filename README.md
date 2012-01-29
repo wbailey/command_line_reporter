@@ -28,6 +28,10 @@ class MyReport
 end
 ```
 
+### Wiki
+
+The [[wiki|Wiki]] has all of the documentation to [[Getting Started|getting you started]]
+
 ### Standard Methods
 
 There are several methods the mixin provides that do not depend on the formatter used:
