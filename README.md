@@ -1,17 +1,22 @@
 ## Command Line Reporter
 
-This gem provides an simple way to add RSpec like formatting of the output of your ruby scripts.  It
-eliminates the need to litter your code with *puts* statements instead providing a cleaner, more
-ruby like way of reporting progress to the user through the command line interface.
+This gem provides a DSL that makes it easy to write reports of various types in ruby.  It eliminate
+the need to litter your source with *puts* statements instead providing a more readable, expressive
+interface to your application.  Some of the best features include:
 
-With the release of Version 2.0, it is now possible to format your output using tables with and
-without borders.  See the section on
-[Tables](https://github.com/wbailey/command_line_reporter/wiki/Tables) in the
-[wiki](https://github.com/wbailey/command_line_reporter/wiki) for more details.
+* Formatters that automatically indicate progress
+* Table syntax similar to HTML that makes it trivial to format your data in rows and columns
+* Easily created headers and footers for your report
+* Output suppression that makes it easy for your script to support a _quiet_ flag
 
 ### Installation
 
-It is up on rubygems.org so add it to your bundle or do it the old fashioned way:
+It is up on rubygems.org so add it to your bundle
+
+```bash
+gem 'command_line_reporter', '>=2.1'
+
+or do it the old fashioned way:
 
 ```bash
 gem install command_line_reporter
