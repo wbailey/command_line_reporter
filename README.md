@@ -30,7 +30,8 @@ end
 
 ### Wiki
 
-The [[wiki|Wiki]] has all of the documentation to [[Getting Started|getting you started]]
+The [Wiki](https://github.com/wbailey/command_line_reporter/wiki) has all of the documentation
+necessary for getting you started.
 
 ### Standard Methods
 
