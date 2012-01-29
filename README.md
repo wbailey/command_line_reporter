@@ -30,7 +30,7 @@ class MyReport
 end
 ```
 
-### [Wiki]](https://github.com/wbailey/command_line_reporter/wiki)
+### [Wiki](https://github.com/wbailey/command_line_reporter/wiki)
 
 The [Wiki](https://github.com/wbailey/command_line_reporter/wiki) has all of the documentation
 necessary for getting you started.
