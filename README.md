@@ -4,8 +4,8 @@ This gem provides an simple way to add RSpec like formatting of the output of yo
 eliminates the need to litter your code with *puts* statements instead providing a cleaner, more
 ruby like way of reporting progress to the user through the command line interface.
 
-With the release of Version 2.0, it is now possible to produce tables with and without borders.  See
-the section on *Tables* for more examples.
+With the release of Version 2.0, it is now possible to format your output using tables with and
+without borders.  See the section on *Tables* in the wiki for more details.
 
 ### Installation
 
@@ -20,10 +20,15 @@ gem install command_line_reporter
 The gem provides a mixin that can be included in your scripts.
 
 ```ruby
-include CommandLineReporter
+require 'command_line_reporter'
+
+class MyReport
+  include CommandLineReporter
+  ...
+end
 ```
 
-##### Standard Methods
+### Standard Methods
 
 There are several methods the mixin provides that do not depend on the formatter used:
 
@@ -73,275 +78,6 @@ There are several methods the mixin provides that do not depend on the formatter
     * :width - defines the width of the column
     * :padding - The number of spaces to put on both the left and right of the text.
     * :align - Allowed values are left|right|center
-
-### Progress Formatter
-
-#### Example
-
-```ruby
-require 'command_line_reporter'
-
-class Example
-  include CommandLineReporter
-
-  def initialize
-    self.formatter = 'progress'
-  end
-
-  def run
-    x = 0
-    report do
-      10.times do
-        x += 1
-        formatter.progress
-      end
-    end
-  end
-end
-
-Example.new.run
-```
-
-This simply produces 10 dots (.) in succession:
-
-```bash
-[~/scratch]$ ruby example.rb
-..........
-```
-
-#### Indicator
-
-The indicator is the string that is displayed in the command line interface that indicates progress.
-The default is the dot (.) but any string is allowed.  In fact one can use the erase character to
-get crafty with displaying percent complete in place.
-
-#### Instance Methods
-
-* _indicator(string)_ - This overrides the default value of the dot (.) being used for all calls to
-   the report method.
-
-```ruby
-formatter.indicator('*')
-```
-
-* _progress(string)_ - Call this method to invoke the output to the command line interface.  The
-   string overrides the indicator for this call only.
-
-```ruby
-formatter.progress
-formatter.progress("^H^H^H10%")
-```
-
-### Nested Formatter
-
-The nested formatter concept is inspired by the documentation formatter in RSpec.  The idea is to be
-able to create nested grouping levels of output that are very readable as the code is being
-executed.
-
-#### Example
-
-```ruby
-require 'command_line_reporter'
-
-class Example
-  include CommandLineReporter
-
-  def initialize
-    self.formatter = 'nested'
-  end
-
-  def run
-    x,y,z = 0,0,0
-
-    report(:message => 'calculating first expression') do
-      x = 2 + 2
-      2.times do
-        report(:message => 'calculating second expression') do
-          y = 10 - x
-          10.times do |i|
-            report(:message => 'pixelizing', :type => 'inline', :complete => "#{i*10+10}%") do
-              z = x + y
-            end
-          end
-        end
-      end
-    end
-  end
-end
-
-Example.new.run
-
-```
-
-This produces the more complex output:
-
-```
-[~/scratch]$ ruby example.rb
-calculating first expression
-  calculating second expression
-    pixelizing...10%
-    pixelizing...20%
-    pixelizing...30%
-    pixelizing...40%
-    pixelizing...50%
-    pixelizing...60%
-    pixelizing...70%
-    pixelizing...80%
-    pixelizing...90%
-    pixelizing...100%
-  complete
-  calculating second expression
-    pixelizing...10%
-    pixelizing...20%
-    pixelizing...30%
-    pixelizing...40%
-    pixelizing...50%
-    pixelizing...60%
-    pixelizing...70%
-    pixelizing...80%
-    pixelizing...90%
-    pixelizing...100%
-  complete
-complete
-```
-
-#### Instance Methods
-
-* _message_string(string)_ - This defines the string that is displayed as the first part of the
-  message to the user. The default value is "_working_".
-
-```ruby
-formatter.message_string('working')
-```
-
-* _complete_string(string)_ - This defines the string that completes the message to the user for the
-  report.  The default value is "_complete_".
-
-```ruby
-formatter.complete_string('done')
-```
-
-* _indent_size(int)_ - The number of spaces to indent for a single indentation level.  The default
-  value is 2 spaces.
-
-```ruby
-formatter.indent_size(4)
-```
-
-#### Report Options
-
-The following are the allowed values of the options hash argument to the _report_ method:
-
-* _:message_ - The string that is displayed as the first part of the message to the user
-* _:complete_ - The string that completes the message to the user
-* _:type_ - Define as 'inline' if you want the message and complete strings on the same line
-* _:indent_size_ - The number of spaces to indent the current level
-
-```ruby
-report(:message => 'running', :complete => 'finished', :type => 'inline', :indent_size => 8) do
-  # code here
-end
-```
-
-### Tables
-
-Examples are always helpful so let's look at the following:
-
-```ruby
-require 'command_line_reporter'
-
-class Example
-  include CommandLineReporter
-
-  def run
-    table(:border => true) do
-     row do
-       column('NAME', :width => 20)
-       column('ADDRESS', :width => 30, :align => 'right', :padding => 5)
-       column('CITY', :width => 15)
-     end
-     row do
-       column('Ceaser')
-       column('1 Appian Way')
-       column('Rome')
-     end
-     row do
-       column('Richard Feynman')
-       column('1 Golden Gate')
-       column('Quantum Field')
-     end
-   end
-  end
-end
-
-Example.new.run
-```
-
-This produces the very simple output with 2 rows and 3 columns of data:
-
-```bash
-+----------------------+--------------------------------+-----------------+
-| NAME                 |                   ADDRESS      | CITY            | 
-+----------------------+--------------------------------+-----------------+
-| Ceaser               |              1 Appian Way      | Rome            | 
-+----------------------+--------------------------------+-----------------+
-| Richard Feynman      |             1 Golden Gate      | Quantum Field   | 
-+----------------------+--------------------------------+-----------------+
-```
-
-Notice how the properties of the columns for the second and third rows have been inherited from the
-first like in HTML.  This makes it a lot easier to write in free-form.  What if you have data to
-iterate over and have text that is wider than the column width you have selected?  Not a problem as
-the following example demonstrates all of the combinations of the various options:
-
-```ruby
-require 'command_line_reporter'
-
-class Example
-  include CommandLineReporter
-
-  def run
-    table(:border => true) do
-      3.times do
-        row do
-          i = 0
-          3.times do
-            i += 10
-            column('x' * (0 + rand(50)), :align => %w[left right center][rand(3)], :width => i, :padding => rand(5))
-          end
-        end
-      end
-    end
-  end
-end
-```
-
-This randomly produces a table with a border that has 3 rows and 3 columns.  Each column gets wider
-by 10 characters.  The alignment of the column is demonstrated and you can see where some data
-elements have padding around them.
-
-```bash
-+------------+----------------------+--------------------------------+
-| xxxxxxxxxx |    xxxxxxxxxxxxxx    |   xxxxxxxxxxxxxxxxxxxxxxxxxx   | 
-|     xxxxxx |       xxxxxxxxx      |   xxxxxx                       | 
-+------------+----------------------+--------------------------------+
-| xxxxxxxxxx |    xxxxxxxxxxxxxx    |   xxxxxxxxxxxxxxxxxxxxxxxxxx   | 
-| xxxxxxxxxx |    xxxxxxxxxxxxxx    |        xxxxxxxxxxxxxxxxx       | 
-| xxxxxxxxxx |    xxxxxxxxxxxxxx    |                                | 
-| xxxxxxx    |    xxxx              |                                | 
-+------------+----------------------+--------------------------------+
-| xxxxxxxxxx |         xxxx         |            xxxxxxxxxxxxxxxxxxx | 
-| xxxxxx     |                      |                                | 
-+------------+----------------------+--------------------------------+
-```
-
-This is all generated randomly to illustrate the features but you get the idea of how to use
-alignment, width and padding.
-
-The best feature is *wrapping*.  If the text you are display in a cell is larger than the width it
-was given, it will automatically wrap it for you.  Padding and alignment are preserved.  It palso
-properly handles the case where the data in one cell causes the wrapping but other cells my not have
-the same number of lines to wrap.
 
 ### To Do
 

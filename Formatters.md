@@ -1,1 +1,0 @@
-Formatters are used to indicate progress in a report.  There are a couple built in formatters for common tasks
