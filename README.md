@@ -5,7 +5,8 @@ eliminates the need to litter your code with *puts* statements instead providing
 ruby like way of reporting progress to the user through the command line interface.
 
 With the release of Version 2.0, it is now possible to format your output using tables with and
-without borders.  See the section on *Tables* in the wiki for more details.
+without borders.  See the section on
+[Tables](https://github.com/wbailey/command_line_reporter/wiki/Tables) in the wiki for more details.
 
 ### Installation
 
