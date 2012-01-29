@@ -6,7 +6,8 @@ ruby like way of reporting progress to the user through the command line interfa
 
 With the release of Version 2.0, it is now possible to format your output using tables with and
 without borders.  See the section on
-[Tables](https://github.com/wbailey/command_line_reporter/wiki/Tables) in the wiki for more details.
+[Tables](https://github.com/wbailey/command_line_reporter/wiki/Tables) in the
+[wiki]](https://github.com/wbailey/command_line_reporter/wiki) for more details.
 
 ### Installation
 
@@ -29,7 +30,7 @@ class MyReport
 end
 ```
 
-### Wiki
+### [Wiki]](https://github.com/wbailey/command_line_reporter/wiki)
 
 The [Wiki](https://github.com/wbailey/command_line_reporter/wiki) has all of the documentation
 necessary for getting you started.
