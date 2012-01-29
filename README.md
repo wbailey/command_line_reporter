@@ -15,6 +15,7 @@ It is up on rubygems.org so add it to your bundle
 
 ```bash
 gem 'command_line_reporter', '>=2.1'
+```
 
 or do it the old fashioned way:
 
