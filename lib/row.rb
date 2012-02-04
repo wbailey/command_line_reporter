@@ -1,12 +1,10 @@
 require 'column'
-require 'forwardable'
 require 'options_validator'
 
 class Row
-  extend Forwardable
   include OptionsValidator
 
-  VALID_OPTIONS = [:header]
+  VALID_OPTIONS = [:header, :color, :bold]
   attr_accessor :columns, :border, *VALID_OPTIONS
 
   def initialize(options = {})
@@ -14,11 +12,22 @@ class Row
 
     self.columns = []
     self.border = false
-
     self.header = options[:header] || false
+    self.color = options[:color]
+    self.bold = options[:bold] || false
   end
 
-  def_delegator :@columns, :push, :add
+  def add(column)
+    if column.color.nil? && self.color
+      column.color = self.color
+    end
+
+    if self.bold || self.header
+      column.bold = true
+    end
+
+    self.columns << column
+  end
 
   def separator
     @sep ||= '+' + self.columns.map {|c| '-' * (c.width + 2)}.join('+') + '+'

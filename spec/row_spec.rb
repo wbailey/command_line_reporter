@@ -6,6 +6,20 @@ describe Row do
     @cols = 10.times.map {|v| Column.new("test#{v}")}
   end
 
+  describe '#initialize' do
+    it 'accepts header' do
+      Row.new(:header => true).header.should == true
+    end
+
+    it 'accepts color' do
+      Row.new(:color => 'red').color.should == 'red'
+    end
+
+    it 'accepts bold' do
+      Row.new(:bold => true).bold.should == true
+    end
+  end
+
   describe '#add' do
     subject { Row.new }
 
@@ -15,6 +29,22 @@ describe Row do
       subject.columns[0].should == @cols[0]
       subject.add(@cols[1])
       subject.columns.should == @cols[0,2]
+    end
+
+    it 'defaults colors on columns' do
+      row = Row.new(:color => 'red')
+      row.add(@cols[0])
+      row.columns[0].color.should == 'red'
+      row.add(@cols[1])
+      row.columns[1].color.should == 'red'
+    end
+
+    it 'defaults bold on columns' do
+      row = Row.new(:bold => true)
+      row.add(@cols[0])
+      row.columns[0].bold.should == true
+      row.add(@cols[1])
+      row.columns[1].bold.should == true
     end
   end
 

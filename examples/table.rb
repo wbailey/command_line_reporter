@@ -28,12 +28,12 @@ class Example
     header(:title => 'A simple example of how column properties are inherited from the first row')
 
     table(:border => true) do
-      row(:header => true) do
-        column('MY NAME IS REALLY LONG AND WILL WRAP AND HOPE', :width => 20, :align => 'center', :color => 'blue', :bold => true)
-        column('ADDRESS', :width => 30, :color => 'red', :padding => 5)
-        column('CITY', :width => 15, :color => 'red')
+      row(:header => true, :color => 'red') do
+        column('MY NAME IS REALLY LONG AND WILL WRAP AND HOPE', :width => 20, :align => 'center', :color => 'blue')
+        column('ADDRESS', :width => 30, :padding => 5)
+        column('CITY', :width => 15)
       end
-      row do
+      row(:color => 'green', :bold => true) do
         column('Ceaser')
         column('1 Appian Way')
         column('Rome')
