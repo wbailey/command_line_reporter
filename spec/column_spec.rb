@@ -33,6 +33,14 @@ describe Column do
       Column.new('asdf').text.should == 'asdf'
     end
 
+    it 'accepts color' do
+      Column.new('asdf', :color => 'red').color.should == 'red'
+    end
+
+    it 'accepts bold' do
+      Column.new('asdf', :bold => true).bold.should == true
+    end
+
     it 'defaults the padding' do
       Column.new('test').padding.should == 0
     end
@@ -49,6 +57,14 @@ describe Column do
   end
 
   describe '#screen_rows' do
+    before :all do
+      @controls = {
+        :clear => "\e[0m",
+        :bold => "\e[1m",
+        :red => "\e[31m",
+      }
+    end
+
     context 'no wrapping' do
       context 'no padding' do
         it 'gives a single row' do
@@ -61,70 +77,347 @@ describe Column do
           c.screen_rows[0].should == ' ' * 10
         end
 
-        it 'left justifies' do
-          c = Column.new('x' * 10, :width => 20)
-          c.screen_rows[0].should == 'x' * 10 + ' ' * 10
+        context 'left justifies' do
+          before :each do
+            @text = 'x' * 10
+            @filler = ' ' * 10
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :width => 20)
+            c.screen_rows[0].should == @text + @filler
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :align => 'left', :width => 20, :color => 'red')
+            c.screen_rows[0].should == @controls[:red] + @text + @filler + @controls[:clear]
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :align => 'left', :width => 20, :bold => true)
+            c.screen_rows[0].should == @controls[:bold] + @text + @filler + @controls[:clear]
+          end
         end
 
-        it 'right justifies' do
-          c = Column.new('x' * 10, :align => 'right', :width => 20)
-          c.screen_rows[0].should == ' ' * 10 + 'x' * 10
+        context 'right justifies' do
+          before :each do
+            @text = 'x' * 10
+            @filler = ' ' * 10
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :align => 'right', :width => 20)
+            c.screen_rows[0].should == @filler + @text
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :align => 'right', :width => 20, :color => 'red')
+            c.screen_rows[0].should == @controls[:red] + @filler + @text  + @controls[:clear]
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :align => 'right', :width => 20, :bold => true)
+            c.screen_rows[0].should == @controls[:bold] + @filler + @text + @controls[:clear]
+          end
         end
 
-        it 'center justifies' do
-          c = Column.new('x' * 10, :align => 'center', :width => 20)
-          c.screen_rows[0].should == ' ' * 5 + 'x' * 10 + ' ' * 5
+        context 'center justifies' do
+          before :each do
+            @text = 'x' * 10
+            @filler = ' ' * 5
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :align => 'center', :width => 20)
+            c.screen_rows[0].should == @filler + @text + @filler
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :align => 'center', :width => 20, :color => 'red')
+            c.screen_rows[0].should == @controls[:red] + @filler + @text + @filler + @controls[:clear]
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :align => 'center', :width => 20, :bold => true)
+            c.screen_rows[0].should == @controls[:bold] + @filler + @text + @filler + @controls[:clear]
+          end
         end
       end
 
       context 'accounts for padding' do
-        it 'left justifies' do
-          c = Column.new('x' * 10, :padding => 5, :width => 30)
-          c.screen_rows[0].should == ' ' * 5 + 'x' * 10 + ' ' * 15
+        context 'left justifies' do
+          before :each do
+            @text = 'x' * 10
+            @padding = ' ' * 5
+            @filler = ' ' * 10
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :padding => 5, :width => 30)
+            c.screen_rows[0].should == @padding + @text + @filler + @padding
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :padding => 5, :width => 30, :color => 'red')
+            c.screen_rows[0].should == @padding + @controls[:red] + @text + @filler + @controls[:clear] + @padding
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :padding => 5, :width => 30, :bold => true)
+            c.screen_rows[0].should == @padding + @controls[:bold] + @text + @filler + @controls[:clear] + @padding
+          end
         end
-        it 'right justifies' do
-          c = Column.new('x' * 10, :align => 'right', :padding => 5, :width => 30)
-          c.screen_rows[0].should == ' ' * 15 + 'x' * 10 + ' ' * 5
+
+        context 'right justifies' do
+          before :each do
+            @text = 'x' * 10
+            @padding = ' ' * 5
+            @filler = ' ' * 10
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :align => 'right', :padding => 5, :width => 30)
+            c.screen_rows[0].should == @padding + @filler + @text + @padding
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :align => 'right', :padding => 5, :width => 30, :color => 'red')
+            c.screen_rows[0].should == @padding + @controls[:red] + @filler + @text + @controls[:clear] + @padding
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :align => 'right', :padding => 5, :width => 30, :bold => true)
+            c.screen_rows[0].should == @padding + @controls[:bold] + @filler + @text + @controls[:clear] + @padding
+          end
         end
-        it 'right justifies' do
-          c = Column.new('x' * 10, :align => 'center', :padding => 5, :width => 30)
-          c.screen_rows[0].should == ' ' * 10 + 'x' * 10 + ' ' * 10
+
+        context 'right justifies' do
+          before :each do
+            @text = ' ' * 10
+            @padding = ' ' * 5
+            @filler = ' ' * 5
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :align => 'center', :padding => 5, :width => 30)
+            c.screen_rows[0].should == @padding + @filler + @text + @filler + @padding
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :align => 'center', :padding => 5, :width => 30, :color => 'red')
+            c.screen_rows[0].should == @padding + @controls[:red] + @filler + @text + @filler + @controls[:clear] + @padding
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :align => 'center', :padding => 5, :width => 30, :bold => true)
+            c.screen_rows[0].should == @padding + @controls[:bold] + @filler + @text + @filler + @controls[:clear] + @padding
+          end
         end
       end
     end
 
     context 'with wrapping' do
       context 'no padding' do
-        it 'left justifies' do
-          c = Column.new('x' * 25, :width => 10)
-          c.screen_rows.should == ['x' * 10, 'x' * 10, 'x' * 5 + ' ' * 5]
+        context 'left justifies' do
+          before :each do
+            @text = 'x' * 25
+            @full_line = 'x' * 10
+            @remainder = 'x' * 5
+            @filler = ' ' * 5
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :width => 10)
+            c.screen_rows.should == [@full_line, @full_line, @remainder + @filler]
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :width => 10, :color => 'red')
+            c.screen_rows.should == [
+              @controls[:red] + @full_line + @controls[:clear],
+              @controls[:red] + @full_line + @controls[:clear],
+              @controls[:red] + @remainder + @filler + @controls[:clear],
+            ]
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :width => 10, :bold => true)
+            c.screen_rows.should == [
+              @controls[:bold] + @full_line + @controls[:clear],
+              @controls[:bold] + @full_line + @controls[:clear],
+              @controls[:bold] + @remainder + @filler + @controls[:clear],
+            ]
+          end
         end
 
-        it 'left justifies' do
-          c = Column.new('x' * 25, :align => 'right', :width => 10)
-          c.screen_rows.should == ['x' * 10, 'x' * 10, ' ' * 5 + 'x' * 5]
+        context 'right justifies' do
+          before :each do
+            @text = 'x' * 25
+            @full_line = 'x' * 10
+            @remainder = 'x' * 5
+            @filler = ' ' * 5
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :align => 'right', :width => 10)
+            c.screen_rows.should == [@full_line, @full_line, @filler + @remainder]
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :align => 'right', :width => 10, :color => 'red')
+            c.screen_rows.should == [
+              @controls[:red] + @full_line + @controls[:clear],
+              @controls[:red] + @full_line + @controls[:clear],
+              @controls[:red] + @filler + @remainder + @controls[:clear],
+            ]
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :align => 'right', :width => 10, :bold => true)
+            c.screen_rows.should == [
+              @controls[:bold] + @full_line + @controls[:clear],
+              @controls[:bold] + @full_line + @controls[:clear],
+              @controls[:bold] + @filler + @remainder + @controls[:clear],
+            ]
+          end
         end
 
-        it 'left justifies' do
-          c = Column.new('x' * 25, :align => 'center', :width => 10)
-          c.screen_rows.should == ['x' * 10, 'x' * 10, ' ' * 3 + 'x' * 5 + ' ' * 2]
+        context 'center justifies' do
+          before :each do
+            @text = 'x' * 25
+            @full_line = 'x' * 10
+            @remainder = 'x' * 5
+            @left_filler = ' ' * 3
+            @right_filler = ' ' * 2
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :align => 'center', :width => 10)
+            c.screen_rows.should == [@full_line, @full_line, ' ' * 3 + @remainder + @right_filler]
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :align => 'center', :width => 10, :color => 'red')
+            c.screen_rows.should == [
+              @controls[:red] + @full_line + @controls[:clear],
+              @controls[:red] + @full_line + @controls[:clear],
+              @controls[:red] + @left_filler + @remainder + @right_filler + @controls[:clear],
+            ]
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :align => 'center', :width => 10, :bold => true)
+            c.screen_rows.should == [
+              @controls[:bold] + @full_line + @controls[:clear],
+              @controls[:bold] + @full_line + @controls[:clear],
+              @controls[:bold] + @left_filler + @remainder + @right_filler + @controls[:clear],
+            ]
+          end
         end
       end
 
       context 'account for padding' do
-        it 'left justifies' do
-          c = Column.new('x' * 25, :padding => 2, :width => 20)
-          c.screen_rows.should == [' ' * 2 + 'x' * 16 + ' ' * 2, ' ' * 2 + 'x' * 9 + ' ' * 9]
+        context 'left justifies' do
+          before :each do
+            @text = 'x' * 25
+            @full_line = 'x' * 16
+            @remainder = 'x' * 9
+            @padding = ' ' * 2
+            @filler = ' ' * 7
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :padding => 2, :width => 20)
+            c.screen_rows.should == [
+              @padding + @full_line + @padding,
+              @padding + @remainder + @filler + @padding,
+            ]
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :padding => 2, :width => 20, :color => 'red')
+            c.screen_rows.should == [
+              @padding + @controls[:red] + @full_line + @controls[:clear] + @padding,
+              @padding + @controls[:red] + @remainder + @filler + @controls[:clear] + @padding,
+            ]
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :padding => 2, :width => 20, :bold => true)
+            c.screen_rows.should == [
+              @padding + @controls[:bold] + @full_line + @controls[:clear] + @padding,
+              @padding + @controls[:bold] + @remainder + @filler + @controls[:clear] + @padding,
+            ]
+          end
         end
 
-        it 'right justifies' do
-          c = Column.new('x' * 25, :padding => 2, :align => 'right', :width => 20)
-          c.screen_rows.should == [' ' * 2 + 'x' * 16 + ' ' * 2, ' ' * 9 + 'x' * 9 + ' ' * 2]
+        context 'right justifies' do
+          before :each do
+            @text = 'x' * 25
+            @full_line = 'x' * 16
+            @remainder = 'x' * 9
+            @padding = ' ' * 2
+            @filler = ' ' * 7
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :padding => 2, :align => 'right', :width => 20)
+            c.screen_rows.should == [
+              @padding + @full_line + @padding,
+              @padding + @filler + @remainder + @padding,
+            ]
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :align => 'right', :padding => 2, :width => 20, :color => 'red')
+            c.screen_rows.should == [
+              @padding + @controls[:red] + @full_line + @controls[:clear] + @padding,
+              @padding + @controls[:red] + @filler + @remainder + @controls[:clear] + @padding,
+            ]
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :align => 'right', :padding => 2, :width => 20, :bold => true)
+            c.screen_rows.should == [
+              @padding + @controls[:bold] + @full_line + @controls[:clear] + @padding,
+              @padding + @controls[:bold] + @filler + @remainder + @controls[:clear] + @padding,
+            ]
+          end
         end
 
-        it 'center justifies' do
-          c = Column.new('x' * 25, :padding => 2, :align => 'center', :width => 20)
-          c.screen_rows.should == [' ' * 2 + 'x' * 16 + ' ' * 2,  ' ' * 6 + 'x' * 9 + ' ' * 5]
+        context 'center justifies' do
+          before :each do
+            @text = 'x' * 25
+            @full_line = 'x' * 16
+            @remainder = 'x' * 9
+            @padding = ' ' * 2
+            @left_filler = ' ' * 4
+            @right_filler = ' ' * 3
+          end
+
+          it 'plain text' do
+            c = Column.new(@text, :padding => 2, :align => 'center', :width => 20)
+            c.screen_rows.should == [
+              @padding + @full_line + @padding,
+              @padding + @left_filler + @remainder + @right_filler + @padding,
+            ]
+          end
+
+          it 'outputs red' do
+            c = Column.new(@text, :padding => 2, :align => 'center', :width => 20, :color => 'red')
+            c.screen_rows.should == [
+              @padding + @controls[:red] + @full_line + @controls[:clear] + @padding,
+              @padding + @controls[:red] + @left_filler + @remainder + @right_filler + @controls[:clear] + @padding,
+            ]
+          end
+
+          it 'outputs bold' do
+            c = Column.new(@text, :padding => 2, :align => 'center', :width => 20, :bold => true)
+            c.screen_rows.should == [
+              @padding + @controls[:bold] + @full_line + @controls[:clear] + @padding,
+              @padding + @controls[:bold] + @left_filler + @remainder + @right_filler + @controls[:clear] + @padding,
+            ]
+          end
         end
       end
     end

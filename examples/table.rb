@@ -1,3 +1,4 @@
+# recoil  <co>mmand_<li>ne_<re>porter
 require 'command_line_reporter'
 
 class Example
@@ -28,7 +29,7 @@ class Example
 
     table(:border => true) do
       row(:header => true) do
-        column('MY NAME', :width => 20, :align => 'center', :color => 'blue', :bold => true)
+        column('MY NAME IS REALLY LONG AND WILL WRAP AND HOPE', :width => 20, :align => 'center', :color => 'blue', :bold => true)
         column('ADDRESS', :width => 30, :color => 'red', :padding => 5)
         column('CITY', :width => 15, :color => 'red')
       end

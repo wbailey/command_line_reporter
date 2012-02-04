@@ -94,6 +94,8 @@ There are several methods the mixin provides that do not depend on the formatter
 
 ### To Do
 
+* Add support for color output
+* Add html output option for tables
 * Add the ability for a column to span across others
 * Add the progress method to the top level mixin so that there is no need to invoke through the
   formatter.
