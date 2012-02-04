@@ -25,6 +25,8 @@ class Table
         c.align = self.rows[0].columns[i].align
         c.padding = self.rows[0].columns[i].padding
         c.width = self.rows[0].columns[i].width
+        c.color = self.rows[0].columns[i].color unless self.rows[0].header
+        c.bold = self.rows[0].columns[i].bold unless self.rows[0].header
         c.size = c.width - 2 * c.padding
       end
     end

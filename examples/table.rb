@@ -27,10 +27,10 @@ class Example
     header(:title => 'A simple example of how column properties are inherited from the first row')
 
     table(:border => true) do
-      row do
-        column('NAME', :width => 20)
-        column('ADDRESS', :width => 30, :align => 'right', :padding => 5)
-        column('CITY', :width => 15)
+      row(:header => true) do
+        column('MY NAME', :width => 20, :align => 'center', :color => 'blue', :bold => true)
+        column('ADDRESS', :width => 30, :color => 'red', :padding => 5)
+        column('CITY', :width => 15, :color => 'red')
       end
       row do
         column('Ceaser')

@@ -1,9 +1,10 @@
 require 'options_validator'
+require 'colored'
 
 class Column
   include OptionsValidator
 
-  VALID_OPTIONS = [:width, :padding, :align]
+  VALID_OPTIONS = [:width, :padding, :align, :color, :bold, :underline, :reversed]
   attr_accessor :text, :size, *VALID_OPTIONS
 
   def initialize(text = nil, options = {})
@@ -14,6 +15,10 @@ class Column
     self.width = options[:width] || 10
     self.align = options[:align] || 'left'
     self.padding = options[:padding] || 0
+    self.color = options[:color] || nil
+    self.bold = options[:bold] || false
+    self.underline = options[:underline] || false
+    self.reversed = options[:reversed] || false
 
     raise ArgumentError unless self.width > 0
     raise ArgumentError unless self.padding.to_s.match(/^\d+$/)
@@ -32,6 +37,9 @@ class Column
   private
 
   def to_cell(str)
+    # NOTE: For making underline and reversed work Change so that based on the
+    # unformatted text it determines how much spacing to add left and right
+    # then colorize the cell text
     cell =  if str.empty?
               ' ' * self.size
             else
@@ -45,6 +53,16 @@ class Column
               end
             end
 
-    ' ' * self.padding + cell + ' ' * self.padding
+    padding_str = ' ' * self.padding
+    padding_str + add_color(cell) + padding_str
+  end
+
+  def add_color(str)
+    color_chain = []
+    color_chain << self.color unless self.color.nil?
+    color_chain << 'bold' if self.bold
+    color_chain << 'underline' if self.underline
+    color_chain << 'reversed' if self.reversed
+    color_chain.inject(str) {|s,v| s.send(v)}
   end
 end

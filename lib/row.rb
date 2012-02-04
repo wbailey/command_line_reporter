@@ -1,14 +1,21 @@
 require 'column'
 require 'forwardable'
+require 'options_validator'
 
 class Row
   extend Forwardable
+  include OptionsValidator
 
-  attr_accessor :columns, :border
+  VALID_OPTIONS = [:header]
+  attr_accessor :columns, :border, *VALID_OPTIONS
 
   def initialize(options = {})
+    self.validate_options(options, *VALID_OPTIONS)
+
     self.columns = []
     self.border = false
+
+    self.header = options[:header] || false
   end
 
   def_delegator :@columns, :push, :add
