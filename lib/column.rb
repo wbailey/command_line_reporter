@@ -55,16 +55,13 @@ module CommandLineReporter
               end
 
       padding_str = ' ' * self.padding
-      padding_str + add_color(cell) + padding_str
+      padding_str + colorize(cell) + padding_str
     end
 
-    def add_color(str)
-      color_chain = []
-      color_chain << self.color unless self.color.nil?
-      color_chain << 'bold' if self.bold
-      color_chain << 'underline' if self.underline
-      color_chain << 'reversed' if self.reversed
-      color_chain.inject(str) {|s,v| s.send(v)}
+    def colorize(str)
+      str = str.send(color) if self.color
+      str = str.send('bold') if self.bold
+      str
     end
   end
 end

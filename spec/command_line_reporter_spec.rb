@@ -131,12 +131,14 @@ describe CommandLineReporter do
 
       it 'accepts color' do
         expect {
+          subject.should_receive(:puts).any_number_of_times
           subject.header(:color => 'red')
         }.to_not raise_error ArgumentError
       end
 
       it 'accepts bold' do
         expect {
+          subject.should_receive(:puts).any_number_of_times
           subject.header(:bold => true)
         }.to_not raise_error ArgumentError
       end

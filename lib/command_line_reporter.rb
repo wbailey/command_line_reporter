@@ -86,18 +86,18 @@ module CommandLineReporter
     color = options[:color]
     bold = options[:bold] || false
 
-    line =  case align
-            when 'left'
-              text
-            when 'right'
-              text.rjust(width)
-            when 'center'
-              text.rjust((width - text.size)/2 + text.size)
-            else
-              raise ArgumentError
-            end
+    line = case align
+           when 'left'
+             text
+           when 'right'
+             text.rjust(width)
+           when 'center'
+             text.rjust((width - text.size)/2 + text.size)
+           else
+             raise ArgumentError
+           end
 
-    line = line.send(color) unless color.nil?
+    line = line.send(color) if color
     line = line.send('bold') if bold
 
     puts line
