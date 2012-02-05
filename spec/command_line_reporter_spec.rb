@@ -636,6 +636,7 @@ describe CommandLineReporter do
 
     it 'rejects invalid options' do
       expect {
+        subject.should_receive(:puts).any_number_of_times
         subject.table(:asdf => '100') { }
       }.to raise_error ArgumentError
     end
@@ -668,6 +669,9 @@ describe CommandLineReporter do
     end
 
     it 'accepts valid options' do
+      subject.should_receive(:column).once
+      subject.should_receive(:puts).any_number_of_times
+
       subject.table do
         subject.row do
           subject.column('asdf', :width => 30)
@@ -676,6 +680,7 @@ describe CommandLineReporter do
     end
 
     it 'rejects invalid options' do
+      subject.should_receive(:puts).any_number_of_times
       expect {
         subject.table do
           subject.row do
