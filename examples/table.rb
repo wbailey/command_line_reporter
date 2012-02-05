@@ -44,6 +44,24 @@ class Example
         column('Quantum Field')
       end
     end
+
+    table(:border => true) do
+      row(:header => false, :color => 'red') do
+        column('MY NAME IS REALLY LONG AND WILL WRAP AND HOPE', :width => 20, :align => 'center', :color => 'blue')
+        column('ADDRESS', :width => 30, :padding => 5)
+        column('CITY', :width => 15)
+      end
+      row(:color => 'green', :bold => true) do
+        column('Ceaser')
+        column('1 Appian Way')
+        column('Rome')
+      end
+      row do
+        column('Richard Feynman')
+        column('1 Golden Gate')
+        column('Quantum Field')
+      end
+    end
   end
 end
 

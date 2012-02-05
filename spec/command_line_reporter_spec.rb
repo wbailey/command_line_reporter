@@ -523,7 +523,6 @@ describe CommandLineReporter do
       subject.should_receive(:puts).any_number_of_times
       subject.should_receive(:table).once
       subject.table { }
-      # subject.instance_variable_get(:@table).should_not be_nil
     end
 
     it 'requires a row to be defined' do

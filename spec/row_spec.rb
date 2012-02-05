@@ -1,29 +1,29 @@
 require 'spec_helper'
 require 'row'
 
-describe Row do
+describe CommandLineReporter::Row do
   before :each do
-    @cols = 10.times.map {|v| Column.new("test#{v}")}
+    @cols = 10.times.map {|v| CommandLineReporter::Column.new("test#{v}")}
   end
 
   describe '#initialize' do
     it 'accepts header' do
-      Row.new(:header => true).header.should == true
+      CommandLineReporter::Row.new(:header => true).header.should be_true
     end
 
     it 'accepts color' do
-      Row.new(:color => 'red').color.should == 'red'
+      CommandLineReporter::Row.new(:color => 'red').color.should == 'red'
     end
 
     it 'accepts bold' do
-      Row.new(:bold => true).bold.should == true
+      CommandLineReporter::Row.new(:bold => true).bold.should be_true
     end
   end
 
   describe '#add' do
-    subject { Row.new }
+    subject { CommandLineReporter::Row.new }
 
-    it 'adds columns' do
+    it 'columns' do
       subject.add(@cols[0])
       subject.columns.size.should == 1
       subject.columns[0].should == @cols[0]
@@ -32,31 +32,38 @@ describe Row do
     end
 
     it 'defaults colors on columns' do
-      row = Row.new(:color => 'red')
+      row = CommandLineReporter::Row.new(:color => 'red')
       row.add(@cols[0])
       row.columns[0].color.should == 'red'
       row.add(@cols[1])
       row.columns[1].color.should == 'red'
     end
 
-    it 'defaults bold on columns' do
-      row = Row.new(:bold => true)
+    it 'allows columns to override the row color' do
+      col = CommandLineReporter::Column.new('test', :color => 'blue')
+      row = CommandLineReporter::Row.new(:color => 'red')
+      row.add(col)
+      row.columns[0].color.should == 'blue'
+    end
+
+    it 'supercedes bold on columns' do
+      row = CommandLineReporter::Row.new(:bold => true)
       row.add(@cols[0])
-      row.columns[0].bold.should == true
+      row.columns[0].bold.should be_true
       row.add(@cols[1])
-      row.columns[1].bold.should == true
+      row.columns[1].bold.should be_true
     end
   end
 
   describe '#output' do
     before :each do
       @cols = [
-        Column.new('asdf'),
-        Column.new('qwer', :align => 'center'),
-        Column.new('zxcv', :align => 'right'),
-        Column.new('x' * 25, :align => 'left', :width => 10),
-        Column.new('x' * 25, :align => 'center', :width => 10),
-        Column.new('x' * 35, :align => 'left', :width => 10),
+        CommandLineReporter::Column.new('asdf'),
+        CommandLineReporter::Column.new('qwer', :align => 'center'),
+        CommandLineReporter::Column.new('zxcv', :align => 'right'),
+        CommandLineReporter::Column.new('x' * 25, :align => 'left', :width => 10),
+        CommandLineReporter::Column.new('x' * 25, :align => 'center', :width => 10),
+        CommandLineReporter::Column.new('x' * 35, :align => 'left', :width => 10),
       ]
     end
 

@@ -92,19 +92,19 @@ module CommandLineReporter
   end
 
   def table(options = {})
-    @table = Table.new(options)
+    @table = CommandLineReporter::Table.new(options)
     yield
     @table.output
   end
 
   def row(options = {})
-    @row = Row.new(options)
+    @row = CommandLineReporter::Row.new(options)
     yield
     @table.add(@row)
   end
 
   def column(text, options = {})
-    col = Column.new(text, options)
+    col = CommandLineReporter::Column.new(text, options)
     @row.add(col)
   end
 
