@@ -16,12 +16,14 @@ class Example
       10.times do
         x += 1
         sleep 0.1
-        formatter.progress
+        # formatter.progress
+        progress
 
         10.times do
           x += 1
           sleep 0.1
-          formatter.progress
+          # formatter.progress
+          progress
         end
       end
     end
@@ -32,24 +34,24 @@ class Example
       10.times do
         y += 1
         sleep 0.1
-        formatter.progress("#{y*10}%")
+        progress("#{y*10}%")
       end
     end
 
     report do
       3.times do
-        formatter.progress("\\")
+        progress("\\")
         sleep 0.1
-        formatter.progress("/")
+        progress("/")
         sleep 0.1
-        formatter.progress("-")
+        progress("-")
         sleep 0.1
       end
     end
 
-    report do
+    report(:color => 'red') do
       100.times do
-        self.formatter.progress(erase_chars + NYAN_CHARS)
+        progress(erase_chars + NYAN_CHARS)
         sleep 0.1
       end
     end

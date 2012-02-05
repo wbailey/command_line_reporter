@@ -1,13 +1,17 @@
 require 'singleton'
+require 'options_validator'
+require 'colored'
 
 module CommandLineReporter
   class NestedFormatter
     include Singleton
+    include OptionsValidator
 
-    attr_accessor :indent_size, :complete_string, :message_string
+    VALID_OPTIONS = [:message, :type, :complete, :indent_size, :color, :bold]
+    attr_accessor :indent_size, :complete_string, :message_string, :color, :bold
 
     def format(options, block)
-      raise ArgumentError unless (options.keys - [:message, :type, :complete, :indent_size]).empty?
+      self.validate_options(options, *VALID_OPTIONS)
 
       indent_level :incr
 
@@ -17,15 +21,15 @@ module CommandLineReporter
       complete_str = options[:complete] || self.complete_string
 
       if options[:type] == 'inline'
-        print "#{message_str}..."
+        colorize("#{message_str}...", true, options)
       else
-        puts message_str
+        colorize(message_str, false, options)
         complete_str = padding + complete_str
       end
 
       block.call
 
-      puts complete_str
+      colorize(complete_str, false, options)
 
       indent_level :decr
     end
@@ -43,6 +47,17 @@ module CommandLineReporter
     end
 
     private
+
+    def colorize(str, inline, options)
+      str = str.send(options[:color]) if options[:color]
+      str = str.bold if options[:bold]
+
+      if inline
+        print str
+      else
+        puts str
+      end
+    end
 
     def indent_level(value)
       case value

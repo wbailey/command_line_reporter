@@ -11,6 +11,7 @@ module CommandLineReporter
   DEFAULTS = {
     :width => 100,
     :align => 'left',
+    :formatter => 'nested',
   }
 
   def suppress_output
@@ -36,8 +37,12 @@ module CommandLineReporter
   end
 
   def report(options = {}, &block)
-    self.formatter ||= 'nested'
+    self.formatter ||= DEFAULTS[:formatter]
     self.formatter.format(options, block)
+  end
+
+  def progress(override = nil)
+    self.formatter.progress(override)
   end
 
   def footer(options = {})
@@ -45,12 +50,12 @@ module CommandLineReporter
   end
 
   def horizontal_rule(options = {})
-    validate_options(options, :char, :width)
+    validate_options(options, :char, :width, :color, :bold)
 
     char = options[:char].is_a?(String) ? options[:char] : '-'
     width = options[:width] || DEFAULTS[:width]
 
-    puts char * width
+    aligned(char * width, :width => width, :color => options[:color], :bold => options[:bold])
   end
 
   def vertical_spacing(lines = 1)
@@ -60,7 +65,7 @@ module CommandLineReporter
   end
 
   def datetime(options = {})
-    validate_options(options, :align, :width, :format)
+    validate_options(options, :align, :width, :format, :color, :bold)
 
     format = options[:format] || '%Y-%m-%d - %l:%M:%S%p'
     align = options[:align] || DEFAULTS[:align]
@@ -70,25 +75,32 @@ module CommandLineReporter
 
     raise Exception if text.size > width
 
-    aligned(text, {:align => align, :width => width})
+    aligned(text, :align => align, :width => width, :color => options[:color], :bold => options[:bold])
   end
 
   def aligned(text, options = {})
-    validate_options(options, :align, :width)
+    validate_options(options, :align, :width, :color, :bold)
 
     align = options[:align] || DEFAULTS[:align]
     width = options[:width] || DEFAULTS[:width]
+    color = options[:color]
+    bold = options[:bold] || false
 
-    case align
-    when 'left'
-      puts text
-    when 'right'
-      puts text.rjust(width)
-    when 'center'
-      puts text.rjust((width - text.size)/2 + text.size)
-    else
-      raise ArgumentError
-    end
+    line =  case align
+            when 'left'
+              text
+            when 'right'
+              text.rjust(width)
+            when 'center'
+              text.rjust((width - text.size)/2 + text.size)
+            else
+              raise ArgumentError
+            end
+
+    line = line.send(color) unless color.nil?
+    line = line.send('bold') if bold
+
+    puts line
   end
 
   def table(options = {})
@@ -111,26 +123,28 @@ module CommandLineReporter
   private
 
   def section(type, options)
-    validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule)
+    validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule, :color, :bold)
 
     title = options[:title] || 'Report'
     width = options[:width] || DEFAULTS[:width]
     align = options[:align] || DEFAULTS[:align]
     lines = options[:spacing] || 1
+    color = options[:color]
+    bold = options[:bold] || false
 
     # This also ensures that width is a Fixnum
     raise ArgumentError if title.size > width
 
     if type == :footer
       vertical_spacing(lines)
-      horizontal_rule(:char => options[:rule], :width => width) if options[:rule]
+      horizontal_rule(:char => options[:rule], :width => width, :color => color, :bold => bold) if options[:rule]
     end
 
-    aligned(title, {:align => align, :width => width})
-    datetime(:align => align, :width => width) if options[:timestamp]
+    aligned(title, :align => align, :width => width, :color => color, :bold => bold)
+    datetime(:align => align, :width => width, :color => color, :bold => bold) if options[:timestamp]
 
     if type == :header
-      horizontal_rule(:char => options[:rule], :width => width) if options[:rule]
+      horizontal_rule(:char => options[:rule], :width => width, :color => color, :bold => bold) if options[:rule]
       vertical_spacing(lines)
     end
   end

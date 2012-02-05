@@ -4,6 +4,14 @@ require 'nested_formatter'
 describe CommandLineReporter::NestedFormatter do
   subject { CommandLineReporter::NestedFormatter.instance }
 
+  before :all do
+    @controls = {
+      :clear => "\e[0m",
+      :bold => "\e[1m",
+      :red => "\e[31m",
+    }
+  end
+
   describe '#method default values' do
     its(:message_string) { should == 'working' }
     its(:complete_string) { should == 'complete' }
@@ -61,6 +69,20 @@ describe CommandLineReporter::NestedFormatter do
         subject.should_receive(:puts).with('complete')
 
         subject.format({ }, lambda { })
+      end
+
+      it 'performs a wrapped report with color' do
+        subject.should_receive(:puts).with("#{@controls[:red]}working#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{@controls[:red]}complete#{@controls[:clear]}")
+
+        subject.format({:color => 'red'}, lambda { })
+      end
+
+      it 'performs a wrapped report with color' do
+        subject.should_receive(:puts).with("#{@controls[:bold]}working#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{@controls[:bold]}complete#{@controls[:clear]}")
+
+        subject.format({:bold => true}, lambda { })
       end
 
       it 'performs a wrapped report overriding the message' do
@@ -138,11 +160,30 @@ describe CommandLineReporter::NestedFormatter do
         subject.should_receive(:puts).with('  complete')
         subject.should_receive(:puts).with('complete')
 
-        nested = lambda {
-        }
-
         subject.format({:message => 'test'}, lambda {
           subject.format({:message => 'test2'}, lambda {})
+        })
+      end
+
+      it 'indents the nested wrapped messages and outputs color' do
+        subject.should_receive(:puts).with("#{@controls[:red]}test#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{@controls[:red]}  test2#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{@controls[:red]}  complete#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{@controls[:red]}complete#{@controls[:clear]}")
+
+        subject.format({:message => 'test', :color => 'red'}, lambda {
+          subject.format({:message => 'test2', :color => 'red'}, lambda {})
+        })
+      end
+
+      it 'indents the nested wrapped messages and outputs bold' do
+        subject.should_receive(:puts).with("#{@controls[:bold]}test#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{@controls[:bold]}  test2#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{@controls[:bold]}  complete#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{@controls[:bold]}complete#{@controls[:clear]}")
+
+        subject.format({:message => 'test', :bold => true}, lambda {
+          subject.format({:message => 'test2', :bold => true}, lambda {})
         })
       end
 
