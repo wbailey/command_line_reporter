@@ -1,6 +1,6 @@
 ## Command Line Reporter
 
-This gem provides a DSL that makes it easy to write reports of various types in ruby.  It eliminate
+This gem provides a DSL that makes it easy to write reports of various types in ruby.  It eliminates
 the need to litter your source with *puts* statements instead providing a more readable, expressive
 interface to your application.  Some of the best features include:
 
@@ -9,12 +9,15 @@ interface to your application.  Some of the best features include:
 * Easily created headers and footers for your report
 * Output suppression that makes it easy for your script to support a _quiet_ flag
 
+The latest release also supports colors allowing you to distinguish data in new ways including bold
+if your terminal supports it.
+
 ### Installation
 
-It is up on rubygems.org so add it to your bundle
+It is up on rubygems.org so add it to your bundle in the Gemfile
 
 ```bash
-gem 'command_line_reporter', '>=2.1'
+gem 'command_line_reporter', '>=3.0'
 ```
 
 or do it the old fashioned way:
@@ -55,6 +58,8 @@ There are several methods the mixin provides that do not depend on the formatter
     Either true|false.  _Default: false_
   * _:rule_ - true|false indicates whether to include a horizontal rule below|above the
     header|footer.  _Default: false_
+  * _:color_ - The color to use for the terminal output i.e. 'red' or 'blue' or 'green'
+  * _:bold_ - true|false to boldface the font
 * _report(hash) {block}_
   * The first argument is a hash that defines the options for the method. See the details in the
     formatter section for allowed values.
@@ -69,36 +74,44 @@ There are several methods the mixin provides that do not depend on the formatter
 * _horizontal_rule(hash)_
   * _:char_ - The character used to build the rule.  _Default: '-'_
   * _:width_ - The width in characters of the rule.  _Default: 100_
+  * _:color_ - The color to use for the terminal output i.e. 'red' or 'blue' or 'green'
+  * _:bold_ - true|false to boldface the font
 * _vertical_spacing(int)_
   * Number of blank lines to output.  _Default: 1_
 * _datetime(hash)_
   * _:align_ - 'left'|'center'|'right' alignment of the timestamp.  _Default: 'left'_
   * _:width_ - The width of the string in characters.  _Default: 100_
   * _:format_ - Any allowed format from #strftime#.  _Default: %Y-%m-%d %H:%I:%S%p_
+  * _:color_ - The color to use for the terminal output i.e. 'red' or 'blue' or 'green'
+  * _:bold_ - true|false to boldface the font
 * _aligned(string, hash)_
   * _text_ - String to display
   * _:align_ - 'left'|'right'|'center' align the string text.  _Default: 'left'_
   * _:width_ - The width in characters of the string text.  _Default: 100_
+  * _:color_ - The color to use for the terminal output i.e. 'red' or 'blue' or 'green'
+  * _:bold_ - true|false to boldface the font
 * _table(hash) {block}_
   * The first argument is a hash that defines properties of the table.
     * _:border_ - true|false indicates whether to include borders around the table cells
   * The second argument is a block which includes calls the to the _row_ method
 * _row {block}_
-  * Only argument is a block with calls to _column_ allowed
+  * _:header_ - Set to true to indicate if this is a header row in the table.
+  * _:color_ - The color to use for the terminal output i.e. 'red' or 'blue' or 'green'
+  * _:bold_ - true|false to boldface the font
 * _column(string, hash)_
   * _text_ - String to display in the table cell
   * _options_ - The options to define the column
     * :width - defines the width of the column
     * :padding - The number of spaces to put on both the left and right of the text.
     * :align - Allowed values are left|right|center
+    * :color - The color to use for the terminal output i.e. 'red' or 'blue' or 'green'
+    * :bold - true|false to boldface the font
 
 ### To Do
 
-* Add support for color output
-* Add html output option for tables
-* Add the ability for a column to span across others
-* Add the progress method to the top level mixin so that there is no need to invoke through the
-  formatter.
+* Refactor the table structure to use a formatter that produces the current ascii output
+* After the formatter is added to a table then create one for html output
+* Add the ability for a column to span across others in a table
 
 ### Contributors
 

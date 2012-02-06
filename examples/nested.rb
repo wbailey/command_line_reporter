@@ -30,8 +30,8 @@ class Example
       end
     end
 
-    puts '-' * 20
-    %w(x y z).each {|v| puts "#{v}: #{eval v}"}
+    horizontal_rule(:width => 20)
+    %w(x y z).each {|v| aligned "#{v}: #{eval v}"}
   end
 end
 

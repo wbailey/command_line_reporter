@@ -8,58 +8,61 @@ class Example
     header(:title => 'TABLE EXAMPLES - Borders, Wrapping, Alignment and Padding', :align => 'center', :width => 70)
 
     2.times do |j|
-      header(:title => "Table #{j}", :align => 'center', :width => 65)
+      header :title => "Table #{j}", :align => 'center', :width => 65
 
-      table(:border => j % 2 == 0) do
+      table :border => j % 2 == 0  do
         3.times do
           row do
             i = 0
             3.times do
               i += 10
-              column('x' * (0 + rand(50)), :align => %w[left right center][rand(3)], :width => i, :padding => rand(5))
+              column 'x' * (0 + rand(50)), :align => %w[left right center][rand(3)], :width => i, :padding => rand(5) 
             end
           end
         end
       end
 
-      vertical_spacing(2)
+      vertical_spacing 2
     end
 
-    header(:title => 'A simple example of how column properties are inherited from the first row')
+    header :title => 'An example of a table with a header row.  The color and border properties are not inherited'
 
-    table(:border => true) do
-      row(:header => true, :color => 'red') do
-        column('MY NAME IS REALLY LONG AND WILL WRAP AND HOPE', :width => 20, :align => 'center', :color => 'blue')
-        column('ADDRESS', :width => 30, :padding => 5)
-        column('CITY', :width => 15)
+    table :border => true do
+      row :header => true, :color => 'red'  do
+        column 'MY NAME IS REALLY LONG AND WILL WRAP AND HOPE', :width => 20, :align => 'center', :color => 'blue'
+        column 'ADDRESS', :width => 30, :padding => 5
+        column 'CITY', :width => 15
       end
-      row(:color => 'green', :bold => true) do
-        column('Ceaser')
-        column('1 Appian Way')
-        column('Rome')
+      row :color => 'green', :bold => true do
+        column 'Ceaser'
+        column '1 Appian Way'
+        column 'Rome'
       end
       row do
-        column('Richard Feynman')
-        column('1 Golden Gate')
-        column('Quantum Field')
+        column 'Richard Feynman'
+        column '1 Golden Gate'
+        column 'Quantum Field'
       end
     end
 
-    table(:border => true) do
-      row(:header => false, :color => 'red') do
-        column('MY NAME IS REALLY LONG AND WILL WRAP AND HOPE', :width => 20, :align => 'center', :color => 'blue')
-        column('ADDRESS', :width => 30, :padding => 5)
-        column('CITY', :width => 15)
+    vertical_spacing 2
+    header :title => 'The same table with the properties inherited from the first row'
+
+    table :border => true do
+      row :color => 'red' do
+        column 'MY NAME IS REALLY LONG AND WILL WRAP AND HOPE', :width => 20, :align => 'center', :color => 'blue'
+        column 'ADDRESS', :width => 30, :padding => 5
+        column 'CITY', :width => 15
       end
-      row(:color => 'green', :bold => true) do
-        column('Ceaser')
-        column('1 Appian Way')
-        column('Rome')
+      row :color => 'green', :bold => true do
+        column 'Ceaser'
+        column '1 Appian Way'
+        column 'Rome'
       end
       row do
-        column('Richard Feynman')
-        column('1 Golden Gate')
-        column('Quantum Field')
+        column 'Richard Feynman'
+        column '1 Golden Gate'
+        column 'Quantum Field'
       end
     end
   end

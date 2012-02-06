@@ -12,8 +12,9 @@ class Example
       sum = 0
       10.times do
         sum += 10
-        self.formatter.progress
+        progress
       end
+      vertical_spacing
       aligned("Sum: #{sum}")
     end
   end
