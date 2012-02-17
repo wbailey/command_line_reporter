@@ -11,7 +11,7 @@ module CommandLineReporter
     def initialize(text = nil, options = {})
       self.validate_options(options, *VALID_OPTIONS)
 
-      self.text = text
+      self.text = text.to_s
 
       self.width = options[:width] || 10
       self.align = options[:align] || 'left'
