@@ -8,6 +8,7 @@ interface to your application.  Some of the best features include:
 * Table syntax similar to HTML that makes it trivial to format your data in rows and columns
 * Easily created headers and footers for your report
 * Output suppression that makes it easy for your script to support a _quiet_ flag
+* Capture report output as a string and save it a database
 
 The latest release also supports colors allowing you to distinguish data in new ways including bold
 if your terminal supports it.
@@ -106,6 +107,9 @@ There are several methods the mixin provides that do not depend on the formatter
     * :align - Allowed values are left|right|center
     * :color - The color to use for the terminal output i.e. 'red' or 'blue' or 'green'
     * :bold - true|false to boldface the font
+* _suppress_output_ - Suppresses output stream that goes to STDOUT
+* _capture_output_ - Captures all of the output stream to a string and restores output to STDOUT
+* _restore_output_ - Restores the output stream to STDOUT
 
 ### To Do
 
