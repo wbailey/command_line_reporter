@@ -8,7 +8,7 @@ interface to your application.  Some of the best features include:
 * Table syntax similar to HTML that makes it trivial to format your data in rows and columns
 * Easily created headers and footers for your report
 * Output suppression that makes it easy for your script to support a _quiet_ flag
-* Capture report output as a string and save it a database
+* Capture report output as a string
 
 The latest release also supports colors allowing you to distinguish data in new ways including bold
 if your terminal supports it.
