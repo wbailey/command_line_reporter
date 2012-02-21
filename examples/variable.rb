@@ -9,6 +9,7 @@ class Example
 
   def run
     suppress_output 
+
     report do
       sum = 0
       10.times do
@@ -19,11 +20,11 @@ class Example
       aligned("Sum: #{sum}")
     end
 
-    out = capture_output
-
-    puts 'here'
-    puts out
+    capture_output
   end
 end
 
-Example.new.run
+out = Example.new.run
+
+puts 'this could be stored in a database'
+puts out

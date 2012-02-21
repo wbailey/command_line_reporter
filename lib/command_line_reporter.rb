@@ -14,6 +14,13 @@ module CommandLineReporter
     :formatter => 'nested',
   }
 
+  def capture_output
+    $stdout.rewind
+    $stdout.read
+  ensure
+    $stdout = STDOUT
+  end
+
   def suppress_output
     $stdout = StringIO.new
   end
