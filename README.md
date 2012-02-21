@@ -115,6 +115,8 @@ There are several methods the mixin provides that do not depend on the formatter
 
 ### Contributors
 
+* Thanks to [Stefan Frank](https://github.com/mugwump) for raising the issue that he could not
+  capture report output in a variable as a string
 * Thanks to [Mike Gunderloy](https://github.com/ffmike) for suggesting the need for suppressing
   output and putting together a fantastic pull request and discussion
 * Thanks to [Jason Rogers](https://github.com/jacaetevha) and [Peter
