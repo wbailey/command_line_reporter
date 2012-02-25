@@ -30,13 +30,10 @@ module CommandLineReporter
       self.columns << column
     end
 
-    def separator
-      @sep ||= '+' + self.columns.map {|c| '-' * (c.width + 2)}.join('+') + '+'
-    end
-
     def output
       screen_count.times do |sr|
-        line = (self.border) ? '| ' : ''
+        border_char = ("\u2501" == "u2501") ? '|' : "\u2503"
+        line = (self.border) ? "#{border_char} " : ''
         self.columns.size.times do |mc|
           col = self.columns[mc]
           # Account for the fact that some columns will have more screen rows than their
@@ -63,7 +60,7 @@ module CommandLineReporter
           else
             line <<  self.columns[mc].screen_rows[sr]
           end
-          line << ' ' + ((self.border) ? '| ' : '')
+          line << ' ' + ((self.border) ? "#{border_char} " : '')
         end
         puts line
       end

@@ -30,14 +30,24 @@ module CommandLineReporter
           c.width = self.rows[0].columns[i].width
           c.size = c.width - 2 * c.padding
 
-          # Allow for the fact that the row or column may take precedence
-          unless self.rows[0].header || row.color || c.color
-            c.color = self.rows[0].columns[i].color
+          # Allow for the fact that the row or column may take precedence and that the first
+          # row might be a header row which we don't want to inherit from
+          unless row.color || c.color
+            if self.rows[0].header
+              c.color = self.rows[1].columns[i].color if self.rows[1]
+            else
+              c.color = self.rows[0].columns[i].color
+            end
           end
 
-          # Allow for the row to take precendence
-          unless self.rows[0].header || row.bold
-            c.bold = self.rows[0].columns[i].bold
+          # Allow for the row to take precendence and that the first # row might be a header
+          # row which we don't want to inherit from
+          unless row.bold
+            if self.rows[0].header
+              c.bold = self.rows[1].columns[i].bold if self.rows[1]
+            else
+              c.bold = self.rows[0].columns[i].bold
+            end
           end
         end
       end
@@ -48,11 +58,39 @@ module CommandLineReporter
     def output
       return if self.rows.size == 0 # we got here with nothing to print to the screen
 
-      puts self.rows[0].separator if self.border
-      self.rows.each do |row|
+      puts separator('first') if self.border
+      self.rows.each_with_index do |row, index|
         row.output
-        puts self.rows[0].separator if self.border
+        puts separator('middle') if self.border && (index != self.rows.size - 1)
       end
+      puts separator('last') if self.border
+    end
+
+    private
+
+    def separator(type = 'middle')
+      if "\u2501" == 'u2501'
+        left = right = center = '+'
+        bar = '-'
+      else
+        bar = "\u2501"
+        case type
+        when 'first'
+          left = "\u250F"
+          center = "\u2533"
+          right = "\u2513"
+        when 'middle'
+          left = "\u2523"
+          center = "\u254A"
+          right = "\u252B"
+        when 'last'
+          left = "\u2517"
+          center = "\u253B"
+          right = "\u251B"
+        end
+      end
+
+      left + self.rows[0].columns.map {|c| bar * (c.width + 2)}.join(center) + right
     end
   end
 end
