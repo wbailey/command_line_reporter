@@ -59,7 +59,9 @@ module CommandLineReporter
   def horizontal_rule(options = {})
     validate_options(options, :char, :width, :color, :bold)
 
-    char = options[:char].is_a?(String) ? options[:char] : '-'
+    use_char = "\u2501" == 'u2501' ? '-' : "\u2501"
+
+    char = options[:char].is_a?(String) ? options[:char] : use_char
     width = options[:width] || DEFAULTS[:width]
 
     aligned(char * width, :width => width, :color => options[:color], :bold => options[:bold])
