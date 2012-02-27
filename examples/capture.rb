@@ -30,5 +30,3 @@ end
 
 # All the content is now in the report variable
 report = Example.new.run
-
-puts report
