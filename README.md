@@ -10,8 +10,8 @@ interface to your application.  Some of the best features include:
 * Output suppression that makes it easy for your script to support a _quiet_ flag
 * Capture report output as a string
 
-The latest release also supports colors allowing you to distinguish data in new ways including bold
-if your terminal supports it.
+The latest release uses unicode drawing characters for the table, colors allowing you to distinguish
+data in new ways including bold if your terminal supports it.
 
 ### Installation
 

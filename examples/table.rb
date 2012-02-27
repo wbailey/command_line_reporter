@@ -34,7 +34,7 @@ class Example
         column 'CITY', :width => 15
       end
       row :color => 'green', :bold => true do
-        column 'Ceaser'
+        column 'caeser'
         column '1 Appian Way'
         column 'Rome'
       end
@@ -55,7 +55,7 @@ class Example
         column 'CITY', :width => 15
       end
       row :color => 'green', :bold => true do
-        column 'Ceaser'
+        column 'caeser'
         column '1 Appian Way'
         column 'Rome'
       end
