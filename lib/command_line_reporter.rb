@@ -59,6 +59,7 @@ module CommandLineReporter
   def horizontal_rule(options = {})
     validate_options(options, :char, :width, :color, :bold)
 
+    # Got unicode?
     use_char = "\u2501" == 'u2501' ? '-' : "\u2501"
 
     char = options[:char].is_a?(String) ? options[:char] : use_char
