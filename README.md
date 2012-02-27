@@ -11,7 +11,10 @@ interface to your application.  Some of the best features include:
 * Capture report output as a string
 
 The latest release uses unicode drawing characters for the table, colors allowing you to distinguish
-data in new ways including bold if your terminal supports it.
+data in new ways including bold if your terminal supports it.  Here is an example of output you can
+generate easily with "the reporter":
+
+![Screenshot](http://i.imgur.com/5izCf.png)
 
 ### Installation
 
