@@ -8,19 +8,19 @@ describe CommandLineReporter do
     end
   end
 
-  subject { use_class.new }
+  let(:timestamp_regex) { /\d{4}-\d{2}-\d{2} - (\d| )\d:\d{2}:\d{2}[AP]M/ }
 
-  before :each do
-    @timestamp_regex = /\d{4}-\d{2}-\d{2} - (\d| )\d:\d{2}:\d{2}[AP]M/
-  end
-
-  before :all do
-    @controls = {
+  let :controls do
+    {
       :clear => "\e[0m",
       :bold => "\e[1m",
       :red => "\e[31m",
     }
   end
+
+  let(:linechar) { "\u2501" == 'u2501' ? '-' : "\u2501" }
+
+  subject { use_class.new }
 
   describe '#formatter=' do
     it 'only allows allowed formatters' do
@@ -203,21 +203,21 @@ describe CommandLineReporter do
     context 'timestamp subheading' do
       it 'is added with default alignment' do
         subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with(/^#{@timestamp_regex}/)
+        subject.should_receive(:puts).with(/^#{timestamp_regex}/)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :timestamp => true)
       end
 
       it 'added with right alignment' do
         subject.should_receive(:puts).with(/^ *title$/)
-        subject.should_receive(:puts).with(/^ *#{@timestamp_regex}$/)
+        subject.should_receive(:puts).with(/^ *#{timestamp_regex}$/)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :align => 'right', :timestamp => true, :width => 80)
       end
 
       it 'added with center alignment' do
         subject.should_receive(:puts).with(/^ *title *$/)
-        subject.should_receive(:puts).with(/^ *#{@timestamp_regex} *$/)
+        subject.should_receive(:puts).with(/^ *#{timestamp_regex} *$/)
         subject.should_receive(:puts).with("\n")
         subject.header(:title => 'title', :align => 'center', :timestamp => true, :width => 80)
       end
@@ -226,7 +226,7 @@ describe CommandLineReporter do
     context 'horizontal rule' do
       it 'uses dashes by default' do
         subject.should_receive(:puts)
-        subject.should_receive(:puts).with('-' * 100)
+        subject.should_receive(:puts).with(linechar * 100)
         subject.should_receive(:puts)
         subject.header(:rule => true)
       end
@@ -241,14 +241,14 @@ describe CommandLineReporter do
 
     context 'color' do
       it 'single red line' do
-        subject.should_receive(:puts).with(@controls[:red] + 'Report' + @controls[:clear])
+        subject.should_receive(:puts).with(controls[:red] + 'Report' + controls[:clear])
         subject.should_receive(:puts)
         subject.header(:color => 'red')
       end
 
       it 'multimple red lines' do
-        subject.should_receive(:puts).with(@controls[:red] + 'Report' + @controls[:clear])
-        subject.should_receive(:puts).with(@controls[:red] + '-' * 100 + @controls[:clear])
+        subject.should_receive(:puts).with(controls[:red] + 'Report' + controls[:clear])
+        subject.should_receive(:puts).with(controls[:red] + linechar * 100 + controls[:clear])
         subject.should_receive(:puts)
         subject.header(:color => 'red', :rule => true)
       end
@@ -256,14 +256,14 @@ describe CommandLineReporter do
 
     context 'bold' do
       it 'single line' do
-        subject.should_receive(:puts).with(@controls[:bold] + 'Report' + @controls[:clear])
+        subject.should_receive(:puts).with(controls[:bold] + 'Report' + controls[:clear])
         subject.should_receive(:puts)
         subject.header(:bold => true)
       end
 
       it 'multimple lines' do
-        subject.should_receive(:puts).with(@controls[:bold] + 'Report' + @controls[:clear])
-        subject.should_receive(:puts).with(@controls[:bold] + '-' * 100 + @controls[:clear])
+        subject.should_receive(:puts).with(controls[:bold] + 'Report' + controls[:clear])
+        subject.should_receive(:puts).with(controls[:bold] + linechar * 100 + controls[:clear])
         subject.should_receive(:puts)
         subject.header(:bold => true, :rule => true)
       end
@@ -295,7 +295,7 @@ describe CommandLineReporter do
 
     context 'drawing' do
       it 'writes a 100 yard dash by default' do
-        subject.should_receive(:puts).with('-' * 100)
+        subject.should_receive(:puts).with(linechar * 100)
         subject.horizontal_rule
       end
 
@@ -311,12 +311,12 @@ describe CommandLineReporter do
     end
 
     it 'outputs color' do
-      subject.should_receive(:puts).with(@controls[:red] + '-' * 100 + @controls[:clear])
+      subject.should_receive(:puts).with(controls[:red] + linechar * 100 + controls[:clear])
       subject.horizontal_rule(:color => 'red')
     end
 
     it 'outputs bold' do
-      subject.should_receive(:puts).with(@controls[:bold] + '-' * 100 + @controls[:clear])
+      subject.should_receive(:puts).with(controls[:bold] + linechar * 100 + controls[:clear])
       subject.horizontal_rule(:bold => true)
     end
   end
@@ -384,17 +384,17 @@ describe CommandLineReporter do
 
     context 'display' do
       it 'a default format - left aligned' do
-        subject.should_receive(:puts).with(/^#{@timestamp_regex} *$/)
+        subject.should_receive(:puts).with(/^#{timestamp_regex} *$/)
         subject.datetime
       end
 
       it 'a default format - right aligned' do
-        subject.should_receive(:puts).with(/^ *#{@timestamp_regex}$/)
+        subject.should_receive(:puts).with(/^ *#{timestamp_regex}$/)
         subject.datetime(:align => 'right')
       end
 
       it 'a default format - center aligned' do
-        subject.should_receive(:puts).with(/^ *#{@timestamp_regex} *$/)
+        subject.should_receive(:puts).with(/^ *#{timestamp_regex} *$/)
         subject.datetime(:align => 'center')
       end
 
@@ -405,12 +405,12 @@ describe CommandLineReporter do
     end
 
     it 'outputs color' do
-      subject.should_receive(:puts).with(/^\e\[31m#{@timestamp_regex}\e\[0m/)
+      subject.should_receive(:puts).with(/^\e\[31m#{timestamp_regex}\e\[0m/)
       subject.datetime(:color => 'red')
     end
 
     it 'outputs bold' do
-      subject.should_receive(:puts).with(/^\e\[1m#{@timestamp_regex}\e\[0m/)
+      subject.should_receive(:puts).with(/^\e\[1m#{timestamp_regex}\e\[0m/)
       subject.datetime(:bold => true)
     end
   end
@@ -445,12 +445,12 @@ describe CommandLineReporter do
     end
 
     it 'outputs color' do
-      subject.should_receive(:puts).with(@controls[:red] + 'x' * 10 + @controls[:clear])
+      subject.should_receive(:puts).with(controls[:red] + 'x' * 10 + controls[:clear])
       subject.aligned('x' * 10, :color => 'red')
     end
 
     it 'outputs bold' do
-      subject.should_receive(:puts).with(@controls[:bold] + 'x' * 10 + @controls[:clear])
+      subject.should_receive(:puts).with(controls[:bold] + 'x' * 10 + controls[:clear])
       subject.aligned('x' * 10, :bold => true)
     end
 
@@ -565,21 +565,21 @@ describe CommandLineReporter do
       it 'is added with default alignment' do
         subject.should_receive(:puts).with("\n")
         subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with(/^#{@timestamp_regex}/)
+        subject.should_receive(:puts).with(/^#{timestamp_regex}/)
         subject.footer(:title => 'title', :timestamp => true)
       end
 
       it 'added with right alignment' do
         subject.should_receive(:puts).with("\n")
         subject.should_receive(:puts).with(/^ *title$/)
-        subject.should_receive(:puts).with(/^ *#{@timestamp_regex}$/)
+        subject.should_receive(:puts).with(/^ *#{timestamp_regex}$/)
         subject.footer(:title => 'title', :align => 'right', :timestamp => true, :width => 80)
       end
 
       it 'added with center alignment' do
         subject.should_receive(:puts).with("\n")
         subject.should_receive(:puts).with(/^ *title *$/)
-        subject.should_receive(:puts).with(/^ *#{@timestamp_regex} *$/)
+        subject.should_receive(:puts).with(/^ *#{timestamp_regex} *$/)
         subject.footer(:title => 'title', :align => 'center', :timestamp => true, :width => 80)
       end
     end
@@ -587,7 +587,7 @@ describe CommandLineReporter do
     context 'horizontal rule' do
       it 'uses dashes by default' do
         subject.should_receive(:puts)
-        subject.should_receive(:puts).with('-' * 100)
+        subject.should_receive(:puts).with(linechar * 100)
         subject.should_receive(:puts)
         subject.footer(:rule => true)
       end
@@ -602,15 +602,15 @@ describe CommandLineReporter do
 
     it 'outputs red' do
       subject.should_receive(:puts).with("\n")
-      subject.should_receive(:puts).with(@controls[:red] + 'title' + @controls[:clear])
-      subject.should_receive(:puts).with(/^\e\[31m#{@timestamp_regex}\e\[0m/)
+      subject.should_receive(:puts).with(controls[:red] + 'title' + controls[:clear])
+      subject.should_receive(:puts).with(/^\e\[31m#{timestamp_regex}\e\[0m/)
       subject.footer(:title => 'title', :timestamp => true, :color => 'red')
     end
 
     it 'outputs bold' do
       subject.should_receive(:puts).with("\n")
-      subject.should_receive(:puts).with(@controls[:bold] + 'title' + @controls[:clear])
-      subject.should_receive(:puts).with(/^\e\[1m#{@timestamp_regex}\e\[0m/)
+      subject.should_receive(:puts).with(controls[:bold] + 'title' + controls[:clear])
+      subject.should_receive(:puts).with(/^\e\[1m#{timestamp_regex}\e\[0m/)
       subject.footer(:title => 'title', :timestamp => true, :bold => true)
     end
   end

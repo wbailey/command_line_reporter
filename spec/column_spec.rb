@@ -57,8 +57,8 @@ describe CommandLineReporter::Column do
   end
 
   describe '#screen_rows' do
-    before :all do
-      @controls = {
+    let :controls do
+      {
         :clear => "\e[0m",
         :bold => "\e[1m",
         :red => "\e[31m",
@@ -78,139 +78,127 @@ describe CommandLineReporter::Column do
         end
 
         context 'left justifies' do
-          before :each do
-            @text = 'x' * 10
-            @filler = ' ' * 10
-          end
+          let(:text) { 'x' * 10 }
+          let(:filler) { ' ' * 10 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :width => 20)
-            c.screen_rows[0].should == @text + @filler
+            c = CommandLineReporter::Column.new(text, :width => 20)
+            c.screen_rows[0].should == text + filler
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :align => 'left', :width => 20, :color => 'red')
-            c.screen_rows[0].should == @controls[:red] + @text + @filler + @controls[:clear]
+            c = CommandLineReporter::Column.new(text, :align => 'left', :width => 20, :color => 'red')
+            c.screen_rows[0].should == controls[:red] + text + filler + controls[:clear]
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :align => 'left', :width => 20, :bold => true)
-            c.screen_rows[0].should == @controls[:bold] + @text + @filler + @controls[:clear]
+            c = CommandLineReporter::Column.new(text, :align => 'left', :width => 20, :bold => true)
+            c.screen_rows[0].should == controls[:bold] + text + filler + controls[:clear]
           end
         end
 
         context 'right justifies' do
-          before :each do
-            @text = 'x' * 10
-            @filler = ' ' * 10
-          end
+          let(:text) { 'x' * 10 }
+          let(:filler) { ' ' * 10 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :width => 20)
-            c.screen_rows[0].should == @filler + @text
+            c = CommandLineReporter::Column.new(text, :align => 'right', :width => 20)
+            c.screen_rows[0].should == filler + text
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :width => 20, :color => 'red')
-            c.screen_rows[0].should == @controls[:red] + @filler + @text  + @controls[:clear]
+            c = CommandLineReporter::Column.new(text, :align => 'right', :width => 20, :color => 'red')
+            c.screen_rows[0].should == controls[:red] + filler + text  + controls[:clear]
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :width => 20, :bold => true)
-            c.screen_rows[0].should == @controls[:bold] + @filler + @text + @controls[:clear]
+            c = CommandLineReporter::Column.new(text, :align => 'right', :width => 20, :bold => true)
+            c.screen_rows[0].should == controls[:bold] + filler + text + controls[:clear]
           end
         end
 
         context 'center justifies' do
-          before :each do
-            @text = 'x' * 10
-            @filler = ' ' * 5
-          end
+          let(:text) { 'x' * 10 }
+          let(:filler) { ' ' * 5 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :align => 'center', :width => 20)
-            c.screen_rows[0].should == @filler + @text + @filler
+            c = CommandLineReporter::Column.new(text, :align => 'center', :width => 20)
+            c.screen_rows[0].should == filler + text + filler
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :align => 'center', :width => 20, :color => 'red')
-            c.screen_rows[0].should == @controls[:red] + @filler + @text + @filler + @controls[:clear]
+            c = CommandLineReporter::Column.new(text, :align => 'center', :width => 20, :color => 'red')
+            c.screen_rows[0].should == controls[:red] + filler + text + filler + controls[:clear]
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :align => 'center', :width => 20, :bold => true)
-            c.screen_rows[0].should == @controls[:bold] + @filler + @text + @filler + @controls[:clear]
+            c = CommandLineReporter::Column.new(text, :align => 'center', :width => 20, :bold => true)
+            c.screen_rows[0].should == controls[:bold] + filler + text + filler + controls[:clear]
           end
         end
       end
 
       context 'accounts for padding' do
         context 'left justifies' do
-          before :each do
-            @text = 'x' * 10
-            @padding = ' ' * 5
-            @filler = ' ' * 10
-          end
+          let(:text) { 'x' * 10 }
+          let(:padding) { ' ' * 5 }
+          let(:filler) { ' ' * 10 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :padding => 5, :width => 30)
-            c.screen_rows[0].should == @padding + @text + @filler + @padding
+            c = CommandLineReporter::Column.new(text, :padding => 5, :width => 30)
+            c.screen_rows[0].should == padding + text + filler + padding
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :padding => 5, :width => 30, :color => 'red')
-            c.screen_rows[0].should == @padding + @controls[:red] + @text + @filler + @controls[:clear] + @padding
+            c = CommandLineReporter::Column.new(text, :padding => 5, :width => 30, :color => 'red')
+            c.screen_rows[0].should == padding + controls[:red] + text + filler + controls[:clear] + padding
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :padding => 5, :width => 30, :bold => true)
-            c.screen_rows[0].should == @padding + @controls[:bold] + @text + @filler + @controls[:clear] + @padding
+            c = CommandLineReporter::Column.new(text, :padding => 5, :width => 30, :bold => true)
+            c.screen_rows[0].should == padding + controls[:bold] + text + filler + controls[:clear] + padding
           end
         end
 
         context 'right justifies' do
-          before :each do
-            @text = 'x' * 10
-            @padding = ' ' * 5
-            @filler = ' ' * 10
-          end
+          let(:text) { 'x' * 10 }
+          let(:padding) { ' ' * 5 }
+          let(:filler) { ' ' * 10 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :padding => 5, :width => 30)
-            c.screen_rows[0].should == @padding + @filler + @text + @padding
+            c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 5, :width => 30)
+            c.screen_rows[0].should == padding + filler + text + padding
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :padding => 5, :width => 30, :color => 'red')
-            c.screen_rows[0].should == @padding + @controls[:red] + @filler + @text + @controls[:clear] + @padding
+            c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 5, :width => 30, :color => 'red')
+            c.screen_rows[0].should == padding + controls[:red] + filler + text + controls[:clear] + padding
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :padding => 5, :width => 30, :bold => true)
-            c.screen_rows[0].should == @padding + @controls[:bold] + @filler + @text + @controls[:clear] + @padding
+            c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 5, :width => 30, :bold => true)
+            c.screen_rows[0].should == padding + controls[:bold] + filler + text + controls[:clear] + padding
           end
         end
 
         context 'right justifies' do
-          before :each do
-            @text = ' ' * 10
-            @padding = ' ' * 5
-            @filler = ' ' * 5
-          end
+          let(:text) { 'x' * 10 }
+          let(:padding) { ' ' * 5 }
+          let(:filler) { ' ' * 5 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :align => 'center', :padding => 5, :width => 30)
-            c.screen_rows[0].should == @padding + @filler + @text + @filler + @padding
+            c = CommandLineReporter::Column.new(text, :align => 'center', :padding => 5, :width => 30)
+            c.screen_rows[0].should == padding + filler + text + filler + padding
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :align => 'center', :padding => 5, :width => 30, :color => 'red')
-            c.screen_rows[0].should == @padding + @controls[:red] + @filler + @text + @filler + @controls[:clear] + @padding
+            c = CommandLineReporter::Column.new(text, :align => 'center', :padding => 5, :width => 30, :color => 'red')
+            c.screen_rows[0].should == padding + controls[:red] + filler + text + filler + controls[:clear] + padding
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :align => 'center', :padding => 5, :width => 30, :bold => true)
-            c.screen_rows[0].should == @padding + @controls[:bold] + @filler + @text + @filler + @controls[:clear] + @padding
+            c = CommandLineReporter::Column.new(text, :align => 'center', :padding => 5, :width => 30, :bold => true)
+            c.screen_rows[0].should == padding + controls[:bold] + filler + text + filler + controls[:clear] + padding
           end
         end
       end
@@ -219,98 +207,92 @@ describe CommandLineReporter::Column do
     context 'with wrapping' do
       context 'no padding' do
         context 'left justifies' do
-          before :each do
-            @text = 'x' * 25
-            @full_line = 'x' * 10
-            @remainder = 'x' * 5
-            @filler = ' ' * 5
-          end
+          let(:text) { 'x' * 25 }
+          let(:full_line) { 'x' * 10 }
+          let(:remainder) { 'x' * 5 }
+          let(:filler) { ' ' * 5 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :width => 10)
-            c.screen_rows.should == [@full_line, @full_line, @remainder + @filler]
+            c = CommandLineReporter::Column.new(text, :width => 10)
+            c.screen_rows.should == [full_line, full_line, remainder + filler]
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :width => 10, :color => 'red')
+            c = CommandLineReporter::Column.new(text, :width => 10, :color => 'red')
             c.screen_rows.should == [
-              @controls[:red] + @full_line + @controls[:clear],
-              @controls[:red] + @full_line + @controls[:clear],
-              @controls[:red] + @remainder + @filler + @controls[:clear],
+              controls[:red] + full_line + controls[:clear],
+              controls[:red] + full_line + controls[:clear],
+              controls[:red] + remainder + filler + controls[:clear],
             ]
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :width => 10, :bold => true)
+            c = CommandLineReporter::Column.new(text, :width => 10, :bold => true)
             c.screen_rows.should == [
-              @controls[:bold] + @full_line + @controls[:clear],
-              @controls[:bold] + @full_line + @controls[:clear],
-              @controls[:bold] + @remainder + @filler + @controls[:clear],
+              controls[:bold] + full_line + controls[:clear],
+              controls[:bold] + full_line + controls[:clear],
+              controls[:bold] + remainder + filler + controls[:clear],
             ]
           end
         end
 
         context 'right justifies' do
-          before :each do
-            @text = 'x' * 25
-            @full_line = 'x' * 10
-            @remainder = 'x' * 5
-            @filler = ' ' * 5
-          end
+          let(:text) { 'x' * 25 }
+          let(:full_line) { 'x' * 10 }
+          let(:remainder) { 'x' * 5 }
+          let(:filler) { ' ' * 5 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :width => 10)
-            c.screen_rows.should == [@full_line, @full_line, @filler + @remainder]
+            c = CommandLineReporter::Column.new(text, :align => 'right', :width => 10)
+            c.screen_rows.should == [full_line, full_line, filler + remainder]
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :width => 10, :color => 'red')
+            c = CommandLineReporter::Column.new(text, :align => 'right', :width => 10, :color => 'red')
             c.screen_rows.should == [
-              @controls[:red] + @full_line + @controls[:clear],
-              @controls[:red] + @full_line + @controls[:clear],
-              @controls[:red] + @filler + @remainder + @controls[:clear],
+              controls[:red] + full_line + controls[:clear],
+              controls[:red] + full_line + controls[:clear],
+              controls[:red] + filler + remainder + controls[:clear],
             ]
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :width => 10, :bold => true)
+            c = CommandLineReporter::Column.new(text, :align => 'right', :width => 10, :bold => true)
             c.screen_rows.should == [
-              @controls[:bold] + @full_line + @controls[:clear],
-              @controls[:bold] + @full_line + @controls[:clear],
-              @controls[:bold] + @filler + @remainder + @controls[:clear],
+              controls[:bold] + full_line + controls[:clear],
+              controls[:bold] + full_line + controls[:clear],
+              controls[:bold] + filler + remainder + controls[:clear],
             ]
           end
         end
 
         context 'center justifies' do
-          before :each do
-            @text = 'x' * 25
-            @full_line = 'x' * 10
-            @remainder = 'x' * 5
-            @left_filler = ' ' * 3
-            @right_filler = ' ' * 2
-          end
+          let(:text) { 'x' * 25 }
+          let(:full_line) { 'x' * 10 }
+          let(:remainder) { 'x' * 5 }
+          let(:left_filler) { ' ' * 3 }
+          let(:right_filler) { ' ' * 2 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :align => 'center', :width => 10)
-            c.screen_rows.should == [@full_line, @full_line, ' ' * 3 + @remainder + @right_filler]
+            c = CommandLineReporter::Column.new(text, :align => 'center', :width => 10)
+            c.screen_rows.should == [full_line, full_line, ' ' * 3 + remainder + right_filler]
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :align => 'center', :width => 10, :color => 'red')
+            c = CommandLineReporter::Column.new(text, :align => 'center', :width => 10, :color => 'red')
             c.screen_rows.should == [
-              @controls[:red] + @full_line + @controls[:clear],
-              @controls[:red] + @full_line + @controls[:clear],
-              @controls[:red] + @left_filler + @remainder + @right_filler + @controls[:clear],
+              controls[:red] + full_line + controls[:clear],
+              controls[:red] + full_line + controls[:clear],
+              controls[:red] + left_filler + remainder + right_filler + controls[:clear],
             ]
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :align => 'center', :width => 10, :bold => true)
+            c = CommandLineReporter::Column.new(text, :align => 'center', :width => 10, :bold => true)
             c.screen_rows.should == [
-              @controls[:bold] + @full_line + @controls[:clear],
-              @controls[:bold] + @full_line + @controls[:clear],
-              @controls[:bold] + @left_filler + @remainder + @right_filler + @controls[:clear],
+              controls[:bold] + full_line + controls[:clear],
+              controls[:bold] + full_line + controls[:clear],
+              controls[:bold] + left_filler + remainder + right_filler + controls[:clear],
             ]
           end
         end
@@ -318,104 +300,98 @@ describe CommandLineReporter::Column do
 
       context 'account for padding' do
         context 'left justifies' do
-          before :each do
-            @text = 'x' * 25
-            @full_line = 'x' * 16
-            @remainder = 'x' * 9
-            @padding = ' ' * 2
-            @filler = ' ' * 7
-          end
+          let(:text) { 'x' * 25 }
+          let(:full_line) { 'x' * 16 }
+          let(:remainder) { 'x' * 9 }
+          let(:padding) { ' ' * 2 }
+          let(:filler) { ' ' * 7 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :padding => 2, :width => 20)
+            c = CommandLineReporter::Column.new(text, :padding => 2, :width => 20)
             c.screen_rows.should == [
-              @padding + @full_line + @padding,
-              @padding + @remainder + @filler + @padding,
+              padding + full_line + padding,
+              padding + remainder + filler + padding,
             ]
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :padding => 2, :width => 20, :color => 'red')
+            c = CommandLineReporter::Column.new(text, :padding => 2, :width => 20, :color => 'red')
             c.screen_rows.should == [
-              @padding + @controls[:red] + @full_line + @controls[:clear] + @padding,
-              @padding + @controls[:red] + @remainder + @filler + @controls[:clear] + @padding,
+              padding + controls[:red] + full_line + controls[:clear] + padding,
+              padding + controls[:red] + remainder + filler + controls[:clear] + padding,
             ]
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :padding => 2, :width => 20, :bold => true)
+            c = CommandLineReporter::Column.new(text, :padding => 2, :width => 20, :bold => true)
             c.screen_rows.should == [
-              @padding + @controls[:bold] + @full_line + @controls[:clear] + @padding,
-              @padding + @controls[:bold] + @remainder + @filler + @controls[:clear] + @padding,
+              padding + controls[:bold] + full_line + controls[:clear] + padding,
+              padding + controls[:bold] + remainder + filler + controls[:clear] + padding,
             ]
           end
         end
 
         context 'right justifies' do
-          before :each do
-            @text = 'x' * 25
-            @full_line = 'x' * 16
-            @remainder = 'x' * 9
-            @padding = ' ' * 2
-            @filler = ' ' * 7
-          end
+          let(:text) { 'x' * 25 }
+          let(:full_line) { 'x' * 16 }
+          let(:remainder) { 'x' * 9 }
+          let(:padding) { ' ' * 2 }
+          let(:filler) { ' ' * 7 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :padding => 2, :align => 'right', :width => 20)
+            c = CommandLineReporter::Column.new(text, :padding => 2, :align => 'right', :width => 20)
             c.screen_rows.should == [
-              @padding + @full_line + @padding,
-              @padding + @filler + @remainder + @padding,
+              padding + full_line + padding,
+              padding + filler + remainder + padding,
             ]
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :padding => 2, :width => 20, :color => 'red')
+            c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 2, :width => 20, :color => 'red')
             c.screen_rows.should == [
-              @padding + @controls[:red] + @full_line + @controls[:clear] + @padding,
-              @padding + @controls[:red] + @filler + @remainder + @controls[:clear] + @padding,
+              padding + controls[:red] + full_line + controls[:clear] + padding,
+              padding + controls[:red] + filler + remainder + controls[:clear] + padding,
             ]
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :align => 'right', :padding => 2, :width => 20, :bold => true)
+            c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 2, :width => 20, :bold => true)
             c.screen_rows.should == [
-              @padding + @controls[:bold] + @full_line + @controls[:clear] + @padding,
-              @padding + @controls[:bold] + @filler + @remainder + @controls[:clear] + @padding,
+              padding + controls[:bold] + full_line + controls[:clear] + padding,
+              padding + controls[:bold] + filler + remainder + controls[:clear] + padding,
             ]
           end
         end
 
         context 'center justifies' do
-          before :each do
-            @text = 'x' * 25
-            @full_line = 'x' * 16
-            @remainder = 'x' * 9
-            @padding = ' ' * 2
-            @left_filler = ' ' * 4
-            @right_filler = ' ' * 3
-          end
+          let(:text) { 'x' * 25 }
+          let(:full_line) { 'x' * 16 }
+          let(:remainder) { 'x' * 9 }
+          let(:padding) { ' ' * 2 }
+          let(:left_filler) { ' ' * 4 }
+          let(:right_filler) { ' ' * 3 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(@text, :padding => 2, :align => 'center', :width => 20)
+            c = CommandLineReporter::Column.new(text, :padding => 2, :align => 'center', :width => 20)
             c.screen_rows.should == [
-              @padding + @full_line + @padding,
-              @padding + @left_filler + @remainder + @right_filler + @padding,
+              padding + full_line + padding,
+              padding + left_filler + remainder + right_filler + padding,
             ]
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(@text, :padding => 2, :align => 'center', :width => 20, :color => 'red')
+            c = CommandLineReporter::Column.new(text, :padding => 2, :align => 'center', :width => 20, :color => 'red')
             c.screen_rows.should == [
-              @padding + @controls[:red] + @full_line + @controls[:clear] + @padding,
-              @padding + @controls[:red] + @left_filler + @remainder + @right_filler + @controls[:clear] + @padding,
+              padding + controls[:red] + full_line + controls[:clear] + padding,
+              padding + controls[:red] + left_filler + remainder + right_filler + controls[:clear] + padding,
             ]
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(@text, :padding => 2, :align => 'center', :width => 20, :bold => true)
+            c = CommandLineReporter::Column.new(text, :padding => 2, :align => 'center', :width => 20, :bold => true)
             c.screen_rows.should == [
-              @padding + @controls[:bold] + @full_line + @controls[:clear] + @padding,
-              @padding + @controls[:bold] + @left_filler + @remainder + @right_filler + @controls[:clear] + @padding,
+              padding + controls[:bold] + full_line + controls[:clear] + padding,
+              padding + controls[:bold] + left_filler + remainder + right_filler + controls[:clear] + padding,
             ]
           end
         end

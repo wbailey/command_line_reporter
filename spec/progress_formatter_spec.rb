@@ -8,8 +8,8 @@ describe CommandLineReporter::ProgressFormatter do
     its(:indicator) { should == '.' }
   end
 
-  before :all do
-    @controls = {
+  let :controls do
+    {
       :clear => "\e[0m",
       :bold => "\e[1m",
       :red => "\e[31m",
@@ -27,7 +27,7 @@ describe CommandLineReporter::ProgressFormatter do
     end
 
     it 'displays colored red dots for the indicator' do
-      subject.should_receive(:print).exactly(10).times.with("#{@controls[:red]}.#{@controls[:clear]}")
+      subject.should_receive(:print).exactly(10).times.with("#{controls[:red]}.#{controls[:clear]}")
       subject.should_receive(:puts).exactly(1).times
 
       subject.format({:color => 'red'}, lambda {
@@ -36,7 +36,7 @@ describe CommandLineReporter::ProgressFormatter do
     end
 
     it 'displays BOLD dots for the indicator' do
-      subject.should_receive(:print).exactly(10).times.with("#{@controls[:bold]}.#{@controls[:clear]}")
+      subject.should_receive(:print).exactly(10).times.with("#{controls[:bold]}.#{controls[:clear]}")
       subject.should_receive(:puts).exactly(1).times
 
       subject.format({:bold => true}, lambda {

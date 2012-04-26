@@ -4,8 +4,8 @@ require 'nested_formatter'
 describe CommandLineReporter::NestedFormatter do
   subject { CommandLineReporter::NestedFormatter.instance }
 
-  before :all do
-    @controls = {
+  let(:controls) do
+    {
       :clear => "\e[0m",
       :bold => "\e[1m",
       :red => "\e[31m",
@@ -72,15 +72,15 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'performs a wrapped report with color' do
-        subject.should_receive(:puts).with("#{@controls[:red]}working#{@controls[:clear]}")
-        subject.should_receive(:puts).with("#{@controls[:red]}complete#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:red]}working#{controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:red]}complete#{controls[:clear]}")
 
         subject.format({:color => 'red'}, lambda { })
       end
 
       it 'performs a wrapped report with color' do
-        subject.should_receive(:puts).with("#{@controls[:bold]}working#{@controls[:clear]}")
-        subject.should_receive(:puts).with("#{@controls[:bold]}complete#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:bold]}working#{controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:bold]}complete#{controls[:clear]}")
 
         subject.format({:bold => true}, lambda { })
       end
@@ -166,10 +166,10 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'indents the nested wrapped messages and outputs color' do
-        subject.should_receive(:puts).with("#{@controls[:red]}test#{@controls[:clear]}")
-        subject.should_receive(:puts).with("#{@controls[:red]}  test2#{@controls[:clear]}")
-        subject.should_receive(:puts).with("#{@controls[:red]}  complete#{@controls[:clear]}")
-        subject.should_receive(:puts).with("#{@controls[:red]}complete#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:red]}test#{controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:red]}  test2#{controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:red]}  complete#{controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:red]}complete#{controls[:clear]}")
 
         subject.format({:message => 'test', :color => 'red'}, lambda {
           subject.format({:message => 'test2', :color => 'red'}, lambda {})
@@ -177,10 +177,10 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'indents the nested wrapped messages and outputs bold' do
-        subject.should_receive(:puts).with("#{@controls[:bold]}test#{@controls[:clear]}")
-        subject.should_receive(:puts).with("#{@controls[:bold]}  test2#{@controls[:clear]}")
-        subject.should_receive(:puts).with("#{@controls[:bold]}  complete#{@controls[:clear]}")
-        subject.should_receive(:puts).with("#{@controls[:bold]}complete#{@controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:bold]}test#{controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:bold]}  test2#{controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:bold]}  complete#{controls[:clear]}")
+        subject.should_receive(:puts).with("#{controls[:bold]}complete#{controls[:clear]}")
 
         subject.format({:message => 'test', :bold => true}, lambda {
           subject.format({:message => 'test2', :bold => true}, lambda {})
