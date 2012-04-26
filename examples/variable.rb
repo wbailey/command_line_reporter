@@ -1,8 +1,8 @@
 require 'command_line_reporter'
 
-include CommandLineReporter
-
 class Example
+  include CommandLineReporter
+
   def initialize
     self.formatter = 'progress'
   end
