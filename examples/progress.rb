@@ -16,13 +16,11 @@ class Example
       10.times do
         x += 1
         sleep 0.1
-        # formatter.progress
         progress
 
         10.times do
           x += 1
           sleep 0.1
-          # formatter.progress
           progress
         end
       end
