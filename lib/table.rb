@@ -5,13 +5,14 @@ module CommandLineReporter
   class Table
     include OptionsValidator
 
-    VALID_OPTIONS = [:border]
+    VALID_OPTIONS = [:border, :width]
     attr_accessor :rows, *VALID_OPTIONS
 
     def initialize(options = {})
       self.validate_options(options, *VALID_OPTIONS)
 
       self.border = options[:border] || false
+      self.width = options[:width] || false
 
       @rows = []
     end
@@ -28,7 +29,6 @@ module CommandLineReporter
           c.align = self.rows[0].columns[i].align
           c.padding = self.rows[0].columns[i].padding
           c.width = self.rows[0].columns[i].width
-          c.size = c.width - 2 * c.padding
 
           # Allow for the fact that the row or column may take precedence and that the first
           # row might be a header row which we don't want to inherit from
@@ -57,6 +57,7 @@ module CommandLineReporter
 
     def output
       return if self.rows.size == 0 # we got here with nothing to print to the screen
+      auto_adjust_widths if self.width == :auto
 
       puts separator('first') if self.border
       self.rows.each_with_index do |row, index|
@@ -64,6 +65,22 @@ module CommandLineReporter
         puts separator('middle') if self.border && (index != self.rows.size - 1)
       end
       puts separator('last') if self.border
+    end
+
+    def auto_adjust_widths
+      column_widths = []
+
+      self.rows.each do |row|
+        row.columns.each_with_index do |col, i|
+          column_widths[i] = [ col.required_width, ( column_widths[i] || 0 ) ].max
+        end
+      end
+
+      self.rows.each do |row|
+        row.columns.each_with_index do |col, i|
+          col.width = column_widths[i]
+        end
+      end
     end
 
     private

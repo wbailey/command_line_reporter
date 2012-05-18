@@ -65,6 +65,27 @@ class Example
         column 'Quantum Field'
       end
     end
+
+    vertical_spacing 2
+    header :title => 'A table with no width will determine width automatically'
+
+    table :border => true, :width => :auto do
+      row :color => 'red' do
+        column 'MY NAME IS REALLY LONG AND WILL NOT WRAP', :align => 'center', :color => 'blue'
+        column 'ADDRESS', :padding => 5
+        column 'CITY'
+      end
+      row :color => 'green', :bold => true do
+        column 'caeser'
+        column '1 Appian Way'
+        column 'Rome'
+      end
+      row do
+        column 'Richard Feynman'
+        column '1 Golden Gate'
+        column 'Quantum Field'
+      end
+    end
   end
 end
 

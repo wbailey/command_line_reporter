@@ -56,6 +56,22 @@ describe CommandLineReporter::Column do
     end
   end
 
+  describe '#size' do
+    it 'is the width less twice the padding' do
+      CommandLineReporter::Column.new('test').size.should == 10
+      CommandLineReporter::Column.new('test', :width => 5).size.should == 5
+      CommandLineReporter::Column.new('test', :width => 5, :padding => 1).size.should == 3
+    end
+  end
+
+  describe '#required_width' do
+    it 'is the length of the text plus twice the padding' do
+      CommandLineReporter::Column.new('test').required_width.should == 4
+      CommandLineReporter::Column.new('test', :padding => 1).required_width.should == 6
+      CommandLineReporter::Column.new('test', :padding => 5).required_width.should == 14
+    end
+  end
+
   describe '#screen_rows' do
     let :controls do
       {
