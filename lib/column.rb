@@ -13,7 +13,7 @@ module CommandLineReporter
 
       self.text = text.to_s
 
-      self.width = options[:width] || 10
+      self.width = options[:width]  || 10
       self.align = options[:align] || 'left'
       self.padding = options[:padding] || 0
       self.color = options[:color] || nil
@@ -23,8 +23,14 @@ module CommandLineReporter
 
       raise ArgumentError unless self.width > 0
       raise ArgumentError unless self.padding.to_s.match(/^\d+$/)
+    end
 
-      self.size = self.width - 2 * self.padding
+    def size
+      self.width - 2 * self.padding
+    end
+
+    def required_width
+      self.text.to_s.size + 2 * self.padding
     end
 
     def screen_rows

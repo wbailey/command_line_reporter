@@ -96,4 +96,34 @@ describe CommandLineReporter::Table do
       end
     end
   end
+
+  describe '#auto_adjust_widths' do
+    it 'sets the widths of each column in each row to the maximum required width for that column' do
+      table = CommandLineReporter::Table.new.tap do |t|
+        t.add(
+          CommandLineReporter::Row.new.tap do |r|
+            r.add CommandLineReporter::Column.new('medium length')
+            r.add CommandLineReporter::Column.new('i am pretty long') # longest column
+            r.add CommandLineReporter::Column.new('short', :padding => 100)
+          end
+        )
+
+        t.add(
+          CommandLineReporter::Row.new.tap do |r|
+            r.add CommandLineReporter::Column.new('longer than medium length') # longest column
+            r.add CommandLineReporter::Column.new('shorter')
+            r.add CommandLineReporter::Column.new('longer than short') # longest column (inherits padding)
+          end
+        )
+      end
+
+      table.auto_adjust_widths
+
+      table.rows.each do |row|
+        row.columns[0].width.should == CommandLineReporter::Column.new('longer than medium length').required_width
+        row.columns[1].width.should == CommandLineReporter::Column.new('i am pretty long').required_width
+        row.columns[2].width.should == CommandLineReporter::Column.new('longer than short', :padding => 100).required_width
+      end
+    end
+  end
 end
