@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'table'
 
 describe CommandLineReporter::Table do
   context 'creation' do

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'column'
 
 describe CommandLineReporter::Column do
   describe '#initialize' do

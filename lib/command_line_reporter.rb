@@ -1,7 +1,12 @@
 require 'stringio'
-require 'table'
 
-Dir.glob(File.join(File.dirname(__FILE__), 'command_line_reporter', 'formatter', '*.rb')).each {|r| require r}
+require 'command_line_reporter/options_validator'
+require 'command_line_reporter/formatter/progress'
+require 'command_line_reporter/formatter/nested'
+require 'command_line_reporter/row'
+require 'command_line_reporter/column'
+require 'command_line_reporter/table'
+require 'command_line_reporter/version'
 
 module CommandLineReporter
   include OptionsValidator

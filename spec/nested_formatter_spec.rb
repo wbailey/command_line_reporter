@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'nested_formatter'
 
 describe CommandLineReporter::NestedFormatter do
   subject { CommandLineReporter::NestedFormatter.instance }

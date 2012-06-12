@@ -1,6 +1,3 @@
-require 'row'
-require 'options_validator'
-
 module CommandLineReporter
   class Table
     include OptionsValidator

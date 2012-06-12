@@ -1,4 +1,3 @@
-require 'options_validator'
 require 'colored'
 
 module CommandLineReporter

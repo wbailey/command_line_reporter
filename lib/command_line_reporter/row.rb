@@ -1,6 +1,3 @@
-require 'column'
-require 'options_validator'
-
 module CommandLineReporter
   class Row
     include OptionsValidator
