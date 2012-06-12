@@ -1,7 +1,7 @@
 require 'stringio'
 require 'table'
 
-Dir[File.join(File.dirname(__FILE__), '*_formatter.rb')].each {|r| require r}
+Dir.glob(File.join(File.dirname(__FILE__), 'command_line_reporter', 'formatter', '*.rb')).each {|r| require r}
 
 module CommandLineReporter
   include OptionsValidator
