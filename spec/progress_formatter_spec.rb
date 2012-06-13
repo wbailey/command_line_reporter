@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'progress_formatter'
 
 describe CommandLineReporter::ProgressFormatter do
   subject { CommandLineReporter::ProgressFormatter.instance }

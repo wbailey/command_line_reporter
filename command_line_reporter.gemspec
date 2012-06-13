@@ -1,7 +1,7 @@
-$: << File.join(__FILE__, '..')
+$LOAD_PATH << File.expand_path( File.join( '..' , 'lib' ), __FILE__ ) 
 
 require 'date'
-require 'lib/version'
+require 'command_line_reporter/version'
 
 Gem::Specification.new do |gem|
   gem.name    = 'command_line_reporter'

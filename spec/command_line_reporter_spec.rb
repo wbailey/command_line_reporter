@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'command_line_reporter'
 
 describe CommandLineReporter do
   let :use_class do

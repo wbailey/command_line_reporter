@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'options_validator'
 
 describe OptionsValidator do
   subject { Class.new.extend(OptionsValidator) }
