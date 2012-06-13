@@ -1,5 +1,4 @@
 require 'singleton'
-require 'options_validator'
 require 'colored'
 
 module CommandLineReporter

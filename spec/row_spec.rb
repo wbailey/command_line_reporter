@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'row'
 
 describe CommandLineReporter::Row do
   let(:cols) { 10.times.map {|v| CommandLineReporter::Column.new("test#{v}")} }
