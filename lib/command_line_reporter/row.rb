@@ -13,7 +13,7 @@ module CommandLineReporter
       self.header = options[:header] || false
       self.color = options[:color]
       self.bold = options[:bold] || false
-      self.encoding = options[:encoding]
+      self.encoding = options[:encoding] || false
 
     end
 
