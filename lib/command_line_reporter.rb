@@ -17,6 +17,7 @@ module CommandLineReporter
     :width => 100,
     :align => 'left',
     :formatter => 'nested',
+    :encoding => :unicode,
   }
 
   def capture_output
@@ -118,13 +119,25 @@ module CommandLineReporter
     puts line
   end
 
+  def encoding(options)
+    if options[:encoding]
+      raise ArgumentError, "Invalid encoding" unless [ :ascii, :unicode ].include? options[:encoding]
+    else
+      options[:encoding] = DEFAULTS[:encoding]
+    end
+
+    options
+  end
+
   def table(options = {})
+    encoding(options)
     @table = CommandLineReporter::Table.new(options)
     yield
     @table.output
   end
 
   def row(options = {})
+    options[:encoding] ||= @table.encoding
     @row = CommandLineReporter::Row.new(options)
     yield
     @table.add(@row)

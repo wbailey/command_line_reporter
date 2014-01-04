@@ -2,7 +2,7 @@ module CommandLineReporter
   class Table
     include OptionsValidator
 
-    VALID_OPTIONS = [:border, :width]
+    VALID_OPTIONS = [:border, :width, :encoding]
     attr_accessor :rows, *VALID_OPTIONS
 
     def initialize(options = {})
@@ -10,6 +10,7 @@ module CommandLineReporter
 
       self.border = options[:border] || false
       self.width = options[:width] || false
+      self.encoding = options[:encoding] || false
 
       @rows = []
     end
@@ -83,7 +84,7 @@ module CommandLineReporter
     private
 
     def separator(type = 'middle')
-      if "\u2501" == 'u2501'
+      if "\u2501" == 'u2501' || self.encoding == :ascii
         left = right = center = '+'
         bar = '-'
       else
