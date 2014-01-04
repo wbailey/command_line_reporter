@@ -119,18 +119,7 @@ module CommandLineReporter
     puts line
   end
 
-  def encoding(options)
-    if options[:encoding]
-      raise ArgumentError, "Invalid encoding" unless [ :ascii, :unicode ].include? options[:encoding]
-    else
-      options[:encoding] = DEFAULTS[:encoding]
-    end
-
-    options
-  end
-
   def table(options = {})
-    encoding(options)
     @table = CommandLineReporter::Table.new(options)
     yield
     @table.output

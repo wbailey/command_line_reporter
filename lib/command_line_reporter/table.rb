@@ -10,9 +10,11 @@ module CommandLineReporter
 
       self.border = options[:border] || false
       self.width = options[:width] || false
-      self.encoding = options[:encoding] || false
+      self.encoding = options[:encoding] || CommandLineReporter::DEFAULTS[:encoding]
 
       @rows = []
+
+      raise ArgumentError, "Invalid encoding" unless [ :ascii, :unicode ].include? self.encoding
     end
 
     def add(row)

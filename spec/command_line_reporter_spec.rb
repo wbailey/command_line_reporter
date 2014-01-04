@@ -690,20 +690,4 @@ describe CommandLineReporter do
     end
   end
 
-  describe '#encoding' do
-    it 'accepts valid encodings' do
-      expect {
-        subject.table(:encoding => :unicode) 
-        subject.table(:encoding => :ascii) 
-      }.to_not raise_error ArgumentError
-    end
-
-    it 'rejects invalid encodings' do
-      expect {
-        subject.table(:encoding => :ebcdic) 
-      }.to raise_error ArgumentError
-    end
-  end
-
-
 end

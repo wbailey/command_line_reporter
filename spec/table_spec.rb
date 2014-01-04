@@ -21,7 +21,7 @@ describe CommandLineReporter::Table do
     end
 
     it 'output encoding should be unicode' do
-      CommandLineReporter::Table.new.encoding.should be_false
+      CommandLineReporter::Table.new.encoding.should == :unicode
     end
   end
 
