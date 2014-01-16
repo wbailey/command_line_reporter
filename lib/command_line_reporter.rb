@@ -17,6 +17,7 @@ module CommandLineReporter
     :width => 100,
     :align => 'left',
     :formatter => 'nested',
+    :encoding => :unicode,
   }
 
   def capture_output
@@ -125,6 +126,7 @@ module CommandLineReporter
   end
 
   def row(options = {})
+    options[:encoding] ||= @table.encoding
     @row = CommandLineReporter::Row.new(options)
     yield
     @table.add(@row)

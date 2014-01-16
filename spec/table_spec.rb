@@ -15,6 +15,14 @@ describe CommandLineReporter::Table do
     it 'accepts the border' do
       CommandLineReporter::Table.new(:border => true).border.should == true
     end
+
+    it 'output encoding should be ascii' do
+      CommandLineReporter::Table.new(:encoding => :ascii).encoding.should == :ascii
+    end
+
+    it 'output encoding should be unicode' do
+      CommandLineReporter::Table.new.encoding.should == :unicode
+    end
   end
 
   context 'rows' do
@@ -125,4 +133,5 @@ describe CommandLineReporter::Table do
       end
     end
   end
+
 end

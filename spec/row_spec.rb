@@ -15,6 +15,15 @@ describe CommandLineReporter::Row do
     it 'accepts bold' do
       CommandLineReporter::Row.new(:bold => true).bold.should be_true
     end
+
+    it 'output encoding should be ascii' do
+      CommandLineReporter::Row.new(:encoding => :ascii).encoding.should == :ascii
+    end
+
+    it 'output encoding should be unicode' do
+      CommandLineReporter::Row.new.encoding.should be_false
+    end
+
   end
 
   describe '#add' do

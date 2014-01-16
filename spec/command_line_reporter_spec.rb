@@ -689,4 +689,5 @@ describe CommandLineReporter do
       }.to raise_error ArgumentError
     end
   end
+
 end

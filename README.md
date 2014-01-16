@@ -97,6 +97,7 @@ There are several methods the mixin provides that do not depend on the formatter
 * _table(hash) {block}_
   * The first argument is a hash that defines properties of the table.
     * _:border_ - true|false indicates whether to include borders around the table cells
+    * _:encoding_ - :ascii or :unicode (default unicode)
   * The second argument is a block which includes calls the to the _row_ method
 * _row {block}_
   * _:header_ - Set to true to indicate if this is a header row in the table.

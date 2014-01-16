@@ -2,7 +2,7 @@ module CommandLineReporter
   class Row
     include OptionsValidator
 
-    VALID_OPTIONS = [:header, :color, :bold]
+    VALID_OPTIONS = [:header, :color, :bold, :encoding]
     attr_accessor :columns, :border, *VALID_OPTIONS
 
     def initialize(options = {})
@@ -13,6 +13,8 @@ module CommandLineReporter
       self.header = options[:header] || false
       self.color = options[:color]
       self.bold = options[:bold] || false
+      self.encoding = options[:encoding] || false
+
     end
 
     def add(column)
@@ -29,7 +31,7 @@ module CommandLineReporter
 
     def output
       screen_count.times do |sr|
-        border_char = ("\u2501" == "u2501") ? '|' : "\u2503"
+        border_char = ("\u2501" == "u2501" || self.encoding == :ascii) ? '|' : "\u2503"
         line = (self.border) ? "#{border_char} " : ''
         self.columns.size.times do |mc|
           col = self.columns[mc]
