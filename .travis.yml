@@ -1,0 +1,7 @@
+language: ruby
+bundler_args: --without development
+rvm:
+  - 1.9.3
+  - jruby-19mode # JRuby in 1.9 mode
+  - 2.0.0
+script: bundle exec rspec spec
