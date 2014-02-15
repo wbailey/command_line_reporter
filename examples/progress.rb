@@ -10,7 +10,7 @@ class Example
   end
 
   def run
-    x = 0
+    x,y = 0,0
 
     report do
       10.times do
@@ -26,7 +26,6 @@ class Example
       end
     end
 
-    y = 0
 
     report do
       10.times do

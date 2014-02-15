@@ -5,6 +5,16 @@ class Example
   include CommandLineReporter
 
   def run
+    example_simple
+    vertical_spacing 2
+    example_header
+    vertical_spacing 2
+    example_inherit
+    vertical_spacing 2
+    example_width
+  end
+
+  def example_simple
     header(:title => 'TABLE EXAMPLES - Borders, Wrapping, Alignment and Padding', :align => 'center', :width => 70)
 
     2.times do |j|
@@ -24,7 +34,9 @@ class Example
 
       vertical_spacing 2
     end
+  end
 
+  def example_header
     header :title => 'An example of a table with a header row.  The color and border properties are not inherited'
 
     table :border => true do
@@ -44,8 +56,9 @@ class Example
         column 'Quantum Field'
       end
     end
+  end
 
-    vertical_spacing 2
+  def example_inherit
     header :title => 'The same table with the properties inherited from the first row'
 
     table :border => true do
@@ -65,8 +78,9 @@ class Example
         column 'Quantum Field'
       end
     end
+  end
 
-    vertical_spacing 2
+  def example_width
     header :title => 'A table with no width will determine width automatically'
 
     table :border => true, :width => :auto do
