@@ -5,23 +5,23 @@ describe CommandLineReporter::Row do
 
   describe '#initialize' do
     it 'accepts header' do
-      CommandLineReporter::Row.new(:header => true).header.should be_true
+      expect(CommandLineReporter::Row.new(:header => true).header).to be_true
     end
 
     it 'accepts color' do
-      CommandLineReporter::Row.new(:color => 'red').color.should == 'red'
+      expect(CommandLineReporter::Row.new(:color => 'red').color).to eq('red')
     end
 
     it 'accepts bold' do
-      CommandLineReporter::Row.new(:bold => true).bold.should be_true
+      expect(CommandLineReporter::Row.new(:bold => true).bold).to be_true
     end
 
     it 'output encoding should be ascii' do
-      CommandLineReporter::Row.new(:encoding => :ascii).encoding.should == :ascii
+      expect(CommandLineReporter::Row.new(:encoding => :ascii).encoding).to eq(:ascii)
     end
 
     it 'output encoding should be unicode' do
-      CommandLineReporter::Row.new.encoding.should be_false
+      expect(CommandLineReporter::Row.new.encoding).to be_false
     end
 
   end
@@ -31,33 +31,33 @@ describe CommandLineReporter::Row do
 
     it 'columns' do
       subject.add(cols[0])
-      subject.columns.size.should == 1
-      subject.columns[0].should == cols[0]
+      expect(subject.columns.size).to eq(1)
+      expect(subject.columns[0]).to eq(cols[0])
       subject.add(cols[1])
-      subject.columns.should == cols[0,2]
+      expect(subject.columns).to eq(cols[0,2])
     end
 
     it 'defaults colors on columns' do
       row = CommandLineReporter::Row.new(:color => 'red')
       row.add(cols[0])
-      row.columns[0].color.should == 'red'
+      expect(row.columns[0].color).to eq('red')
       row.add(cols[1])
-      row.columns[1].color.should == 'red'
+      expect(row.columns[1].color).to eq('red')
     end
 
     it 'allows columns to override the row color' do
       col = CommandLineReporter::Column.new('test', :color => 'blue')
       row = CommandLineReporter::Row.new(:color => 'red')
       row.add(col)
-      row.columns[0].color.should == 'blue'
+      expect(row.columns[0].color).to eq('blue')
     end
 
     it 'supercedes bold on columns' do
       row = CommandLineReporter::Row.new(:bold => true)
       row.add(cols[0])
-      row.columns[0].bold.should be_true
+      expect(row.columns[0].bold).to be_true
       row.add(cols[1])
-      row.columns[1].bold.should be_true
+      expect(row.columns[1].bold).to be_true
     end
   end
 
@@ -84,14 +84,14 @@ describe CommandLineReporter::Row do
       context 'no wrap' do
         it 'outputs a single column' do
           subject.add(cols[0])
-          subject.should_receive(:puts).with(/^asdf#{@six_pieces}/)
+          expect(subject).to receive(:puts).with(/^asdf#{@six_pieces}/)
           subject.output
         end
         it 'outputs three columns' do
           subject.add(cols[0])
           subject.add(cols[1])
           subject.add(cols[2])
-          subject.should_receive(:puts).with(/^asdf#{six_spaces}#{one_space}#{three_spaces}qwer#{three_spaces}#{one_space}#{six_spaces}zxcv $/)
+          expect(subject).to receive(:puts).with(/^asdf#{six_spaces}#{one_space}#{three_spaces}qwer#{three_spaces}#{one_space}#{six_spaces}zxcv $/)
           subject.output
         end
       end
@@ -99,28 +99,28 @@ describe CommandLineReporter::Row do
       context 'with wrapping' do
         it 'outputs a single column' do
           subject.add(cols[3])
-          subject.should_receive(:puts).with(/^#{ten_xs}#{one_space}$/)
-          subject.should_receive(:puts).with(/^#{ten_xs}#{one_space}$/)
-          subject.should_receive(:puts).with(/^#{five_xs}#{six_spaces}$/)
+          expect(subject).to receive(:puts).with(/^#{ten_xs}#{one_space}$/)
+          expect(subject).to receive(:puts).with(/^#{ten_xs}#{one_space}$/)
+          expect(subject).to receive(:puts).with(/^#{five_xs}#{six_spaces}$/)
           subject.output
         end
 
         it 'outputs multiple columns of the same size' do
           subject.add(cols[3])
           subject.add(cols[4])
-          subject.should_receive(:puts).with(/^#{ten_xs}#{one_space}#{ten_xs}#{one_space}$/)
-          subject.should_receive(:puts).with(/^#{ten_xs}#{one_space}#{ten_xs}#{one_space}$/)
-          subject.should_receive(:puts).with(/^#{five_xs}#{nine_spaces}#{five_xs}#{three_spaces}$/)
+          expect(subject).to receive(:puts).with(/^#{ten_xs}#{one_space}#{ten_xs}#{one_space}$/)
+          expect(subject).to receive(:puts).with(/^#{ten_xs}#{one_space}#{ten_xs}#{one_space}$/)
+          expect(subject).to receive(:puts).with(/^#{five_xs}#{nine_spaces}#{five_xs}#{three_spaces}$/)
           subject.output
         end
 
         it 'outputs multiple columns with different sizes' do
           subject.add(cols[5])
           subject.add(cols[3])
-          subject.should_receive(:puts).with(/^#{ten_xs}#{one_space}#{ten_xs}#{one_space}$/)
-          subject.should_receive(:puts).with(/^#{ten_xs}#{one_space}#{ten_xs}#{one_space}$/)
-          subject.should_receive(:puts).with(/^#{ten_xs}#{one_space}#{five_xs}#{six_spaces}$/)
-          subject.should_receive(:puts).with(/^#{five_xs} {5,17}$/)
+          expect(subject).to receive(:puts).with(/^#{ten_xs}#{one_space}#{ten_xs}#{one_space}$/)
+          expect(subject).to receive(:puts).with(/^#{ten_xs}#{one_space}#{ten_xs}#{one_space}$/)
+          expect(subject).to receive(:puts).with(/^#{ten_xs}#{one_space}#{five_xs}#{six_spaces}$/)
+          expect(subject).to receive(:puts).with(/^#{five_xs} {5,17}$/)
           subject.output
         end
       end

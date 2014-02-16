@@ -12,9 +12,20 @@ describe CommandLineReporter::NestedFormatter do
   end
 
   describe '#method default values' do
-    its(:message_string) { should == 'working' }
-    its(:complete_string) { should == 'complete' }
-    its(:indent_size) { should eq 2 }
+    describe '#message_string' do
+      subject { super().message_string }
+      it { should == 'working' }
+    end
+
+    describe '#complete_string' do
+      subject { super().complete_string }
+      it { should == 'complete' }
+    end
+
+    describe '#indent_size' do
+      subject { super().indent_size }
+      it { should eq 2 }
+    end
   end
 
   describe '#format' do
@@ -29,25 +40,25 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'raises exception when there is an invalid argument' do
-        lambda {
+        expect {
           subject.format({:asdf => true}, lambda { })
-        }.should raise_exception ArgumentError
+        }.to raise_exception ArgumentError
       end
 
       it 'raises an exception when a block is not given' do
-        lambda {
+        expect {
           subject.format({:message => 'test'})
-        }.should raise_exception
+        }.to raise_exception
       end
 
       it 'accepts valid arguments' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('complete')
 
-        lambda {
+        expect {
           subject.format({:message => 'test'}, lambda { }) do
           end
-        }.should_not raise_exception
+        }.not_to raise_exception
       end
     end
 
@@ -64,38 +75,38 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'performs a wrapped report' do
-        subject.should_receive(:puts).with('working')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('working')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.format({ }, lambda { })
       end
 
       it 'performs a wrapped report with color' do
-        subject.should_receive(:puts).with("#{controls[:red]}working#{controls[:clear]}")
-        subject.should_receive(:puts).with("#{controls[:red]}complete#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:red]}working#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:red]}complete#{controls[:clear]}")
 
         subject.format({:color => 'red'}, lambda { })
       end
 
       it 'performs a wrapped report with color' do
-        subject.should_receive(:puts).with("#{controls[:bold]}working#{controls[:clear]}")
-        subject.should_receive(:puts).with("#{controls[:bold]}complete#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:bold]}working#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:bold]}complete#{controls[:clear]}")
 
         subject.format({:bold => true}, lambda { })
       end
 
       it 'performs a wrapped report overriding the message' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.format({:message => 'test'}, lambda { })
       end
 
       it 'performs an inline report' do
-        subject.should_receive(:print).with('test...')
-        subject.should_receive(:puts).with('complete')
-        subject.should_receive(:print).with('test2...')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:print).with('test...')
+        expect(subject).to receive(:puts).with('complete')
+        expect(subject).to receive(:print).with('test2...')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.format({:message => 'test', :type => 'inline'}, lambda { })
         subject.format({:message => 'test2', :type => 'inline'}, lambda { })
@@ -103,40 +114,40 @@ describe CommandLineReporter::NestedFormatter do
 
       it 'overrides the default for all invocations of a wrapped report' do
         subject.complete_string = 'done'
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('done')
-        subject.should_receive(:puts).with('test2')
-        subject.should_receive(:puts).with('done')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('done')
+        expect(subject).to receive(:puts).with('test2')
+        expect(subject).to receive(:puts).with('done')
 
         subject.format({:message => 'test'}, lambda { })
         subject.format({:message => 'test2'}, lambda { })
       end
 
       it 'overrides the default complete string for a wrapped report' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('done')
-        subject.should_receive(:puts).with('test2')
-        subject.should_receive(:puts).with('finally')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('done')
+        expect(subject).to receive(:puts).with('test2')
+        expect(subject).to receive(:puts).with('finally')
 
         subject.format({:message => 'test', :complete => 'done'}, lambda { })
         subject.format({:message => 'test2', :complete => 'finally'}, lambda { })
       end
 
       it 'overrides the default complete string for an inline report' do
-        subject.should_receive(:print).with('test...')
-        subject.should_receive(:puts).with('done')
-        subject.should_receive(:print).with('test2...')
-        subject.should_receive(:puts).with('finally')
+        expect(subject).to receive(:print).with('test...')
+        expect(subject).to receive(:puts).with('done')
+        expect(subject).to receive(:print).with('test2...')
+        expect(subject).to receive(:puts).with('finally')
 
         subject.format({:message => 'test', :type => 'inline', :complete => 'done'}, lambda { })
         subject.format({:message => 'test2', :type => 'inline', :complete => 'finally'}, lambda { })
       end
 
       it 'performs another wrapped report to ensure defaul behavior' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('complete')
-        subject.should_receive(:puts).with('test2')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test2')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.format({:message => 'test'}, lambda { })
         subject.format({:message => 'test2'}, lambda { })
@@ -154,10 +165,10 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'indents the nested wrapped messages' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('  test2')
-        subject.should_receive(:puts).with('  complete')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('  test2')
+        expect(subject).to receive(:puts).with('  complete')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.format({:message => 'test'}, lambda {
           subject.format({:message => 'test2'}, lambda {})
@@ -165,10 +176,10 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'indents the nested wrapped messages and outputs color' do
-        subject.should_receive(:puts).with("#{controls[:red]}test#{controls[:clear]}")
-        subject.should_receive(:puts).with("#{controls[:red]}  test2#{controls[:clear]}")
-        subject.should_receive(:puts).with("#{controls[:red]}  complete#{controls[:clear]}")
-        subject.should_receive(:puts).with("#{controls[:red]}complete#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:red]}test#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:red]}  test2#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:red]}  complete#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:red]}complete#{controls[:clear]}")
 
         subject.format({:message => 'test', :color => 'red'}, lambda {
           subject.format({:message => 'test2', :color => 'red'}, lambda {})
@@ -176,10 +187,10 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'indents the nested wrapped messages and outputs bold' do
-        subject.should_receive(:puts).with("#{controls[:bold]}test#{controls[:clear]}")
-        subject.should_receive(:puts).with("#{controls[:bold]}  test2#{controls[:clear]}")
-        subject.should_receive(:puts).with("#{controls[:bold]}  complete#{controls[:clear]}")
-        subject.should_receive(:puts).with("#{controls[:bold]}complete#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:bold]}test#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:bold]}  test2#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:bold]}  complete#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:bold]}complete#{controls[:clear]}")
 
         subject.format({:message => 'test', :bold => true}, lambda {
           subject.format({:message => 'test2', :bold => true}, lambda {})
@@ -187,12 +198,12 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'indents the multiple nested wrapped messages' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('  test2')
-        subject.should_receive(:puts).with('    test3')
-        subject.should_receive(:puts).with('    complete')
-        subject.should_receive(:puts).with('  complete')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('  test2')
+        expect(subject).to receive(:puts).with('    test3')
+        expect(subject).to receive(:puts).with('    complete')
+        expect(subject).to receive(:puts).with('  complete')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.format({:message => 'test'}, lambda {
           subject.format({:message => 'test2'}, lambda {
@@ -202,10 +213,10 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'indents the nested wrapped and inline messages' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:print).with('  test2...')
-        subject.should_receive(:puts).with('complete')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:print).with('  test2...')
+        expect(subject).to receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.format({:message => 'test'}, lambda {
           subject.format({:message => 'test2', :type => 'inline'}, lambda { })
@@ -213,12 +224,12 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'indents the multiple nested wrapped messages' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('  test2')
-        subject.should_receive(:print).with('    test3...')
-        subject.should_receive(:puts).with('complete')
-        subject.should_receive(:puts).with('  complete')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('  test2')
+        expect(subject).to receive(:print).with('    test3...')
+        expect(subject).to receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('  complete')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.format({:message => 'test'}, lambda {
           subject.format({:message => 'test2'}, lambda {
@@ -228,12 +239,12 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'overrides the indent spacing of all messages' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('    test2')
-        subject.should_receive(:print).with('        test3...')
-        subject.should_receive(:puts).with('complete')
-        subject.should_receive(:puts).with('    complete')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('    test2')
+        expect(subject).to receive(:print).with('        test3...')
+        expect(subject).to receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('    complete')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.indent_size = 4
 
@@ -245,12 +256,12 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'overrides the indent spacing of specific message' do
-        subject.should_receive(:puts).with('test')
-        subject.should_receive(:puts).with('      test2')
-        subject.should_receive(:print).with('      test3...')
-        subject.should_receive(:puts).with('complete')
-        subject.should_receive(:puts).with('      complete')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('test')
+        expect(subject).to receive(:puts).with('      test2')
+        expect(subject).to receive(:print).with('      test3...')
+        expect(subject).to receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('      complete')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.indent_size = 4
 
@@ -264,12 +275,12 @@ describe CommandLineReporter::NestedFormatter do
       it 'performs the sums specified in the block' do
         x,y,z = 0,0,0
 
-        subject.should_receive(:puts).with('sum x and 10')
-        subject.should_receive(:puts).with('  y is the difference of 20 and x')
-        subject.should_receive(:puts).with('    z = x + y')
-        subject.should_receive(:puts).with('    complete')
-        subject.should_receive(:puts).with('  complete')
-        subject.should_receive(:puts).with('complete')
+        expect(subject).to receive(:puts).with('sum x and 10')
+        expect(subject).to receive(:puts).with('  y is the difference of 20 and x')
+        expect(subject).to receive(:puts).with('    z = x + y')
+        expect(subject).to receive(:puts).with('    complete')
+        expect(subject).to receive(:puts).with('  complete')
+        expect(subject).to receive(:puts).with('complete')
 
         subject.format({:message => 'sum x and 10'}, lambda {
           x = x + 10
@@ -281,9 +292,9 @@ describe CommandLineReporter::NestedFormatter do
           })
         })
 
-        x.should == 10
-        y.should == 10
-        z.should == 20
+        expect(x).to eq(10)
+        expect(y).to eq(10)
+        expect(z).to eq(20)
       end
     end
   end

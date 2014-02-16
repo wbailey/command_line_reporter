@@ -30,12 +30,12 @@ describe CommandLineReporter do
 
     it 'specifies the progress formatter' do
       subject.formatter = 'progress'
-      subject.formatter.class.should == CommandLineReporter::ProgressFormatter
+      expect(subject.formatter.class).to eq(CommandLineReporter::ProgressFormatter)
     end
 
     it 'specifies the nested formatter' do
       subject.formatter = 'nested'
-      subject.formatter.class.should == CommandLineReporter::NestedFormatter
+      expect(subject.formatter.class).to eq(CommandLineReporter::NestedFormatter)
     end
   end
 
@@ -45,7 +45,7 @@ describe CommandLineReporter do
         subject.report { }
       }
 
-      subject.formatter.class.should == CommandLineReporter::NestedFormatter
+      expect(subject.formatter.class).to eq(CommandLineReporter::NestedFormatter)
     end
 
     it 'uses the progress formatter' do
@@ -54,13 +54,13 @@ describe CommandLineReporter do
         subject.report { }
       }
 
-      subject.formatter.class.should == CommandLineReporter::ProgressFormatter
+      expect(subject.formatter.class).to eq(CommandLineReporter::ProgressFormatter)
     end
 
     it 'does not mask other application errors when a formatter is not set' do
       capture_stdout {
         subject.report {
-          lambda {self.some_method_that_does_not_exist}.should raise_error(NoMethodError)
+          expect {self.some_method_that_does_not_exist}.to raise_error(NoMethodError)
         }
       }
     end
@@ -77,9 +77,9 @@ describe CommandLineReporter do
 
       it 'accepts a title' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.header(:title => 'test')
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'does not allow a title > width' do
@@ -90,9 +90,9 @@ describe CommandLineReporter do
 
       it 'accepts width' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.header(:width => 100)
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'ensure width is a number' do
@@ -103,9 +103,9 @@ describe CommandLineReporter do
 
       it 'accepts align' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.header(:align => 'center')
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'ensure align is a valid value' do
@@ -116,30 +116,30 @@ describe CommandLineReporter do
 
       it 'accepts spacing' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.header(:spacing => 2)
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'accepts timestamp' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.header(:timestamp => true)
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'accepts color' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.header(:color => 'red')
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'accepts bold' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.header(:bold => true)
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
     end
 
@@ -149,121 +149,121 @@ describe CommandLineReporter do
       end
 
       it 'left aligns title by default' do
-        subject.should_receive(:puts).with(@title)
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(@title)
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => @title) { }
       end
 
       it 'left aligns title' do
-        subject.should_receive(:puts).with(@title)
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(@title)
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'left') { }
       end
 
       it 'right aligns title using default width' do
-        subject.should_receive(:puts).with(' ' * 90 + @title)
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(' ' * 90 + @title)
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'right')
       end
 
       it 'right aligns title using specified width' do
-        subject.should_receive(:puts).with(' ' * 40 + @title)
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(' ' * 40 + @title)
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'right', :width => 50)
       end
 
       it 'center aligns title using default width' do
-        subject.should_receive(:puts).with(' ' * 45 + @title)
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(' ' * 45 + @title)
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'center')
       end
 
       it 'center aligns title using specified width' do
-        subject.should_receive(:puts).with(' ' * 35 + @title)
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(' ' * 35 + @title)
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => @title, :align => 'center', :width => 80)
       end
     end
 
     context 'spacing' do
       it 'defaults to a single line of spacing between report' do
-        subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with('title')
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => 'title')
       end
 
       it 'uses the defined spacing between report' do
-        subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with("\n" * 3)
+        expect(subject).to receive(:puts).with('title')
+        expect(subject).to receive(:puts).with("\n" * 3)
         subject.header(:title => 'title', :spacing => 3)
       end
     end
 
     context 'timestamp subheading' do
       it 'is added with default alignment' do
-        subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with(/^#{timestamp_regex}/)
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with('title')
+        expect(subject).to receive(:puts).with(/^#{timestamp_regex}/)
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => 'title', :timestamp => true)
       end
 
       it 'added with right alignment' do
-        subject.should_receive(:puts).with(/^ *title$/)
-        subject.should_receive(:puts).with(/^ *#{timestamp_regex}$/)
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(/^ *title$/)
+        expect(subject).to receive(:puts).with(/^ *#{timestamp_regex}$/)
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => 'title', :align => 'right', :timestamp => true, :width => 80)
       end
 
       it 'added with center alignment' do
-        subject.should_receive(:puts).with(/^ *title *$/)
-        subject.should_receive(:puts).with(/^ *#{timestamp_regex} *$/)
-        subject.should_receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(/^ *title *$/)
+        expect(subject).to receive(:puts).with(/^ *#{timestamp_regex} *$/)
+        expect(subject).to receive(:puts).with("\n")
         subject.header(:title => 'title', :align => 'center', :timestamp => true, :width => 80)
       end
     end
 
     context 'horizontal rule' do
       it 'uses dashes by default' do
-        subject.should_receive(:puts)
-        subject.should_receive(:puts).with(linechar * 100)
-        subject.should_receive(:puts)
+        expect(subject).to receive(:puts)
+        expect(subject).to receive(:puts).with(linechar * 100)
+        expect(subject).to receive(:puts)
         subject.header(:rule => true)
       end
 
       it 'uses = as the rule character' do
-        subject.should_receive(:puts)
-        subject.should_receive(:puts).with('=' * 100)
-        subject.should_receive(:puts)
+        expect(subject).to receive(:puts)
+        expect(subject).to receive(:puts).with('=' * 100)
+        expect(subject).to receive(:puts)
         subject.header(:rule => '=')
       end
     end
 
     context 'color' do
       it 'single red line' do
-        subject.should_receive(:puts).with(controls[:red] + 'Report' + controls[:clear])
-        subject.should_receive(:puts)
+        expect(subject).to receive(:puts).with(controls[:red] + 'Report' + controls[:clear])
+        expect(subject).to receive(:puts)
         subject.header(:color => 'red')
       end
 
       it 'multimple red lines' do
-        subject.should_receive(:puts).with(controls[:red] + 'Report' + controls[:clear])
-        subject.should_receive(:puts).with(controls[:red] + linechar * 100 + controls[:clear])
-        subject.should_receive(:puts)
+        expect(subject).to receive(:puts).with(controls[:red] + 'Report' + controls[:clear])
+        expect(subject).to receive(:puts).with(controls[:red] + linechar * 100 + controls[:clear])
+        expect(subject).to receive(:puts)
         subject.header(:color => 'red', :rule => true)
       end
     end
 
     context 'bold' do
       it 'single line' do
-        subject.should_receive(:puts).with(controls[:bold] + 'Report' + controls[:clear])
-        subject.should_receive(:puts)
+        expect(subject).to receive(:puts).with(controls[:bold] + 'Report' + controls[:clear])
+        expect(subject).to receive(:puts)
         subject.header(:bold => true)
       end
 
       it 'multimple lines' do
-        subject.should_receive(:puts).with(controls[:bold] + 'Report' + controls[:clear])
-        subject.should_receive(:puts).with(controls[:bold] + linechar * 100 + controls[:clear])
-        subject.should_receive(:puts)
+        expect(subject).to receive(:puts).with(controls[:bold] + 'Report' + controls[:clear])
+        expect(subject).to receive(:puts).with(controls[:bold] + linechar * 100 + controls[:clear])
+        expect(subject).to receive(:puts)
         subject.header(:bold => true, :rule => true)
       end
     end
@@ -279,43 +279,43 @@ describe CommandLineReporter do
 
       it 'accepts char' do
         expect {
-          subject.should_receive(:puts)
+          expect(subject).to receive(:puts)
           subject.horizontal_rule(:char => '*')
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'accepts width' do
         expect {
-          subject.should_receive(:puts)
+          expect(subject).to receive(:puts)
           subject.horizontal_rule(:width => 10)
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
     end
 
     context 'drawing' do
       it 'writes a 100 yard dash by default' do
-        subject.should_receive(:puts).with(linechar * 100)
+        expect(subject).to receive(:puts).with(linechar * 100)
         subject.horizontal_rule
       end
 
       it 'writes a 100 yard asterisk' do
-        subject.should_receive(:puts).with('*' * 100)
+        expect(subject).to receive(:puts).with('*' * 100)
         subject.horizontal_rule(:char => '*')
       end
 
       it 'writes a 50 yard equals' do
-        subject.should_receive(:puts).with('=' * 50)
+        expect(subject).to receive(:puts).with('=' * 50)
         subject.horizontal_rule(:char => '=', :width => 50)
       end
     end
 
     it 'outputs color' do
-      subject.should_receive(:puts).with(controls[:red] + linechar * 100 + controls[:clear])
+      expect(subject).to receive(:puts).with(controls[:red] + linechar * 100 + controls[:clear])
       subject.horizontal_rule(:color => 'red')
     end
 
     it 'outputs bold' do
-      subject.should_receive(:puts).with(controls[:bold] + linechar * 100 + controls[:clear])
+      expect(subject).to receive(:puts).with(controls[:bold] + linechar * 100 + controls[:clear])
       subject.horizontal_rule(:bold => true)
     end
   end
@@ -328,7 +328,7 @@ describe CommandLineReporter do
     end
 
     it 'prints carriage returns for the number of lines' do
-      subject.should_receive(:puts).with("\n" * 3)
+      expect(subject).to receive(:puts).with("\n" * 3)
       subject.vertical_spacing(3)
     end
   end
@@ -343,23 +343,23 @@ describe CommandLineReporter do
 
       it 'accepts align' do
         expect {
-          subject.should_receive(:puts)
+          expect(subject).to receive(:puts)
           subject.datetime(:align => 'left')
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'accepts width' do
         expect {
-          subject.should_receive(:puts)
+          expect(subject).to receive(:puts)
           subject.datetime(:width => 70)
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'accepts format' do
         expect {
-          subject.should_receive(:puts)
+          expect(subject).to receive(:puts)
           subject.datetime(:format => '%m/%d/%Y')
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'does not allow invalid width' do
@@ -383,33 +383,33 @@ describe CommandLineReporter do
 
     context 'display' do
       it 'a default format - left aligned' do
-        subject.should_receive(:puts).with(/^#{timestamp_regex} *$/)
+        expect(subject).to receive(:puts).with(/^#{timestamp_regex} *$/)
         subject.datetime
       end
 
       it 'a default format - right aligned' do
-        subject.should_receive(:puts).with(/^ *#{timestamp_regex}$/)
+        expect(subject).to receive(:puts).with(/^ *#{timestamp_regex}$/)
         subject.datetime(:align => 'right')
       end
 
       it 'a default format - center aligned' do
-        subject.should_receive(:puts).with(/^ *#{timestamp_regex} *$/)
+        expect(subject).to receive(:puts).with(/^ *#{timestamp_regex} *$/)
         subject.datetime(:align => 'center')
       end
 
       it 'a modified format' do
-        subject.should_receive(:puts).with(/^\d{2}\/\d{2}\/\d{2} *$/)
+        expect(subject).to receive(:puts).with(/^\d{2}\/\d{2}\/\d{2} *$/)
         subject.datetime(:format => '%y/%m/%d')
       end
     end
 
     it 'outputs color' do
-      subject.should_receive(:puts).with(/^\e\[31m#{timestamp_regex}\e\[0m/)
+      expect(subject).to receive(:puts).with(/^\e\[31m#{timestamp_regex}\e\[0m/)
       subject.datetime(:color => 'red')
     end
 
     it 'outputs bold' do
-      subject.should_receive(:puts).with(/^\e\[1m#{timestamp_regex}\e\[0m/)
+      expect(subject).to receive(:puts).with(/^\e\[1m#{timestamp_regex}\e\[0m/)
       subject.datetime(:bold => true)
     end
   end
@@ -418,7 +418,7 @@ describe CommandLineReporter do
     context 'argument validation' do
       it 'accepts align' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.aligned('test', :align => 'left')
         }.to_not raise_error
       end
@@ -431,7 +431,7 @@ describe CommandLineReporter do
 
       it 'accepts width' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.aligned('test', :width => 40)
         }.to_not raise_error
       end
@@ -444,12 +444,12 @@ describe CommandLineReporter do
     end
 
     it 'outputs color' do
-      subject.should_receive(:puts).with(controls[:red] + 'x' * 10 + controls[:clear])
+      expect(subject).to receive(:puts).with(controls[:red] + 'x' * 10 + controls[:clear])
       subject.aligned('x' * 10, :color => 'red')
     end
 
     it 'outputs bold' do
-      subject.should_receive(:puts).with(controls[:bold] + 'x' * 10 + controls[:clear])
+      expect(subject).to receive(:puts).with(controls[:bold] + 'x' * 10 + controls[:clear])
       subject.aligned('x' * 10, :bold => true)
     end
 
@@ -459,16 +459,16 @@ describe CommandLineReporter do
     context 'argument validation' do
       it 'accepts title' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.footer(:title => 'test')
         }.to_not raise_error
       end
 
       it 'accepts align' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.footer(:align => 'right')
-        }.to_not raise_error ArgumentError
+        }.to_not raise_error
       end
 
       it 'does not accept invalid align' do
@@ -479,7 +479,7 @@ describe CommandLineReporter do
 
       it 'accepts width' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.footer(:width => 50)
         }.to_not raise_error
       end
@@ -498,7 +498,7 @@ describe CommandLineReporter do
 
       it 'accepts spacing' do
         expect {
-          subject.should_receive(:puts).any_number_of_times
+          allow(subject).to receive(:puts)
           subject.footer(:spacing => 3)
         }.to_not raise_error
       end
@@ -510,114 +510,114 @@ describe CommandLineReporter do
       end
 
       it 'left aligns the title by default' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with(@title)
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(@title)
         subject.footer(:title => @title)
       end
 
       it 'left aligns the title' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with(@title)
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(@title)
         subject.footer(:title => @title, :align => 'left')
       end
 
       it 'right aligns the title' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with(' ' * 90 + @title)
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(' ' * 90 + @title)
         subject.footer(:title => @title, :align => 'right')
       end
 
       it 'right aligns the title using width' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with(' ' * 40 + @title)
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(' ' * 40 + @title)
         subject.footer(:title => @title, :align => 'right', :width => 50)
       end
 
       it 'center aligns the title' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with(' ' * 45 + @title)
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(' ' * 45 + @title)
         subject.footer(:title => @title, :align => 'center')
       end
 
       it 'center aligns the title using width' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with(' ' * 35 + @title)
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(' ' * 35 + @title)
         subject.footer(:title => @title, :align => 'center', :width => 80)
       end
     end
 
     context 'spacing' do
       it 'defaults to a single line of spacing between report' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with('title')
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with('title')
         subject.footer(:title => 'title')
       end
 
       it 'uses the defined spacing between report' do
-        subject.should_receive(:puts).with("\n" * 3)
-        subject.should_receive(:puts).with('title')
+        expect(subject).to receive(:puts).with("\n" * 3)
+        expect(subject).to receive(:puts).with('title')
         subject.footer(:title => 'title', :spacing => 3)
       end
     end
 
     context 'timestamp subheading' do
       it 'is added with default alignment' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with('title')
-        subject.should_receive(:puts).with(/^#{timestamp_regex}/)
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with('title')
+        expect(subject).to receive(:puts).with(/^#{timestamp_regex}/)
         subject.footer(:title => 'title', :timestamp => true)
       end
 
       it 'added with right alignment' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with(/^ *title$/)
-        subject.should_receive(:puts).with(/^ *#{timestamp_regex}$/)
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(/^ *title$/)
+        expect(subject).to receive(:puts).with(/^ *#{timestamp_regex}$/)
         subject.footer(:title => 'title', :align => 'right', :timestamp => true, :width => 80)
       end
 
       it 'added with center alignment' do
-        subject.should_receive(:puts).with("\n")
-        subject.should_receive(:puts).with(/^ *title *$/)
-        subject.should_receive(:puts).with(/^ *#{timestamp_regex} *$/)
+        expect(subject).to receive(:puts).with("\n")
+        expect(subject).to receive(:puts).with(/^ *title *$/)
+        expect(subject).to receive(:puts).with(/^ *#{timestamp_regex} *$/)
         subject.footer(:title => 'title', :align => 'center', :timestamp => true, :width => 80)
       end
     end
 
     context 'horizontal rule' do
       it 'uses dashes by default' do
-        subject.should_receive(:puts)
-        subject.should_receive(:puts).with(linechar * 100)
-        subject.should_receive(:puts)
+        expect(subject).to receive(:puts)
+        expect(subject).to receive(:puts).with(linechar * 100)
+        expect(subject).to receive(:puts)
         subject.footer(:rule => true)
       end
 
       it 'uses = as the rule character' do
-        subject.should_receive(:puts)
-        subject.should_receive(:puts).with('=' * 100)
-        subject.should_receive(:puts)
+        expect(subject).to receive(:puts)
+        expect(subject).to receive(:puts).with('=' * 100)
+        expect(subject).to receive(:puts)
         subject.footer(:rule => '=')
       end
     end
 
     it 'outputs red' do
-      subject.should_receive(:puts).with("\n")
-      subject.should_receive(:puts).with(controls[:red] + 'title' + controls[:clear])
-      subject.should_receive(:puts).with(/^\e\[31m#{timestamp_regex}\e\[0m/)
+      expect(subject).to receive(:puts).with("\n")
+      expect(subject).to receive(:puts).with(controls[:red] + 'title' + controls[:clear])
+      expect(subject).to receive(:puts).with(/^\e\[31m#{timestamp_regex}\e\[0m/)
       subject.footer(:title => 'title', :timestamp => true, :color => 'red')
     end
 
     it 'outputs bold' do
-      subject.should_receive(:puts).with("\n")
-      subject.should_receive(:puts).with(controls[:bold] + 'title' + controls[:clear])
-      subject.should_receive(:puts).with(/^\e\[1m#{timestamp_regex}\e\[0m/)
+      expect(subject).to receive(:puts).with("\n")
+      expect(subject).to receive(:puts).with(controls[:bold] + 'title' + controls[:clear])
+      expect(subject).to receive(:puts).with(/^\e\[1m#{timestamp_regex}\e\[0m/)
       subject.footer(:title => 'title', :timestamp => true, :bold => true)
     end
   end
 
   describe '#table' do
     it 'instantiates the table class' do
-      subject.should_receive(:puts).any_number_of_times
-      subject.should_receive(:table).once
+      allow(subject).to receive(:puts)
+      expect(subject).to receive(:table).once
       subject.table { }
     end
 
@@ -635,7 +635,7 @@ describe CommandLineReporter do
 
     it 'rejects invalid options' do
       expect {
-        subject.should_receive(:puts).any_number_of_times
+        allow(subject).to receive(:puts)
         subject.table(:asdf => '100') { }
       }.to raise_error ArgumentError
     end
@@ -643,8 +643,8 @@ describe CommandLineReporter do
 
   describe '#row' do
     it 'instantiates a row class' do
-      subject.should_receive(:row).once
-      subject.should_receive(:puts).any_number_of_times
+      expect(subject).to receive(:row).once
+      allow(subject).to receive(:puts)
 
       subject.table do
         subject.row do
@@ -655,8 +655,8 @@ describe CommandLineReporter do
 
   describe '#column' do
     it 'instantiates multiple columns' do
-      subject.should_receive(:column).exactly(3).times
-      subject.should_receive(:puts).any_number_of_times
+      expect(subject).to receive(:column).exactly(3).times
+      allow(subject).to receive(:puts)
 
       subject.table do
         subject.row do
@@ -668,8 +668,8 @@ describe CommandLineReporter do
     end
 
     it 'accepts valid options' do
-      subject.should_receive(:column).once
-      subject.should_receive(:puts).any_number_of_times
+      expect(subject).to receive(:column).once
+      allow(subject).to receive(:puts)
 
       subject.table do
         subject.row do
@@ -679,7 +679,7 @@ describe CommandLineReporter do
     end
 
     it 'rejects invalid options' do
-      subject.should_receive(:puts).any_number_of_times
+      allow(subject).to receive(:puts)
       expect {
         subject.table do
           subject.row do

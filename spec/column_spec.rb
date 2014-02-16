@@ -15,11 +15,11 @@ describe CommandLineReporter::Column do
     end
 
     it 'defaults the width' do
-      CommandLineReporter::Column.new('test').width.should == 10
+      expect(CommandLineReporter::Column.new('test').width).to eq(10)
     end
 
     it 'accepts the width' do
-      CommandLineReporter::Column.new('test', :width => 50).width.should == 50
+      expect(CommandLineReporter::Column.new('test', :width => 50).width).to eq(50)
     end
 
     it 'requires valid width' do
@@ -29,23 +29,23 @@ describe CommandLineReporter::Column do
     end
 
     it 'accepts text' do
-      CommandLineReporter::Column.new('asdf').text.should == 'asdf'
+      expect(CommandLineReporter::Column.new('asdf').text).to eq('asdf')
     end
 
     it 'accepts color' do
-      CommandLineReporter::Column.new('asdf', :color => 'red').color.should == 'red'
+      expect(CommandLineReporter::Column.new('asdf', :color => 'red').color).to eq('red')
     end
 
     it 'accepts bold' do
-      CommandLineReporter::Column.new('asdf', :bold => true).bold.should be_true
+      expect(CommandLineReporter::Column.new('asdf', :bold => true).bold).to be_true
     end
 
     it 'defaults the padding' do
-      CommandLineReporter::Column.new('test').padding.should == 0
+      expect(CommandLineReporter::Column.new('test').padding).to eq(0)
     end
 
     it 'accepts the padding' do
-      CommandLineReporter::Column.new('test', :padding => 5).padding.should == 5
+      expect(CommandLineReporter::Column.new('test', :padding => 5).padding).to eq(5)
     end
 
     it 'requires valid width' do
@@ -57,17 +57,17 @@ describe CommandLineReporter::Column do
 
   describe '#size' do
     it 'is the width less twice the padding' do
-      CommandLineReporter::Column.new('test').size.should == 10
-      CommandLineReporter::Column.new('test', :width => 5).size.should == 5
-      CommandLineReporter::Column.new('test', :width => 5, :padding => 1).size.should == 3
+      expect(CommandLineReporter::Column.new('test').size).to eq(10)
+      expect(CommandLineReporter::Column.new('test', :width => 5).size).to eq(5)
+      expect(CommandLineReporter::Column.new('test', :width => 5, :padding => 1).size).to eq(3)
     end
   end
 
   describe '#required_width' do
     it 'is the length of the text plus twice the padding' do
-      CommandLineReporter::Column.new('test').required_width.should == 4
-      CommandLineReporter::Column.new('test', :padding => 1).required_width.should == 6
-      CommandLineReporter::Column.new('test', :padding => 5).required_width.should == 14
+      expect(CommandLineReporter::Column.new('test').required_width).to eq(4)
+      expect(CommandLineReporter::Column.new('test', :padding => 1).required_width).to eq(6)
+      expect(CommandLineReporter::Column.new('test', :padding => 5).required_width).to eq(14)
     end
   end
 
@@ -89,7 +89,7 @@ describe CommandLineReporter::Column do
 
         it 'handles empty text' do
           c = CommandLineReporter::Column.new
-          c.screen_rows[0].should == ' ' * 10
+          expect(c.screen_rows[0]).to eq(' ' * 10)
         end
 
         context 'left justifies' do
@@ -98,17 +98,17 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :width => 20)
-            c.screen_rows[0].should == text + filler
+            expect(c.screen_rows[0]).to eq(text + filler)
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :align => 'left', :width => 20, :color => 'red')
-            c.screen_rows[0].should == controls[:red] + text + filler + controls[:clear]
+            expect(c.screen_rows[0]).to eq(controls[:red] + text + filler + controls[:clear])
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :align => 'left', :width => 20, :bold => true)
-            c.screen_rows[0].should == controls[:bold] + text + filler + controls[:clear]
+            expect(c.screen_rows[0]).to eq(controls[:bold] + text + filler + controls[:clear])
           end
         end
 
@@ -118,17 +118,17 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :width => 20)
-            c.screen_rows[0].should == filler + text
+            expect(c.screen_rows[0]).to eq(filler + text)
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :width => 20, :color => 'red')
-            c.screen_rows[0].should == controls[:red] + filler + text  + controls[:clear]
+            expect(c.screen_rows[0]).to eq(controls[:red] + filler + text  + controls[:clear])
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :width => 20, :bold => true)
-            c.screen_rows[0].should == controls[:bold] + filler + text + controls[:clear]
+            expect(c.screen_rows[0]).to eq(controls[:bold] + filler + text + controls[:clear])
           end
         end
 
@@ -138,17 +138,17 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :align => 'center', :width => 20)
-            c.screen_rows[0].should == filler + text + filler
+            expect(c.screen_rows[0]).to eq(filler + text + filler)
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :align => 'center', :width => 20, :color => 'red')
-            c.screen_rows[0].should == controls[:red] + filler + text + filler + controls[:clear]
+            expect(c.screen_rows[0]).to eq(controls[:red] + filler + text + filler + controls[:clear])
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :align => 'center', :width => 20, :bold => true)
-            c.screen_rows[0].should == controls[:bold] + filler + text + filler + controls[:clear]
+            expect(c.screen_rows[0]).to eq(controls[:bold] + filler + text + filler + controls[:clear])
           end
         end
       end
@@ -161,17 +161,17 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :padding => 5, :width => 30)
-            c.screen_rows[0].should == padding + text + filler + padding
+            expect(c.screen_rows[0]).to eq(padding + text + filler + padding)
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :padding => 5, :width => 30, :color => 'red')
-            c.screen_rows[0].should == padding + controls[:red] + text + filler + controls[:clear] + padding
+            expect(c.screen_rows[0]).to eq(padding + controls[:red] + text + filler + controls[:clear] + padding)
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :padding => 5, :width => 30, :bold => true)
-            c.screen_rows[0].should == padding + controls[:bold] + text + filler + controls[:clear] + padding
+            expect(c.screen_rows[0]).to eq(padding + controls[:bold] + text + filler + controls[:clear] + padding)
           end
         end
 
@@ -182,17 +182,17 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 5, :width => 30)
-            c.screen_rows[0].should == padding + filler + text + padding
+            expect(c.screen_rows[0]).to eq(padding + filler + text + padding)
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 5, :width => 30, :color => 'red')
-            c.screen_rows[0].should == padding + controls[:red] + filler + text + controls[:clear] + padding
+            expect(c.screen_rows[0]).to eq(padding + controls[:red] + filler + text + controls[:clear] + padding)
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 5, :width => 30, :bold => true)
-            c.screen_rows[0].should == padding + controls[:bold] + filler + text + controls[:clear] + padding
+            expect(c.screen_rows[0]).to eq(padding + controls[:bold] + filler + text + controls[:clear] + padding)
           end
         end
 
@@ -203,17 +203,17 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :align => 'center', :padding => 5, :width => 30)
-            c.screen_rows[0].should == padding + filler + text + filler + padding
+            expect(c.screen_rows[0]).to eq(padding + filler + text + filler + padding)
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :align => 'center', :padding => 5, :width => 30, :color => 'red')
-            c.screen_rows[0].should == padding + controls[:red] + filler + text + filler + controls[:clear] + padding
+            expect(c.screen_rows[0]).to eq(padding + controls[:red] + filler + text + filler + controls[:clear] + padding)
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :align => 'center', :padding => 5, :width => 30, :bold => true)
-            c.screen_rows[0].should == padding + controls[:bold] + filler + text + filler + controls[:clear] + padding
+            expect(c.screen_rows[0]).to eq(padding + controls[:bold] + filler + text + filler + controls[:clear] + padding)
           end
         end
       end
@@ -229,25 +229,25 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :width => 10)
-            c.screen_rows.should == [full_line, full_line, remainder + filler]
+            expect(c.screen_rows).to eq([full_line, full_line, remainder + filler])
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :width => 10, :color => 'red')
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               controls[:red] + full_line + controls[:clear],
               controls[:red] + full_line + controls[:clear],
               controls[:red] + remainder + filler + controls[:clear],
-            ]
+            ])
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :width => 10, :bold => true)
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               controls[:bold] + full_line + controls[:clear],
               controls[:bold] + full_line + controls[:clear],
               controls[:bold] + remainder + filler + controls[:clear],
-            ]
+            ])
           end
         end
 
@@ -259,25 +259,25 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :width => 10)
-            c.screen_rows.should == [full_line, full_line, filler + remainder]
+            expect(c.screen_rows).to eq([full_line, full_line, filler + remainder])
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :width => 10, :color => 'red')
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               controls[:red] + full_line + controls[:clear],
               controls[:red] + full_line + controls[:clear],
               controls[:red] + filler + remainder + controls[:clear],
-            ]
+            ])
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :width => 10, :bold => true)
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               controls[:bold] + full_line + controls[:clear],
               controls[:bold] + full_line + controls[:clear],
               controls[:bold] + filler + remainder + controls[:clear],
-            ]
+            ])
           end
         end
 
@@ -290,25 +290,25 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :align => 'center', :width => 10)
-            c.screen_rows.should == [full_line, full_line, ' ' * 3 + remainder + right_filler]
+            expect(c.screen_rows).to eq([full_line, full_line, ' ' * 3 + remainder + right_filler])
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :align => 'center', :width => 10, :color => 'red')
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               controls[:red] + full_line + controls[:clear],
               controls[:red] + full_line + controls[:clear],
               controls[:red] + left_filler + remainder + right_filler + controls[:clear],
-            ]
+            ])
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :align => 'center', :width => 10, :bold => true)
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               controls[:bold] + full_line + controls[:clear],
               controls[:bold] + full_line + controls[:clear],
               controls[:bold] + left_filler + remainder + right_filler + controls[:clear],
-            ]
+            ])
           end
         end
       end
@@ -323,26 +323,26 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :padding => 2, :width => 20)
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               padding + full_line + padding,
               padding + remainder + filler + padding,
-            ]
+            ])
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :padding => 2, :width => 20, :color => 'red')
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               padding + controls[:red] + full_line + controls[:clear] + padding,
               padding + controls[:red] + remainder + filler + controls[:clear] + padding,
-            ]
+            ])
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :padding => 2, :width => 20, :bold => true)
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               padding + controls[:bold] + full_line + controls[:clear] + padding,
               padding + controls[:bold] + remainder + filler + controls[:clear] + padding,
-            ]
+            ])
           end
         end
 
@@ -355,26 +355,26 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :padding => 2, :align => 'right', :width => 20)
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               padding + full_line + padding,
               padding + filler + remainder + padding,
-            ]
+            ])
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 2, :width => 20, :color => 'red')
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               padding + controls[:red] + full_line + controls[:clear] + padding,
               padding + controls[:red] + filler + remainder + controls[:clear] + padding,
-            ]
+            ])
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :align => 'right', :padding => 2, :width => 20, :bold => true)
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               padding + controls[:bold] + full_line + controls[:clear] + padding,
               padding + controls[:bold] + filler + remainder + controls[:clear] + padding,
-            ]
+            ])
           end
         end
 
@@ -388,26 +388,26 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = CommandLineReporter::Column.new(text, :padding => 2, :align => 'center', :width => 20)
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               padding + full_line + padding,
               padding + left_filler + remainder + right_filler + padding,
-            ]
+            ])
           end
 
           it 'outputs red' do
             c = CommandLineReporter::Column.new(text, :padding => 2, :align => 'center', :width => 20, :color => 'red')
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               padding + controls[:red] + full_line + controls[:clear] + padding,
               padding + controls[:red] + left_filler + remainder + right_filler + controls[:clear] + padding,
-            ]
+            ])
           end
 
           it 'outputs bold' do
             c = CommandLineReporter::Column.new(text, :padding => 2, :align => 'center', :width => 20, :bold => true)
-            c.screen_rows.should == [
+            expect(c.screen_rows).to eq([
               padding + controls[:bold] + full_line + controls[:clear] + padding,
               padding + controls[:bold] + left_filler + remainder + right_filler + controls[:clear] + padding,
-            ]
+            ])
           end
         end
       end
