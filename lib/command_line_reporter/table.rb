@@ -21,7 +21,7 @@ module CommandLineReporter
       # Inheritance from the table
       row.border = self.border
 
-      # Inherit properties from the first row
+      # Inherit properties from the appropriate row
       if self.rows[0]
         row.columns.each_with_index do |c,i|
           # The positional attributes are always required to inheret to make sure the table
@@ -29,26 +29,26 @@ module CommandLineReporter
           c.align = self.rows[0].columns[i].align
           c.padding = self.rows[0].columns[i].padding
           c.width = self.rows[0].columns[i].width
+          c.color = use_color(row, c, i)
+          c.bold = use_bold(row, c, i)
 
-          # Allow for the fact that the row or column may take precedence and that the first
-          # row might be a header row which we don't want to inherit from
-          unless row.color || c.color
-            if self.rows[0].header
-              c.color = self.rows[1].columns[i].color if self.rows[1]
-            else
-              c.color = self.rows[0].columns[i].color
-            end
-          end
+          #unless row.color || c.color
+            #if self.rows[0].header
+              #c.color = self.rows[1].columns[i].color if self.rows[1]
+            #else
+              #c.color = self.rows[0].columns[i].color
+            #end
+          #end
 
           # Allow for the row to take precendence and that the first # row might be a header
           # row which we don't want to inherit from
-          unless row.bold
-            if self.rows[0].header
-              c.bold = self.rows[1].columns[i].bold if self.rows[1]
-            else
-              c.bold = self.rows[0].columns[i].bold
-            end
-          end
+          #unless row.bold
+            #if self.rows[0].header
+              #c.bold = self.rows[1].columns[i].bold if self.rows[1]
+            #else
+              #c.bold = self.rows[0].columns[i].bold
+            #end
+          #end
         end
       end
 
@@ -108,6 +108,38 @@ module CommandLineReporter
       end
 
       left + self.rows[0].columns.map {|c| bar * (c.width + 2)}.join(center) + right
+    end
+
+    def inherit_from
+      if self.rows.size == 0
+        raise RuntimeError
+      elsif self.rows[0] && !self.rows[0].header
+        0
+      elsif self.rows[0].header && self.rows[1]
+        1
+      else
+        0
+      end
+    end
+
+    def use_color(row, column, index)
+      if column.color
+        column.color
+      elsif row.color
+        row.color
+      else
+        self.rows[inherit_from].columns[index].color
+      end
+    end
+
+    def use_bold(row, column, index)
+      if column.bold
+        column.bold
+      elsif row.bold
+        row.bold
+      else
+        self.rows[inherit_from].columns[index].bold
+      end
     end
   end
 end

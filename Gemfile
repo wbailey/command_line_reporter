@@ -10,6 +10,7 @@ group :test do
   gem "rspec"
   gem "simplecov"
   gem "guard"
+  gem "guard-rspec"
 end
 
 group :development do

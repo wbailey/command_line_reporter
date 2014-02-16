@@ -19,7 +19,7 @@ class Example
     2.times do |j|
       header :title => "Table #{j}", :align => 'center', :width => 65
 
-      table :border => j % 2 == 0, :encoding => 'ascii' do
+      table :border => j % 2 == 0, :encoding => :ascii do
         3.times do
           row do
             i = 0
@@ -36,7 +36,7 @@ class Example
   end
 
   def example_header
-    header :title => 'An example of a table with a header row.  The color and border properties are not inherited'
+    header :title => 'An example of a table with a header row.  The color and border properties are inherited from the first row'
 
     table :border => true, :encoding => :ascii do
       row :header => true, :color => 'red'  do
@@ -58,7 +58,7 @@ class Example
   end
 
   def example_inherit
-    header :title => 'The same table with the properties inherited from the first row'
+    header :title => 'The same table without a header row so the properties inherited from it'
 
     table :border => true, :encoding => :ascii do
       row :color => 'red' do
