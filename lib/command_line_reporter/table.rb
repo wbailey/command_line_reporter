@@ -22,7 +22,7 @@ module CommandLineReporter
       row.border = self.border
 
       # Inherit properties from the appropriate row
-      inherit_column_attr(row) if self.rows[0]
+      inherit_column_attrs(row) if self.rows[0]
 
       self.rows << row
     end
@@ -58,13 +58,13 @@ module CommandLineReporter
     private
 
     def separator(type = 'middle')
-      left, right, center, bar = if "\u2501" == 'u2501' || self.encoding == :ascii
-        ascii_separator
-      else
-        utf8_separator(type)
-      end
+      left, right, center, bar = use_utf8? ? ascii_separator : utf8_separator
 
       left + self.rows[0].columns.map {|c| bar * (c.width + 2)}.join(center) + right
+    end
+
+    def use_utf8?
+      self.encoding == :ascii || "\u2501" == "u2501"
     end
 
     def ascii_separator
@@ -77,31 +77,32 @@ module CommandLineReporter
       bar = "\u2501"
 
       left, right, center = case type
-        when 'first'
-          ["\u250F", "\u2533", "\u2513"]
-        when 'middle'
-          ["\u2523", "\u254A", "\u252B"]
-        when 'last'
-          ["\u2517", "\u253B", "\u251B"]
-        end
+                            when 'first'
+                              ["\u250F", "\u2533", "\u2513"]
+                            when 'middle'
+                              ["\u2523", "\u254A", "\u252B"]
+                            when 'last'
+                              ["\u2517", "\u253B", "\u251B"]
+                            end
 
       [left, right, center, bar]
     end
 
-    def inherit_column_attr(row)
+    def inherit_column_attrs(row)
       row.columns.each_with_index do |c,i|
-        # The positional attributes are always required to inheret to make sure the table
-        # displays properly
-        c.align = use_positional_attr('align', i)
-        c.padding = use_positional_attr('padding', i)
-        c.width = use_positional_attr('width', i)
-        c.color = use_color(row, c, i)
-        c.bold = use_bold(row, c, i)
+        use_positional_attrs(c, i)
+        use_color(row, c, i)
+        use_bold(row, c, i)
       end
     end
 
-    def use_positional_attr(attr, i)
-      self.rows[0].columns[i].send(attr)
+    def use_positional_attrs(c, i)
+      # The positional attributes are always required to inheret to make sure the table
+      # displays properly
+      %w{align padding width}.each do |attr|
+        val = self.rows[0].columns[i].send(attr)
+        c.send(attr + "=", val)
+      end
     end
 
     def inherit_from
@@ -110,24 +111,20 @@ module CommandLineReporter
 
     def use_color(row, c, i)
       if c.color
-        c.color
+        # keep default
       elsif row.color
-        row.color
+        c.color = row.color
       else
-        self.rows[inherit_from].columns[i].color
+        c.color = self.rows[inherit_from].columns[i].color
       end
     end
 
     def use_bold(row, c, i)
-      use = c.bold
-
       if row.bold
-        use = row.bold
+        c.bold = row.bold
       elsif inherit_from != 1
-        use = self.rows[inherit_from].columns[i].bold
+        c.bold = self.rows[inherit_from].columns[i].bold
       end
-
-      use
     end
   end
 end
