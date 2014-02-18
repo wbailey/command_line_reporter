@@ -9,9 +9,9 @@ class Example
     vertical_spacing 2
     example_header
     vertical_spacing 2
-    #example_inherit
-    #vertical_spacing 2
-    #example_width
+    example_inherit
+    vertical_spacing 2
+    example_width
   end
 
   def example_simple

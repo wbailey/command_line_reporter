@@ -22,17 +22,7 @@ module CommandLineReporter
       row.border = self.border
 
       # Inherit properties from the appropriate row
-      if self.rows[0]
-        row.columns.each_with_index do |c,i|
-          # The positional attributes are always required to inheret to make sure the table
-          # displays properly
-          c.align = self.rows[0].columns[i].align
-          c.padding = self.rows[0].columns[i].padding
-          c.width = self.rows[0].columns[i].width
-          c.color = use_color(row, c, i)
-          c.bold = use_bold(row, c, i)
-        end
-      end
+      inherit_column_attr(row) if self.rows[0]
 
       self.rows << row
     end
@@ -96,6 +86,22 @@ module CommandLineReporter
         end
 
       [left, right, center, bar]
+    end
+
+    def inherit_column_attr(row)
+      row.columns.each_with_index do |c,i|
+        # The positional attributes are always required to inheret to make sure the table
+        # displays properly
+        c.align = use_positional_attr('align', i)
+        c.padding = use_positional_attr('padding', i)
+        c.width = use_positional_attr('width', i)
+        c.color = use_color(row, c, i)
+        c.bold = use_bold(row, c, i)
+      end
+    end
+
+    def use_positional_attr(attr, i)
+      self.rows[0].columns[i].send(attr)
     end
 
     def inherit_from
