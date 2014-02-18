@@ -36,7 +36,7 @@ class Example
   end
 
   def example_header
-    header :title => 'An example of a table with a header row.  The color and border properties are inherited from the first row'
+    header :title => 'Table with a header row.  The color and border properties are inherited from the first row'
 
     table :border => true, :encoding => :ascii do
       row :header => true, :color => 'red'  do

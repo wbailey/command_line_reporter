@@ -9,9 +9,9 @@ class Example
     vertical_spacing 2
     example_header
     vertical_spacing 2
-    example_inherit
-    vertical_spacing 2
-    example_width
+    #example_inherit
+    #vertical_spacing 2
+    #example_width
   end
 
   def example_simple
@@ -37,7 +37,7 @@ class Example
   end
 
   def example_header
-    header :title => 'An example of a table with a header row.  The color and border properties are inherited from the first row'
+    header :title => 'Table with a header row.  The color and border properties are inherited from the first row'
 
     table :border => true do
       row :header => true, :color => 'red'  do

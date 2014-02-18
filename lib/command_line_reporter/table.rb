@@ -31,24 +31,6 @@ module CommandLineReporter
           c.width = self.rows[0].columns[i].width
           c.color = use_color(row, c, i)
           c.bold = use_bold(row, c, i)
-
-          #unless row.color || c.color
-            #if self.rows[0].header
-              #c.color = self.rows[1].columns[i].color if self.rows[1]
-            #else
-              #c.color = self.rows[0].columns[i].color
-            #end
-          #end
-
-          # Allow for the row to take precendence and that the first # row might be a header
-          # row which we don't want to inherit from
-          #unless row.bold
-            #if self.rows[0].header
-              #c.bold = self.rows[1].columns[i].bold if self.rows[1]
-            #else
-              #c.bold = self.rows[0].columns[i].bold
-            #end
-          #end
         end
       end
 
@@ -86,60 +68,60 @@ module CommandLineReporter
     private
 
     def separator(type = 'middle')
-      if "\u2501" == 'u2501' || self.encoding == :ascii
-        left = right = center = '+'
-        bar = '-'
+      left, right, center, bar = if "\u2501" == 'u2501' || self.encoding == :ascii
+        ascii_separator
       else
-        bar = "\u2501"
-        case type
-        when 'first'
-          left = "\u250F"
-          center = "\u2533"
-          right = "\u2513"
-        when 'middle'
-          left = "\u2523"
-          center = "\u254A"
-          right = "\u252B"
-        when 'last'
-          left = "\u2517"
-          center = "\u253B"
-          right = "\u251B"
-        end
+        utf8_separator(type)
       end
 
       left + self.rows[0].columns.map {|c| bar * (c.width + 2)}.join(center) + right
     end
 
-    def inherit_from
-      if self.rows.size == 0
-        raise RuntimeError
-      elsif self.rows[0] && !self.rows[0].header
-        0
-      elsif self.rows[0].header && self.rows[1]
-        1
-      else
-        0
-      end
+    def ascii_separator
+      left = right = center = '+'
+      bar = '-'
+      [left, right, center, bar]
     end
 
-    def use_color(row, column, index)
-      if column.color
-        column.color
+    def utf8_separator(type)
+      bar = "\u2501"
+
+      left, right, center = case type
+        when 'first'
+          ["\u250F", "\u2533", "\u2513"]
+        when 'middle'
+          ["\u2523", "\u254A", "\u252B"]
+        when 'last'
+          ["\u2517", "\u253B", "\u251B"]
+        end
+
+      [left, right, center, bar]
+    end
+
+    def inherit_from
+      self.rows[0].header ? 1 : 0
+    end
+
+    def use_color(row, c, i)
+      if c.color
+        c.color
       elsif row.color
         row.color
       else
-        self.rows[inherit_from].columns[index].color
+        self.rows[inherit_from].columns[i].color
       end
     end
 
-    def use_bold(row, column, index)
-      if column.bold
-        column.bold
-      elsif row.bold
-        row.bold
-      else
-        self.rows[inherit_from].columns[index].bold
+    def use_bold(row, c, i)
+      use = c.bold
+
+      if row.bold
+        use = row.bold
+      elsif inherit_from != 1
+        use = self.rows[inherit_from].columns[i].bold
       end
+
+      use
     end
   end
 end
