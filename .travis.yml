@@ -1,9 +1,13 @@
 language: ruby
 bundler_args: --without development
-rvm:
-  - 1.9.3
-  - jruby-19mode # JRuby in 1.9 mode
-  - 2.0.0
 before_install:
   - sudo apt-get install -qq libicu-dev
+rvm:
+  - 1.9.3
+  - jruby
+  - 2.0.0
+  - 2.1.0
+matrix:
+  allow_failures:
+    - rvm: jruby
 script: bundle exec rspec spec
