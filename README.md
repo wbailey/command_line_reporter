@@ -10,9 +10,9 @@ interface to your application.  Some of the best features include:
 * Output suppression that makes it easy for your script to support a _quiet_ flag
 * Capture report output as a string
 
-The latest release uses unicode drawing characters for the table, colors allowing you to distinguish
-data in new ways including bold if your terminal supports it.  Here is an example of output you can
-generate easily with "the reporter":
+The latest releast thanks to a contribution from [Josh Brown](https://github.com/tobijb) allows you
+to choose between UTF8 or ASCII for drawing tables.  By default it will use UTF8 if your system
+support it. Here is an example of output you can generate easily with "the reporter":
 
 ![Screenshot](http://i.imgur.com/5izCf.png)
 
@@ -117,22 +117,22 @@ There are several methods the mixin provides that do not depend on the formatter
 
 ### To Do
 
-* Refactor the table structure to use a formatter that produces the current ascii output
-* After the formatter is added to a table then create one for html output
+* Add a formatter that supports html output
 * Add the ability for a column to span across others in a table
 
 ### Contributors
 
-* Thanks to [Stefan Frank](https://github.com/mugwump) for raising the issue that he could not
-  capture report output in a variable as a string
-* Thanks to [Mike Gunderloy](https://github.com/ffmike) for suggesting the need for suppressing
-  output and putting together a fantastic pull request and discussion
-* Thanks to [Jason Rogers](https://github.com/jacaetevha) and [Peter
-  Suschlik](https://github.com/splattael) for their contributions as well on items I missed
+* [Josh Brown](https://github.com/tobijb) added the ability to encode tables in either ascii or utf8
+* [Stefan Frank](https://github.com/mugwump) for raising the issue that he could not capture report
+  output in a variable as a string
+* [Mike Gunderloy](https://github.com/ffmike) for suggesting the need for suppressing output and
+  putting together a fantastic pull request and discussion
+* [Jason Rogers](https://github.com/jacaetevha) and [Peter Suschlik](https://github.com/splattael)
+  for their contributions as well on items I missed
 
 ### License
 
-Copyright (c) 2011-2013 Wes Bailey
+Copyright (c) 2011-2014 Wes Bailey
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 associated documentation files (the "Software"), to deal in the Software without restriction,
