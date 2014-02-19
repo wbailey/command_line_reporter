@@ -140,14 +140,7 @@ module CommandLineReporter
   private
 
   def section(type, options)
-    validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule, :color, :bold)
-
-    title = options[:title] || 'Report'
-    width = options[:width] || DEFAULTS[:width]
-    align = options[:align] || DEFAULTS[:align]
-    lines = options[:spacing] || 1
-    color = options[:color]
-    bold = options[:bold] || false
+    title, width, align, lines, color, bold = assign_section_properties(options)
 
     # This also ensures that width is a Fixnum
     raise ArgumentError if title.size > width
@@ -164,5 +157,18 @@ module CommandLineReporter
       horizontal_rule(:char => options[:rule], :width => width, :color => color, :bold => bold) if options[:rule]
       vertical_spacing(lines)
     end
+  end
+
+  def assign_section_properties options
+    validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule, :color, :bold)
+
+    title = options[:title] || 'Report'
+    width = options[:width] || DEFAULTS[:width]
+    align = options[:align] || DEFAULTS[:align]
+    lines = options[:spacing] || 1
+    color = options[:color]
+    bold = options[:bold] || false
+
+    return [title, width, align, lines, color, bold]
   end
 end
