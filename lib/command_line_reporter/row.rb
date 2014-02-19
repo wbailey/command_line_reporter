@@ -31,7 +31,7 @@ module CommandLineReporter
 
     def output
       screen_count.times do |sr|
-        border_char = use_utf8? ? '|' : "\u2503"
+        border_char = use_utf8? ? "\u2503" : '|'
 
         line = (self.border) ? "#{border_char} " : ''
 
