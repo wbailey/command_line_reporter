@@ -46,21 +46,24 @@ module CommandLineReporter
       # NOTE: For making underline and reversed work Change so that based on the
       # unformatted text it determines how much spacing to add left and right
       # then colorize the cell text
-      cell =  if str.empty?
-                ' ' * self.size
-              else
-                case self.align
-                when 'left'
-                  str.ljust(self.size)
-                when 'right'
-                  str.rjust(self.size)
-                when 'center'
-                  str.ljust((self.size - str.size)/2.0 + str.size).rjust(self.size)
-                end
-              end
-
+      cell =  str.empty? ? blank_cell : aligned_cell(str)
       padding_str = ' ' * self.padding
       padding_str + colorize(cell) + padding_str
+    end
+
+    def blank_cell
+      ' ' * self.size
+    end
+
+    def aligned_cell(str)
+      case self.align
+      when 'left'
+        str.ljust(self.size)
+      when 'right'
+        str.rjust(self.size)
+      when 'center'
+        str.ljust((self.size - str.size)/2.0 + str.size).rjust(self.size)
+      end
     end
 
     def colorize(str)
