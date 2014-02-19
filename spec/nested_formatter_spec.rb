@@ -30,7 +30,7 @@ describe CommandLineReporter::NestedFormatter do
 
   describe '#format' do
     context 'argument validation' do
-      before :all do
+      before :each do
         @indent_size = subject.indent_size
       end
 
@@ -63,7 +63,7 @@ describe CommandLineReporter::NestedFormatter do
     end
 
     context 'not nested' do
-      before :all do
+      before :each do
         @complete_string = subject.complete_string
         @indent_size = subject.indent_size
       end
@@ -155,7 +155,7 @@ describe CommandLineReporter::NestedFormatter do
     end
 
     context 'nested commands' do
-      before :all do
+      before :each do
         @indent_size = subject.indent_size
       end
 

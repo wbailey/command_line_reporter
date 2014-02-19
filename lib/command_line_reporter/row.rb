@@ -31,8 +31,10 @@ module CommandLineReporter
 
     def output
       screen_count.times do |sr|
-        border_char = ("\u2501" == "u2501" || self.encoding == :ascii) ? '|' : "\u2503"
+        border_char = use_utf8? ? '|' : "\u2503"
+
         line = (self.border) ? "#{border_char} " : ''
+
         self.columns.size.times do |mc|
           col = self.columns[mc]
           # Account for the fact that some columns will have more screen rows than their
@@ -59,8 +61,10 @@ module CommandLineReporter
           else
             line <<  self.columns[mc].screen_rows[sr]
           end
+
           line << ' ' + ((self.border) ? "#{border_char} " : '')
         end
+
         puts line
       end
     end
@@ -69,6 +73,10 @@ module CommandLineReporter
 
     def screen_count
       @sc ||= self.columns.inject(0) {|max,column| column.screen_rows.size > max ? column.screen_rows.size : max}
+    end
+
+    def use_utf8?
+      self.encoding == :ascii || "\u2501" == "u2501"
     end
   end
 end
