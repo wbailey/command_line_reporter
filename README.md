@@ -1,7 +1,7 @@
 ## Command Line Reporter [![Build Status](https://travis-ci.org/wbailey/command_line_reporter.png)](https://travis-ci.org/wbailey/command_line_reporter)  [![Code Climate](https://codeclimate.com/github/wbailey/command_line_reporter.png)](https://codeclimate.com/github/wbailey/command_line_reporter) [![Gem Version](https://badge.fury.io/rb/command_line_reporter.png)](http://badge.fury.io/rb/command_line_reporter)
 
 This gem provides a DSL that makes it easy to write reports of various types in ruby.  It eliminates
-the need to litter your source with *puts* statements instead providing a more readable, expressive
+the need to litter your source with *puts* statements, instead providing a more readable, expressive
 interface to your application.  Some of the best features include:
 
 * Formatters that automatically indicate progress
@@ -10,9 +10,9 @@ interface to your application.  Some of the best features include:
 * Output suppression that makes it easy for your script to support a _quiet_ flag
 * Capture report output as a string
 
-The latest releast thanks to a contribution from [Josh Brown](https://github.com/tobijb) allows you
+The latest releast, thanks to a contribution from [Josh Brown](https://github.com/tobijb), allows you
 to choose between UTF8 or ASCII for drawing tables.  By default it will use UTF8 if your system
-support it. Here is an example of output you can generate easily with "the reporter":
+supports it. Here is an example of output you can generate easily with "the reporter":
 
 ![Screenshot](http://i.imgur.com/5izCf.png)
 
