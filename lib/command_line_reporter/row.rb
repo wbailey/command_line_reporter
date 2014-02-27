@@ -13,7 +13,7 @@ module CommandLineReporter
       self.header = options[:header] || false
       self.color = options[:color]
       self.bold = options[:bold] || false
-      self.encoding = options[:encoding] || false
+      self.encoding = options[:encoding] || :unicode
 
     end
 
@@ -76,7 +76,7 @@ module CommandLineReporter
     end
 
     def use_utf8?
-      self.encoding == :ascii || "\u2501" == "u2501"
+      self.encoding == :unicode && "\u2501" != "u2501"
     end
   end
 end

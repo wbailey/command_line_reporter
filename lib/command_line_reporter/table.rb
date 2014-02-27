@@ -58,13 +58,13 @@ module CommandLineReporter
     private
 
     def separator(type = 'middle')
-      left, right, center, bar = use_utf8? ? ascii_separator : utf8_separator
+      left, center, right, bar = use_utf8? ? utf8_separator(type) : ascii_separator
 
       left + self.rows[0].columns.map {|c| bar * (c.width + 2)}.join(center) + right
     end
 
     def use_utf8?
-      self.encoding == :ascii || "\u2501" == "u2501"
+      self.encoding == :unicode && "\u2501" != "u2501"
     end
 
     def ascii_separator
@@ -76,7 +76,7 @@ module CommandLineReporter
     def utf8_separator(type)
       bar = "\u2501"
 
-      left, right, center = case type
+      left, center, right = case type
                             when 'first'
                               ["\u250F", "\u2533", "\u2513"]
                             when 'middle'
@@ -85,7 +85,7 @@ module CommandLineReporter
                               ["\u2517", "\u253B", "\u251B"]
                             end
 
-      [left, right, center, bar]
+      [left, center, right, bar]
     end
 
     def inherit_column_attrs(row)

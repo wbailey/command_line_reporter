@@ -21,7 +21,7 @@ describe CommandLineReporter::Row do
     end
 
     it 'output encoding should be unicode' do
-      expect(CommandLineReporter::Row.new.encoding).to be_false
+      expect(CommandLineReporter::Row.new.encoding).to eq(:unicode)
     end
 
   end
