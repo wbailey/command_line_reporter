@@ -114,7 +114,7 @@ module CommandLineReporter
         # keep default
       elsif row.color
         c.color = row.color
-			elsif self.rows.size > inherit_from
+      elsif self.rows.size > inherit_from
         c.color = self.rows[inherit_from].columns[i].color
       end
     end

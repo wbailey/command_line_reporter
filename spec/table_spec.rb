@@ -35,21 +35,21 @@ describe CommandLineReporter::Table do
       }.to_not raise_error
     end
 
-		context 'inherits' do
-			before :each do
-				@cols1 = [
-					CommandLineReporter::Column.new('asdf', :width => 5),
-					CommandLineReporter::Column.new('qwer', :align => 'right', :color => 'purple'),
-					CommandLineReporter::Column.new('tutu', :color => 'green'),
-					CommandLineReporter::Column.new('uiui', :bold => true),
-				]
-				@cols2 = [
-					CommandLineReporter::Column.new('test'),
-					CommandLineReporter::Column.new('test'),
-					CommandLineReporter::Column.new('test', :color => 'blue'),
-					CommandLineReporter::Column.new('test'),
-				]
-			end
+    context 'inherits' do
+      before :each do
+        @cols1 = [
+          CommandLineReporter::Column.new('asdf', :width => 5),
+          CommandLineReporter::Column.new('qwer', :align => 'right', :color => 'purple'),
+          CommandLineReporter::Column.new('tutu', :color => 'green'),
+          CommandLineReporter::Column.new('uiui', :bold => true),
+        ]
+        @cols2 = [
+          CommandLineReporter::Column.new('test'),
+          CommandLineReporter::Column.new('test'),
+          CommandLineReporter::Column.new('test', :color => 'blue'),
+          CommandLineReporter::Column.new('test'),
+        ]
+      end
 
       context 'no header row' do
         before :each do
@@ -60,21 +60,21 @@ describe CommandLineReporter::Table do
           row = CommandLineReporter::Row.new
           @cols2.each {|c| row.add(c)}
           @table.add(row)
-				end
+        end
 
-				it 'positional attributes' do
-					[:align, :width, :size, :padding].each do |m|
-						4.times do |i|
-							expect(@table.rows[1].columns[i].send(m)).to eq(@table.rows[0].columns[i].send(m))
-						end
-					end
-				end
+        it 'positional attributes' do
+          [:align, :width, :size, :padding].each do |m|
+            4.times do |i|
+              expect(@table.rows[1].columns[i].send(m)).to eq(@table.rows[0].columns[i].send(m))
+            end
+          end
+        end
 
-				it 'color' do
-					expect(@table.rows[1].columns[0].color).to eq(@table.rows[0].columns[0].color)
-					expect(@table.rows[1].columns[1].color).to eq(@table.rows[0].columns[1].color)
+        it 'color' do
+          expect(@table.rows[1].columns[0].color).to eq(@table.rows[0].columns[0].color)
+          expect(@table.rows[1].columns[1].color).to eq(@table.rows[0].columns[1].color)
           expect(@table.rows[1].columns[2].color).to eq('blue')
-					expect(@table.rows[1].columns[3].color).to eq(@table.rows[0].columns[3].color)
+          expect(@table.rows[1].columns[3].color).to eq(@table.rows[0].columns[3].color)
         end
 
         it 'bold' do
