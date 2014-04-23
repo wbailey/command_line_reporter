@@ -22,7 +22,7 @@ module CommandLineReporter
       row.border = self.border
 
       # Inherit properties from the appropriate row
-      inherit_column_attrs(row) if self.rows[0]
+      inherit_column_attrs(row) if self.rows[0] && self.rows[inherit_from]
 
       self.rows << row
     end
