@@ -114,7 +114,7 @@ module CommandLineReporter
         # keep default
       elsif row.color
         c.color = row.color
-      else
+      elsif self.rows.size > inherit_from
         c.color = self.rows[inherit_from].columns[i].color
       end
     end
@@ -122,7 +122,7 @@ module CommandLineReporter
     def use_bold(row, c, i)
       if row.bold
         c.bold = row.bold
-      elsif inherit_from != 1
+      elsif self.rows.size > inherit_from
         c.bold = self.rows[inherit_from].columns[i].bold
       end
     end

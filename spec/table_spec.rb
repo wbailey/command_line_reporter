@@ -37,42 +37,44 @@ describe CommandLineReporter::Table do
 
     context 'inherits' do
       before :each do
-        @table = CommandLineReporter::Table.new
-        row = CommandLineReporter::Row.new(:color => 'red')
-        (
-          @cols1 = [
-            CommandLineReporter::Column.new('asdf', :width => 5),
-            CommandLineReporter::Column.new('qwer', :align => 'right', :color => 'purple'),
-            CommandLineReporter::Column.new('tutu', :color => 'green'),
-            CommandLineReporter::Column.new('uiui', :bold => true),
-          ]
-        ).each {|c| row.add(c)}
-        @table.add(row)
-        row = CommandLineReporter::Row.new
-        (@cols2 = [
-            CommandLineReporter::Column.new('test'),
-            CommandLineReporter::Column.new('test'),
-            CommandLineReporter::Column.new('test', :color => 'blue'),
-            CommandLineReporter::Column.new('test'),
-          ]
-        ).each {|c| row.add(c)}
-        @table.add(row)
-      end
-
-      it 'positional attributes' do
-        [:align, :width, :size, :padding].each do |m|
-          4.times do |i|
-            expect(@table.rows[1].columns[i].send(m)).to eq(@table.rows[0].columns[i].send(m))
-          end
-        end
+        @cols1 = [
+          CommandLineReporter::Column.new('asdf', :width => 5),
+          CommandLineReporter::Column.new('qwer', :align => 'right', :color => 'purple'),
+          CommandLineReporter::Column.new('tutu', :color => 'green'),
+          CommandLineReporter::Column.new('uiui', :bold => true),
+        ]
+        @cols2 = [
+          CommandLineReporter::Column.new('test'),
+          CommandLineReporter::Column.new('test'),
+          CommandLineReporter::Column.new('test', :color => 'blue'),
+          CommandLineReporter::Column.new('test'),
+        ]
       end
 
       context 'no header row' do
+        before :each do
+          @table = CommandLineReporter::Table.new
+          row = CommandLineReporter::Row.new
+          @cols1.each {|c| row.add(c)}
+          @table.add(row)
+          row = CommandLineReporter::Row.new
+          @cols2.each {|c| row.add(c)}
+          @table.add(row)
+        end
+
+        it 'positional attributes' do
+          [:align, :width, :size, :padding].each do |m|
+            4.times do |i|
+              expect(@table.rows[1].columns[i].send(m)).to eq(@table.rows[0].columns[i].send(m))
+            end
+          end
+        end
+
         it 'color' do
-          expect(@table.rows[1].columns[0].color).to eq('red')
-          expect(@table.rows[1].columns[1].color).to eq('purple')
+          expect(@table.rows[1].columns[0].color).to eq(@table.rows[0].columns[0].color)
+          expect(@table.rows[1].columns[1].color).to eq(@table.rows[0].columns[1].color)
           expect(@table.rows[1].columns[2].color).to eq('blue')
-          expect(@table.rows[1].columns[3].color).to eq('red')
+          expect(@table.rows[1].columns[3].color).to eq(@table.rows[0].columns[3].color)
         end
 
         it 'bold' do
@@ -98,7 +100,7 @@ describe CommandLineReporter::Table do
           expect(@table.rows[1].columns[0].bold).to be_false
           expect(@table.rows[1].columns[1].bold).to be_false
           expect(@table.rows[1].columns[2].bold).to be_false
-          expect(@table.rows[1].columns[3].bold).to be_true
+          expect(@table.rows[1].columns[3].bold).to be_false
         end
       end
     end
