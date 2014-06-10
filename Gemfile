@@ -9,6 +9,8 @@ gem 'reek'
 group :test do
   gem "rspec"
   gem "simplecov"
+  gem "autotest-standalone"
+  gem "autotest-growl"
   gem "guard"
   gem "guard-rspec"
 end

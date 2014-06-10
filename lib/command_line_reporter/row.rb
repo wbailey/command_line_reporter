@@ -14,7 +14,6 @@ module CommandLineReporter
       self.color = options[:color]
       self.bold = options[:bold] || false
       self.encoding = options[:encoding] || :unicode
-
     end
 
     def add(column)

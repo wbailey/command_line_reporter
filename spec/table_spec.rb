@@ -94,7 +94,15 @@ describe CommandLineReporter::Table do
           @table.add(row)
         end
 
+        it 'color' do
+          expect(@table.rows[1].columns[0].color).to eq('red')
+          expect(@table.rows[1].columns[1].color).to eq('purple')
+          expect(@table.rows[1].columns[2].color).to eq('blue')
+          expect(@table.rows[1].columns[3].color).to eq('red')
+        end
+
         it 'bold' do
+          expect(@table.rows[1].columns[0].bold).to be_false
           expect(@table.rows[1].columns[0].bold).to be_false
           expect(@table.rows[1].columns[1].bold).to be_false
           expect(@table.rows[1].columns[2].bold).to be_false

@@ -9,6 +9,8 @@ GEM
       ZenTest (~> 4.3)
     ZenTest (4.9.5)
     ast (1.1.0)
+    autotest-growl (0.2.16)
+    autotest-standalone (4.5.11)
     celluloid (0.15.2)
       timers (~> 1.1.0)
     celluloid-io (0.15.0)
@@ -154,6 +156,8 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth
+  autotest-growl
+  autotest-standalone
   colored
   debugger
   faraday
