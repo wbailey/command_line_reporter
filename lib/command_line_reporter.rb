@@ -36,7 +36,7 @@ module CommandLineReporter
   end
 
   def formatter=(type = 'nested')
-    return type if type.class != String
+    return (@formatter = type) if type.class != String
     name = type.capitalize + 'Formatter'
     klass = %W{CommandLineReporter #{name}}.inject(Kernel) {|s,c| s.const_get(c)}
 
