@@ -11,6 +11,9 @@ GEM
     ast (1.1.0)
     autotest-growl (0.2.16)
     autotest-standalone (4.5.11)
+    byebug (3.2.0)
+      columnize (~> 0.8)
+      debugger-linecache (~> 1.2)
     celluloid (0.15.2)
       timers (~> 1.1.0)
     celluloid-io (0.15.0)
@@ -19,13 +22,8 @@ GEM
     charlock_holmes (0.6.9.4)
     coderay (1.1.0)
     colored (1.2)
-    columnize (0.3.6)
-    debugger (1.6.5)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.3.1)
+    columnize (0.8.9)
     debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.3.1)
     diff-lcs (1.2.5)
     docile (1.1.3)
     faraday (0.9.0)
@@ -158,8 +156,8 @@ DEPENDENCIES
   RedCloth
   autotest-growl
   autotest-standalone
+  byebug
   colored
-  debugger
   faraday
   flay
   flog

@@ -17,7 +17,7 @@ end
 
 group :development do
   gem 'kramdown'
-  gem "debugger"
+  gem "byebug"
   gem "pry"
   gem "rake"
   gem "flog"
