@@ -37,7 +37,7 @@ describe CommandLineReporter::Column do
     end
 
     it 'accepts bold' do
-      expect(CommandLineReporter::Column.new('asdf', :bold => true).bold).to be_true
+      expect(CommandLineReporter::Column.new('asdf', :bold => true).bold).to be true
     end
 
     it 'defaults the padding' do
