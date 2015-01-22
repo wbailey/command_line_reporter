@@ -46,7 +46,7 @@ module CommandLineReporter
           # c1.screen_rows.size == 5
           # c2.screen_rows.size == 2
           #
-          # So when we don't have a screen row for c2 we need to fill the screen with the 
+          # So when we don't have a screen row for c2 we need to fill the screen with the
           # proper number of blanks so the layout looks like (parenthesis on the right just
           # indicate screen row index)
           #
@@ -58,12 +58,15 @@ module CommandLineReporter
           # | xxxxxxxxxxx |            | (4)
           # +-------------+------------+
           if col.screen_rows[sr].nil?
-            line << ' ' * col.width
+            line << ' ' * col.width << ' '
           else
-            line <<  self.columns[mc].screen_rows[sr]
+            line << self.columns[mc].screen_rows[sr] << ' '
           end
 
-          line << ' ' + ((self.border) ? "#{border_char} " : '')
+          if self.border
+            line << border_char
+            line << ' ' if mc < self.columns.size - 1
+          end
         end
 
         puts line
