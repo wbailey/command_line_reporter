@@ -5,7 +5,7 @@ describe CommandLineReporter::Row do
 
   describe '#initialize' do
     it 'accepts header' do
-      expect(CommandLineReporter::Row.new(:header => true).header).to be_true
+      expect(CommandLineReporter::Row.new(:header => true).header).to be true
     end
 
     it 'accepts color' do
@@ -13,7 +13,7 @@ describe CommandLineReporter::Row do
     end
 
     it 'accepts bold' do
-      expect(CommandLineReporter::Row.new(:bold => true).bold).to be_true
+      expect(CommandLineReporter::Row.new(:bold => true).bold).to be true
     end
 
     it 'output encoding should be ascii' do
@@ -55,9 +55,9 @@ describe CommandLineReporter::Row do
     it 'supercedes bold on columns' do
       row = CommandLineReporter::Row.new(:bold => true)
       row.add(cols[0])
-      expect(row.columns[0].bold).to be_true
+      expect(row.columns[0].bold).to be true
       row.add(cols[1])
-      expect(row.columns[1].bold).to be_true
+      expect(row.columns[1].bold).to be true
     end
   end
 

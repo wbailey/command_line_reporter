@@ -9,7 +9,7 @@ describe CommandLineReporter::Table do
     end
 
     it 'defaults the border' do
-      expect(CommandLineReporter::Table.new.border).to be_false
+      expect(CommandLineReporter::Table.new.border).to be false
     end
 
     it 'accepts the border' do
@@ -17,7 +17,7 @@ describe CommandLineReporter::Table do
     end
 
     it 'defaults the border_color' do
-      expect(CommandLineReporter::Table.new.border_color).to be_false
+      expect(CommandLineReporter::Table.new.border_color).to be false
     end
 
     it 'accepts the border_color' do
@@ -84,10 +84,10 @@ describe CommandLineReporter::Table do
         end
 
         it 'bold' do
-          expect(@table.rows[1].columns[0].bold).to be_false
-          expect(@table.rows[1].columns[1].bold).to be_false
-          expect(@table.rows[1].columns[2].bold).to be_false
-          expect(@table.rows[1].columns[3].bold).to be_true
+          expect(@table.rows[1].columns[0].bold).to be false
+          expect(@table.rows[1].columns[1].bold).to be false
+          expect(@table.rows[1].columns[2].bold).to be false
+          expect(@table.rows[1].columns[3].bold).to be true
         end
       end
 
@@ -110,11 +110,11 @@ describe CommandLineReporter::Table do
         end
 
         it 'bold' do
-          expect(@table.rows[1].columns[0].bold).to be_false
-          expect(@table.rows[1].columns[0].bold).to be_false
-          expect(@table.rows[1].columns[1].bold).to be_false
-          expect(@table.rows[1].columns[2].bold).to be_false
-          expect(@table.rows[1].columns[3].bold).to be_true
+          expect(@table.rows[1].columns[0].bold).to be false
+          expect(@table.rows[1].columns[0].bold).to be false
+          expect(@table.rows[1].columns[1].bold).to be false
+          expect(@table.rows[1].columns[2].bold).to be false
+          expect(@table.rows[1].columns[3].bold).to be true
         end
       end
     end
