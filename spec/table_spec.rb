@@ -16,14 +16,6 @@ describe CommandLineReporter::Table do
       expect(CommandLineReporter::Table.new(:border => true).border).to eq(true)
     end
 
-    it 'defaults the border_color' do
-      expect(CommandLineReporter::Table.new.border_color).to be false
-    end
-
-    it 'accepts the border_color' do
-      expect(CommandLineReporter::Table.new(:border_color => true).border_color).to eq(true)
-    end
-
     it 'output encoding should be ascii' do
       expect(CommandLineReporter::Table.new(:encoding => :ascii).encoding).to eq(:ascii)
     end
@@ -120,7 +112,6 @@ describe CommandLineReporter::Table do
     end
   end
 
-  
   describe '#auto_adjust_widths' do
     it 'sets the widths of each column in each row to the maximum required width for that column' do
       table = CommandLineReporter::Table.new.tap do |t|
