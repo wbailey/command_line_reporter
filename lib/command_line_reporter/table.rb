@@ -2,14 +2,13 @@ module CommandLineReporter
   class Table
     include OptionsValidator
 
-    VALID_OPTIONS = [:border, :border_color, :width, :encoding]
+    VALID_OPTIONS = [:border, :width, :encoding]
     attr_accessor :rows, *VALID_OPTIONS
 
     def initialize(options = {})
       self.validate_options(options, *VALID_OPTIONS)
 
       self.border = options[:border] || false
-      self.border_color = options[:border_color] || false
       self.width = options[:width] || false
       self.encoding = options[:encoding] || CommandLineReporter::DEFAULTS[:encoding]
 
@@ -21,7 +20,6 @@ module CommandLineReporter
     def add(row)
       # Inheritance from the table
       row.border = self.border
-      row.border_color = self.border_color
 
       # Inherit properties from the appropriate row
       inherit_column_attrs(row) if self.rows[0]
@@ -62,8 +60,7 @@ module CommandLineReporter
     def separator(type = 'middle')
       left, center, right, bar = use_utf8? ? utf8_separator(type) : ascii_separator
 
-      separator_str = left + self.rows[0].columns.map {|c| bar * (c.width + 2)}.join(center) + right
-      separator_str.send(self.border_color) if self.border_color
+      left + self.rows[0].columns.map {|c| bar * (c.width + 2)}.join(center) + right
     end
 
     def use_utf8?
