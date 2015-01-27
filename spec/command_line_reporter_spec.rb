@@ -328,7 +328,9 @@ describe CommandLineReporter do
     end
 
     it 'prints carriage returns for the number of lines' do
-      expect(subject).to receive(:puts).with("\n" * 3)
+      expect(subject).to receive(:print).with("\0").and_return(nil)
+      expect(subject).to receive(:puts).with("\n" * 3).and_return("\n\n\n")
+      subject.vertical_spacing(0)
       subject.vertical_spacing(3)
     end
   end

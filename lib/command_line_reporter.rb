@@ -75,9 +75,14 @@ module CommandLineReporter
   end
 
   def vertical_spacing(lines = 1)
-    puts "\n" * lines
-  rescue
-    raise ArgumentError
+    lines = Integer(lines)
+
+    # because puts "\n" * 0 produces an unwanted newline
+    if lines == 0
+      print "\0"
+    else
+      puts "\n" * lines
+    end
   end
 
   def datetime(options = {})
