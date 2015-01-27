@@ -122,6 +122,8 @@ There are several methods the mixin provides that do not depend on the formatter
 
 ### Contributors
 
+* [Dennis Ideler](https://github.com/dideler) submitted pull requests getting CLR up to date and
+  fixing issues with border colors
 * [Josh Brown](https://github.com/tobijb) added the ability to encode tables in either ascii or utf8
 * [Stefan Frank](https://github.com/mugwump) for raising the issue that he could not capture report
   output in a variable as a string
@@ -132,7 +134,7 @@ There are several methods the mixin provides that do not depend on the formatter
 
 ### License
 
-Copyright (c) 2011-2014 Wes Bailey
+Copyright (c) 2011-2015 Wes Bailey
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 associated documentation files (the "Software"), to deal in the Software without restriction,
