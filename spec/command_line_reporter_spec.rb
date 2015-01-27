@@ -37,6 +37,17 @@ describe CommandLineReporter do
       subject.formatter = 'nested'
       expect(subject.formatter.class).to eq(CommandLineReporter::NestedFormatter)
     end
+
+    it "doesn't fail if the type parameter is a Proc" do
+      subject.formatter = Proc.new { }
+      expect(subject.formatter).to_not raise_exception
+    end
+
+    it "returns the type if the parameter is something other than a String" do
+      subject.formatter = Proc.new { }
+      expect(subject.formatter.class).to eq(Proc)
+    end
+
   end
 
   describe '#report' do
