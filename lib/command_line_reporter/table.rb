@@ -92,6 +92,7 @@ module CommandLineReporter
       row.columns.each_with_index do |c,i|
         use_positional_attrs(c, i)
         use_color(row, c, i)
+        use_color_code(row, c, i)
         use_bold(row, c, i)
       end
     end
@@ -116,6 +117,16 @@ module CommandLineReporter
         c.color = row.color
       elsif inherit_from != 1
         c.color = self.rows[inherit_from].columns[i].color
+      end
+    end
+
+    def use_color_code(row, c, i)
+      if c.color_code
+        # keep default
+      elsif row.color_code
+        c.color_code = row.color_code
+      elsif inherit_from != 1
+        c.color_code = self.rows[inherit_from].columns[i].color_code
       end
     end
 

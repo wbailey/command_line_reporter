@@ -1,12 +1,12 @@
 require 'singleton'
-require 'colored'
+require 'ansi'
 
 module CommandLineReporter
   class ProgressFormatter
     include Singleton
     include OptionsValidator
 
-    VALID_OPTIONS = [:indicator, :color, :bold]
+    VALID_OPTIONS = [:indicator, :color, :color_code, :bold]
     attr_accessor *VALID_OPTIONS
 
     def format(options, block)
@@ -14,6 +14,7 @@ module CommandLineReporter
 
       self.indicator = options[:indicator] if options[:indicator]
       self.color = options[:color]
+      self.color_code = options[:color_code]
       self.bold = options[:bold] || false
 
       block.call
@@ -24,8 +25,9 @@ module CommandLineReporter
     def progress(override = nil)
       str = override || self.indicator
 
-      str = str.send(self.color) if self.color
-      str = str.send('bold') if self.bold
+      str = ANSI.public_send(color) { str } if self.color
+      str = ANSI::Code.rgb(color_code) { str } if self.color_code
+      str = ANSI.bold { str } if self.bold
 
       print str
     end

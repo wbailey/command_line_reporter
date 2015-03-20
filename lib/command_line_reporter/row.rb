@@ -2,7 +2,7 @@ module CommandLineReporter
   class Row
     include OptionsValidator
 
-    VALID_OPTIONS = [:header, :color, :bold, :encoding]
+    VALID_OPTIONS = [:header, :color, :color_code, :bold, :encoding]
     attr_accessor :columns, :border, *VALID_OPTIONS
 
     def initialize(options = {})
@@ -12,6 +12,7 @@ module CommandLineReporter
       self.border = false
       self.header = options[:header] || false
       self.color = options[:color]
+      self.color_code = options[:color_code]
       self.bold = options[:bold] || false
       self.encoding = options[:encoding] || :unicode
     end
@@ -19,6 +20,10 @@ module CommandLineReporter
     def add(column)
       if column.color.nil? && self.color
         column.color = self.color
+      end
+
+      if column.color_code.nil? && self.color_code
+        column.color_code = self.color_code
       end
 
       if self.bold || self.header
