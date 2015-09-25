@@ -1,10 +1,10 @@
-require 'colored'
+require 'ansi'
 
 module CommandLineReporter
   class Column
     include OptionsValidator
 
-    VALID_OPTIONS = [:width, :padding, :align, :color, :bold, :underline, :reversed]
+    VALID_OPTIONS = [:width, :padding, :align, :color, :color_code, :bold, :underline, :reversed]
     attr_accessor :text, :size, *VALID_OPTIONS
 
     def initialize(text = nil, options = {})
@@ -16,6 +16,7 @@ module CommandLineReporter
       self.align = options[:align] || 'left'
       self.padding = options[:padding] || 0
       self.color = options[:color] || nil
+      self.color_code = options[:color_code] || nil
       self.bold = options[:bold] || false
       self.underline = options[:underline] || false
       self.reversed = options[:reversed] || false
@@ -67,8 +68,9 @@ module CommandLineReporter
     end
 
     def colorize(str)
-      str = str.send(color) if self.color
-      str = str.send('bold') if self.bold
+      str = ANSI.public_send(color) { str } if self.color
+      str = ANSI::Code.rgb(color_code) { str } if self.color_code
+      str = ANSI.bold { str } if self.bold
       str
     end
   end

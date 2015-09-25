@@ -1,9 +1,10 @@
 source 'http://rubygems.org'
 
+gemspec
+
 gem 'gollum'
 gem 'RedCloth'
 gem 'redcarpet', '1.17.2'
-gem 'colored'
 gem 'reek'
 
 group :test do

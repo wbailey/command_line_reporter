@@ -64,7 +64,7 @@ module CommandLineReporter
   end
 
   def horizontal_rule(options = {})
-    validate_options(options, :char, :width, :color, :bold)
+    validate_options(options, :char, :width, :color, :color_code, :bold)
 
     # Got unicode?
     use_char = "\u2501" == 'u2501' ? '-' : "\u2501"
@@ -72,7 +72,7 @@ module CommandLineReporter
     char = options[:char].is_a?(String) ? options[:char] : use_char
     width = options[:width] || DEFAULTS[:width]
 
-    aligned(char * width, :width => width, :color => options[:color], :bold => options[:bold])
+    aligned(char * width, :width => width, :color => options[:color], :color_code => options[:color_code], :bold => options[:bold])
   end
 
   def vertical_spacing(lines = 1)
@@ -87,7 +87,7 @@ module CommandLineReporter
   end
 
   def datetime(options = {})
-    validate_options(options, :align, :width, :format, :color, :bold)
+    validate_options(options, :align, :width, :format, :color, :color_code, :bold)
 
     format = options[:format] || '%Y-%m-%d - %l:%M:%S%p'
     align = options[:align] || DEFAULTS[:align]
@@ -97,15 +97,16 @@ module CommandLineReporter
 
     raise Exception if text.size > width
 
-    aligned(text, :align => align, :width => width, :color => options[:color], :bold => options[:bold])
+    aligned(text, :align => align, :width => width, :color => options[:color], :color_code => options[:color_code], :bold => options[:bold])
   end
 
   def aligned(text, options = {})
-    validate_options(options, :align, :width, :color, :bold)
+    validate_options(options, :align, :width, :color, :color_code, :bold)
 
     align = options[:align] || DEFAULTS[:align]
     width = options[:width] || DEFAULTS[:width]
     color = options[:color]
+    color_code = options[:color_code]
     bold = options[:bold] || false
 
     line = case align
@@ -119,8 +120,9 @@ module CommandLineReporter
              raise ArgumentError
            end
 
-    line = line.send(color) if color
-    line = line.send('bold') if bold
+    line = ANSI.public_send(color) { line } if color
+    line = ANSI::Code.rgb(color_code) { line } if color_code
+    line = ANSI.bold { line } if bold
 
     puts line
   end
@@ -146,35 +148,36 @@ module CommandLineReporter
   private
 
   def section(type, options)
-    title, width, align, lines, color, bold = assign_section_properties(options)
+    title, width, align, lines, color, color_code, bold = assign_section_properties(options)
 
     # This also ensures that width is a Fixnum
     raise ArgumentError if title.size > width
 
     if type == :footer
       vertical_spacing(lines)
-      horizontal_rule(:char => options[:rule], :width => width, :color => color, :bold => bold) if options[:rule]
+      horizontal_rule(:char => options[:rule], :width => width, :color => color, :color_code => color_code, :bold => bold) if options[:rule]
     end
 
     aligned(title, :align => align, :width => width, :color => color, :bold => bold)
-    datetime(:align => align, :width => width, :color => color, :bold => bold) if options[:timestamp]
+    datetime(:align => align, :width => width, :color => color, :color_code => color_code, :bold => bold) if options[:timestamp]
 
     if type == :header
-      horizontal_rule(:char => options[:rule], :width => width, :color => color, :bold => bold) if options[:rule]
+      horizontal_rule(:char => options[:rule], :width => width, :color => color, :color_code => color_code, :bold => bold) if options[:rule]
       vertical_spacing(lines)
     end
   end
 
   def assign_section_properties options
-    validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule, :color, :bold)
+    validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule, :color, :color_code, :bold)
 
     title = options[:title] || 'Report'
     width = options[:width] || DEFAULTS[:width]
     align = options[:align] || DEFAULTS[:align]
     lines = options[:spacing] || 1
     color = options[:color]
+    color_code = options[:color_code]
     bold = options[:bold] || false
 
-    return [title, width, align, lines, color, bold]
+    return [title, width, align, lines, color, color_code, bold]
   end
 end
