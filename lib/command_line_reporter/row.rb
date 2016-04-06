@@ -68,7 +68,7 @@ module CommandLineReporter
     private
 
     def screen_count
-      @sc ||= es.inject(0) { |a, e| e.screen_rows.size > a ? e.screen_rows.size : a }
+      @sc ||= columns.inject(0) { |a, e| e.screen_rows.size > a ? e.screen_rows.size : a }
     end
 
     def use_utf8?

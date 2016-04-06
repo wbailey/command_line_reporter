@@ -9,11 +9,12 @@ module CommandLineReporter
 
     def initialize(text = nil, options = {})
       validate_options(options, *VALID_OPTIONS)
+      assign_alignment_defaults(options)
+      assign_color_defaults(options)
+
       raise ArgumentError unless width > 0
       raise ArgumentError unless padding.to_s =~ /^\d+$/
 
-      assign_alignment_defaults(options)
-      assign_color_defaults(options)
       self.text = text.to_s
     end
 

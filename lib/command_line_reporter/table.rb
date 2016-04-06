@@ -28,7 +28,7 @@ module CommandLineReporter
     end
 
     def output
-      return if rows.size.empty? # we got here with nothing to print to the screen
+      return if rows.size == 0 # we got here with nothing to print to the screen
       auto_adjust_widths if width == :auto
 
       puts separator('first') if border

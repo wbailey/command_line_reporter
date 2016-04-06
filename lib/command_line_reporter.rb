@@ -89,10 +89,7 @@ module CommandLineReporter
 
   def datetime(options = {})
     validate_options(options, :align, :width, :format, :color, :bold)
-
-    format = options[:format] || '%Y-%m-%d - %l:%M:%S%p'
-    align = options[:align] || DEFAULTS[:align]
-    width = options[:width] || DEFAULTS[:width]
+    format, align, width = default_datetime_options(options)
 
     text = Time.now.strftime(format)
 
@@ -101,13 +98,22 @@ module CommandLineReporter
     aligned(text, align: align, width: width, color: options[:color], bold: options[:bold])
   end
 
-  def aligned(text, options = {})
-    validate_options(options, :align, :width, :color, :bold)
-
+  def define_alignment_defaults(options)
     align = options[:align] || DEFAULTS[:align]
     width = options[:width] || DEFAULTS[:width]
     color = options[:color]
     bold = options[:bold] || false
+    [align, width, color, bold]
+  end
+
+  def aligned(text, options = {})
+    validate_options(options, :align, :width, :color, :bold)
+    align, width, color, bold = define_alignment_defaults(options)
+
+    # align = options[:align] || DEFAULTS[:align]
+    # width = options[:width] || DEFAULTS[:width]
+    # color = options[:color]
+    # bold = options[:bold] || false
 
     line = case align
            when 'left'
@@ -145,6 +151,25 @@ module CommandLineReporter
   end
 
   private
+
+  def default_datetime_options(options)
+    format = define_format(options)
+    align = define_align(options)
+    width = define_width(options)
+    [format, align, width]
+  end
+
+  def define_width(options)
+    options[:width] || DEFAULTS[:width]
+  end
+
+  def define_format(options)
+    options[:format] || '%Y-%m-%d - %l:%M:%S%p'
+  end
+
+  def define_align(options)
+    align = options[:align] || DEFAULTS[:align]
+  end
 
   def section(type, options)
     title, width, align, lines, color, bold = assign_section_properties(options)
