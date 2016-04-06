@@ -435,7 +435,7 @@ describe CommandLineReporter do
         expect {
           allow(subject).to receive(:puts)
           subject.aligned('test', :width => 40)
-        }.to_not raise_error
+        }.to_not raise_error Exception
       end
 
       it 'does not allow invalid width values' do
