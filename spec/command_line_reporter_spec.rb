@@ -11,9 +11,9 @@ describe CommandLineReporter do
 
   let :controls do
     {
-      :clear => "\e[0m",
-      :bold => "\e[1m",
-      :red => "\e[31m",
+      clear: "\e[0m",
+      bold: "\e[1m",
+      red: "\e[31m"
     }
   end
 
@@ -23,9 +23,9 @@ describe CommandLineReporter do
 
   describe '#formatter=' do
     it 'only allows allowed formatters' do
-      expect {
+      expect do
         subject.formatter = 'asfd'
-      }.to raise_error ArgumentError
+      end.to raise_error ArgumentError
     end
 
     it 'specifies the progress formatter' do
@@ -41,105 +41,104 @@ describe CommandLineReporter do
 
   describe '#report' do
     it 'uses the nested formatter as default' do
-      capture_stdout {
-        subject.report { }
-      }
+      capture_stdout do
+        subject.report {}
+      end
 
       expect(subject.formatter.class).to eq(CommandLineReporter::NestedFormatter)
     end
 
     it 'uses the progress formatter' do
-      capture_stdout {
+      capture_stdout do
         subject.formatter = 'progress'
-        subject.report { }
-      }
+        subject.report {}
+      end
 
       expect(subject.formatter.class).to eq(CommandLineReporter::ProgressFormatter)
     end
 
     it 'does not mask other application errors when a formatter is not set' do
-      capture_stdout {
-        subject.report {
-          expect {self.some_method_that_does_not_exist}.to raise_error(NoMethodError)
-        }
-      }
+      capture_stdout do
+        subject.report do
+          expect { some_method_that_does_not_exist }.to raise_error(NoMethodError)
+        end
+      end
     end
   end
 
   describe '#header' do
     context 'argument validation' do
-
       it 'does not accept an invalid option' do
-        expect {
-          subject.header(:asdf => 'tests')
-        }.to raise_error ArgumentError
+        expect do
+          subject.header(asdf: 'tests')
+        end.to raise_error ArgumentError
       end
 
       it 'accepts a title' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
-          subject.header(:title => 'test')
-        }.to_not raise_error
+          subject.header(title: 'test')
+        end.to_not raise_error
       end
 
       it 'does not allow a title > width' do
-        expect {
-          subject.header(:title => 'xxxxxxxxxxx', :width => 5)
-        }.to raise_error ArgumentError
+        expect do
+          subject.header(title: 'xxxxxxxxxxx', width: 5)
+        end.to raise_error ArgumentError
       end
 
       it 'accepts width' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
-          subject.header(:width => 100)
-        }.to_not raise_error
+          subject.header(width: 100)
+        end.to_not raise_error
       end
 
       it 'ensure width is a number' do
-        expect {
-          subject.header(:width => '100')
-        }.to raise_error ArgumentError
+        expect do
+          subject.header(width: '100')
+        end.to raise_error ArgumentError
       end
 
       it 'accepts align' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
-          subject.header(:align => 'center')
-        }.to_not raise_error
+          subject.header(align: 'center')
+        end.to_not raise_error
       end
 
       it 'ensure align is a valid value' do
-        expect {
+        expect do
           subject.header(:align => :asdf)
-        }.to raise_error ArgumentError
+        end.to raise_error ArgumentError
       end
 
       it 'accepts spacing' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.header(:spacing => 2)
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'accepts timestamp' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.header(:timestamp => true)
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'accepts color' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.header(:color => 'red')
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'accepts bold' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.header(:bold => true)
-        }.to_not raise_error
+        end.to_not raise_error
       end
     end
 
@@ -272,23 +271,23 @@ describe CommandLineReporter do
   describe '#horizontal_rule' do
     context 'argument validation' do
       it 'does not allow invalid options' do
-        expect {
+        expect do
           subject.horizontal_rule(:asdf => true)
-        }.to raise_error ArgumentError
+        end.to raise_error ArgumentError
       end
 
       it 'accepts char' do
-        expect {
+        expect do
           expect(subject).to receive(:puts)
           subject.horizontal_rule(:char => '*')
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'accepts width' do
-        expect {
+        expect do
           expect(subject).to receive(:puts)
           subject.horizontal_rule(:width => 10)
-        }.to_not raise_error
+        end.to_not raise_error
       end
     end
 
@@ -322,9 +321,9 @@ describe CommandLineReporter do
 
   describe '#vertical_spacing' do
     it 'accepts a fixnum as a valid argument' do
-      expect {
+      expect do
         subject.vertical_spacing('asdf')
-      }.to raise_error ArgumentError
+      end.to raise_error ArgumentError
     end
 
     it 'prints carriage returns for the number of lines' do
@@ -338,48 +337,48 @@ describe CommandLineReporter do
   describe '#datetime' do
     context 'argument validation' do
       it 'does not allow invalid options' do
-        expect {
+        expect do
           subject.datetime(:asdf => true)
-        }.to raise_error ArgumentError
+        end.to raise_error ArgumentError
       end
 
       it 'accepts align' do
-        expect {
+        expect do
           expect(subject).to receive(:puts)
           subject.datetime(:align => 'left')
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'accepts width' do
-        expect {
+        expect do
           expect(subject).to receive(:puts)
           subject.datetime(:width => 70)
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'accepts format' do
-        expect {
+        expect do
           expect(subject).to receive(:puts)
           subject.datetime(:format => '%m/%d/%Y')
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'does not allow invalid width' do
-        expect {
+        expect do
           subject.datetime(:align => 'right', :width => 'asdf')
-        }.to raise_error
+        end.to raise_error Exception
       end
 
       it 'does not allow invalid align' do
-        expect {
+        expect do
           subject.datetime(:align => 1234)
-        }.to raise_error
+        end.to raise_error Exception
       end
 
       it 'does not allow a timestamp format larger than the width' do
-        expect {
+        expect do
           subject.datetime(:width => 8)
-        }.to raise_error
+        end.to raise_error Exception
       end
     end
 
@@ -419,29 +418,29 @@ describe CommandLineReporter do
   describe '#aligned' do
     context 'argument validation' do
       it 'accepts align' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.aligned('test', :align => 'left')
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'does not allow invalid align values' do
-        expect {
+        expect do
           subject.aligned('test', :align => 1234)
-        }.to raise_error ArgumentError
+        end.to raise_error ArgumentError
       end
 
       it 'accepts width' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.aligned('test', :width => 40)
-        }.to_not raise_error Exception
+        end.to_not raise_error Exception
       end
 
       it 'does not allow invalid width values' do
-        expect {
+        expect do
           subject.aligned('test', :align => 'right', :width => 'asdf')
-        }.to raise_error
+        end.to raise_error Exception
       end
     end
 
@@ -460,49 +459,49 @@ describe CommandLineReporter do
   describe '#footer' do
     context 'argument validation' do
       it 'accepts title' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.footer(:title => 'test')
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'accepts align' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.footer(:align => 'right')
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'does not accept invalid align' do
-        expect {
+        expect do
           subject.header(:align => 1234)
-        }.to raise_error ArgumentError
+        end.to raise_error ArgumentError
       end
 
       it 'accepts width' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.footer(:width => 50)
-        }.to_not raise_error
+        end.to_not raise_error
       end
 
       it 'does not accept invalid width' do
-        expect {
+        expect do
           subject.footer(:width => 'asdf')
-        }.to raise_error ArgumentError
+        end.to raise_error ArgumentError
       end
 
       it 'does not allow title > width' do
-        expect {
+        expect do
           subject.footer(:title => 'testtesttest', :width => 6)
-        }.to raise_error ArgumentError
+        end.to raise_error ArgumentError
       end
 
       it 'accepts spacing' do
-        expect {
+        expect do
           allow(subject).to receive(:puts)
           subject.footer(:spacing => 3)
-        }.to_not raise_error
+        end.to_not raise_error
       end
     end
 
@@ -624,22 +623,22 @@ describe CommandLineReporter do
     end
 
     it 'requires a row to be defined' do
-      expect {
+      expect do
         subject.table
-      }.to raise_error LocalJumpError
+      end.to raise_error LocalJumpError
     end
 
     it 'accepts valid options' do
-      expect {
+      expect do
         subject.table(:border => true) { }
-      }.to_not raise_error
+      end.to_not raise_error
     end
 
     it 'rejects invalid options' do
-      expect {
+      expect do
         allow(subject).to receive(:puts)
         subject.table(:asdf => '100') { }
-      }.to raise_error ArgumentError
+      end.to raise_error ArgumentError
     end
   end
 
@@ -682,14 +681,13 @@ describe CommandLineReporter do
 
     it 'rejects invalid options' do
       allow(subject).to receive(:puts)
-      expect {
+      expect do
         subject.table do
           subject.row do
             subject.column('asdf', :asdf => 30)
           end
         end
-      }.to raise_error ArgumentError
+      end.to raise_error ArgumentError
     end
   end
-
 end
