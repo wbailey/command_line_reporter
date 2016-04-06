@@ -2,11 +2,11 @@ module CommandLineReporter
   class Table
     include OptionsValidator
 
-    VALID_OPTIONS = [:border, :width, :encoding]
+    VALID_OPTIONS = [:border, :width, :encoding].freeze
     attr_accessor :rows, *VALID_OPTIONS
 
     def initialize(options = {})
-      self.validate_options(options, *VALID_OPTIONS)
+      validate_options(options, *VALID_OPTIONS)
 
       self.border = options[:border] || false
       self.width = options[:width] || false
@@ -14,41 +14,41 @@ module CommandLineReporter
 
       @rows = []
 
-      raise ArgumentError, "Invalid encoding" unless [ :ascii, :unicode ].include? self.encoding
+      raise ArgumentError, 'Invalid encoding' unless [:ascii, :unicode].include? encoding
     end
 
     def add(row)
       # Inheritance from the table
-      row.border = self.border
+      row.border = border
 
       # Inherit properties from the appropriate row
-      inherit_column_attrs(row) if self.rows[0]
+      inherit_column_attrs(row) if rows[0]
 
-      self.rows << row
+      rows << row
     end
 
     def output
-      return if self.rows.size == 0 # we got here with nothing to print to the screen
-      auto_adjust_widths if self.width == :auto
+      return if rows.size.empty? # we got here with nothing to print to the screen
+      auto_adjust_widths if width == :auto
 
-      puts separator('first') if self.border
-      self.rows.each_with_index do |row, index|
+      puts separator('first') if border
+      rows.each_with_index do |row, index|
         row.output
-        puts separator('middle') if self.border && (index != self.rows.size - 1)
+        puts separator('middle') if border && (index != rows.size - 1)
       end
-      puts separator('last') if self.border
+      puts separator('last') if border
     end
 
     def auto_adjust_widths
       column_widths = []
 
-      self.rows.each do |row|
+      rows.each do |row|
         row.columns.each_with_index do |col, i|
-          column_widths[i] = [ col.required_width, ( column_widths[i] || 0 ) ].max
+          column_widths[i] = [col.required_width, (column_widths[i] || 0)].max
         end
       end
 
-      self.rows.each do |row|
+      rows.each do |row|
         row.columns.each_with_index do |col, i|
           col.width = column_widths[i]
         end
@@ -60,11 +60,11 @@ module CommandLineReporter
     def separator(type = 'middle')
       left, center, right, bar = use_utf8? ? utf8_separator(type) : ascii_separator
 
-      left + self.rows[0].columns.map {|c| bar * (c.width + 2)}.join(center) + right
+      left + rows[0].columns.map { |c| bar * (c.width + 2) }.join(center) + right
     end
 
     def use_utf8?
-      self.encoding == :unicode && "\u2501" != "u2501"
+      encoding == :unicode && "\u2501" != 'u2501'
     end
 
     def ascii_separator
@@ -89,7 +89,7 @@ module CommandLineReporter
     end
 
     def inherit_column_attrs(row)
-      row.columns.each_with_index do |c,i|
+      row.columns.each_with_index do |c, i|
         use_positional_attrs(c, i)
         use_color(row, c, i)
         use_bold(row, c, i)
@@ -99,14 +99,14 @@ module CommandLineReporter
     def use_positional_attrs(c, i)
       # The positional attributes are always required to inheret to make sure the table
       # displays properly
-      %w{align padding width}.each do |attr|
-        val = self.rows[0].columns[i].send(attr)
-        c.send(attr + "=", val)
+      %w(align padding width).each do |attr|
+        val = rows[0].columns[i].send(attr)
+        c.send(attr + '=', val)
       end
     end
 
     def inherit_from
-      self.rows[0].header ? 1 : 0
+      rows[0].header ? 1 : 0
     end
 
     def use_color(row, c, i)
@@ -115,7 +115,7 @@ module CommandLineReporter
       elsif row.color
         c.color = row.color
       elsif inherit_from != 1
-        c.color = self.rows[inherit_from].columns[i].color
+        c.color = rows[inherit_from].columns[i].color
       end
     end
 
@@ -123,7 +123,7 @@ module CommandLineReporter
       if row.bold
         c.bold = row.bold
       elsif inherit_from != 1
-        c.bold = self.rows[inherit_from].columns[i].bold
+        c.bold = rows[inherit_from].columns[i].bold
       end
     end
   end

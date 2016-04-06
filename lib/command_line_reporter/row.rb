@@ -2,11 +2,11 @@ module CommandLineReporter
   class Row
     include OptionsValidator
 
-    VALID_OPTIONS = [:header, :color, :bold, :encoding]
+    VALID_OPTIONS = [:header, :color, :bold, :encoding].freeze
     attr_accessor :columns, :border, *VALID_OPTIONS
 
     def initialize(options = {})
-      self.validate_options(options, *VALID_OPTIONS)
+      validate_options(options, *VALID_OPTIONS)
 
       self.columns = []
       self.border = false
@@ -17,25 +17,19 @@ module CommandLineReporter
     end
 
     def add(column)
-      if column.color.nil? && self.color
-        column.color = self.color
-      end
-
-      if self.bold || self.header
-        column.bold = true
-      end
-
-      self.columns << column
+      column.color = color if column.color.nil? && color
+      column.bold = true if bold || header
+      columns << column
     end
 
     def output
       screen_count.times do |sr|
         border_char = use_utf8? ? "\u2503" : '|'
 
-        line = (self.border) ? "#{border_char} " : ''
+        line = border ? "#{border_char} " : ''
 
-        self.columns.size.times do |mc|
-          col = self.columns[mc]
+        columns.size.times do |mc|
+          col = columns[mc]
           # Account for the fact that some columns will have more screen rows than their
           # counterparts in the row.  An example being:
           # c1 = Column.new('x' * 50, :width => 10)
@@ -58,12 +52,12 @@ module CommandLineReporter
           if col.screen_rows[sr].nil?
             line << ' ' * col.width << ' '
           else
-            line << self.columns[mc].screen_rows[sr] << ' '
+            line << columns[mc].screen_rows[sr] << ' '
           end
 
-          if self.border
+          if border
             line << border_char
-            line << ' ' if mc < self.columns.size - 1
+            line << ' ' if mc < columns.size - 1
           end
         end
 
@@ -74,11 +68,11 @@ module CommandLineReporter
     private
 
     def screen_count
-      @sc ||= self.columns.inject(0) {|max,column| column.screen_rows.size > max ? column.screen_rows.size : max}
+      @sc ||= es.inject(0) { |a, e| e.screen_rows.size > a ? e.screen_rows.size : a }
     end
 
     def use_utf8?
-      self.encoding == :unicode && "\u2501" != "u2501"
+      encoding == :unicode && "\u2501" != 'u2501'
     end
   end
 end

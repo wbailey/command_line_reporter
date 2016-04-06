@@ -8,17 +8,18 @@ require 'command_line_reporter/column'
 require 'command_line_reporter/table'
 require 'command_line_reporter/version'
 
+# rubocop:disable Metrics/ModuleLength
 module CommandLineReporter
   include OptionsValidator
 
   attr_reader :formatter
 
   DEFAULTS = {
-    :width => 100,
-    :align => 'left',
-    :formatter => 'nested',
-    :encoding => :unicode,
-  }
+    width: 100,
+    align: 'left',
+    formatter: 'nested',
+    encoding: :unicode
+  }.freeze
 
   def capture_output
     $stdout.rewind
@@ -38,7 +39,7 @@ module CommandLineReporter
   def formatter=(type = 'nested')
     return type if type.class != String
     name = type.capitalize + 'Formatter'
-    klass = %W{CommandLineReporter #{name}}.inject(Kernel) {|s,c| s.const_get(c)}
+    klass = %W(CommandLineReporter #{name}).inject(Kernel) { |a, e| a.const_get(e) }
 
     # Each formatter is a singleton that responds to #instance
     @formatter = klass.instance
@@ -72,7 +73,7 @@ module CommandLineReporter
     char = options[:char].is_a?(String) ? options[:char] : use_char
     width = options[:width] || DEFAULTS[:width]
 
-    aligned(char * width, :width => width, :color => options[:color], :bold => options[:bold])
+    aligned(char * width, width: width, color: options[:color], bold: options[:bold])
   end
 
   def vertical_spacing(lines = 1)
@@ -97,7 +98,7 @@ module CommandLineReporter
 
     raise Exception if text.size > width
 
-    aligned(text, :align => align, :width => width, :color => options[:color], :bold => options[:bold])
+    aligned(text, align: align, width: width, color: options[:color], bold: options[:bold])
   end
 
   def aligned(text, options = {})
@@ -114,7 +115,7 @@ module CommandLineReporter
            when 'right'
              text.rjust(width)
            when 'center'
-             text.rjust((width - text.size)/2 + text.size)
+             text.rjust((width - text.size) / 2 + text.size)
            else
              raise ArgumentError
            end
@@ -153,19 +154,19 @@ module CommandLineReporter
 
     if type == :footer
       vertical_spacing(lines)
-      horizontal_rule(:char => options[:rule], :width => width, :color => color, :bold => bold) if options[:rule]
+      horizontal_rule(char: options[:rule], width: width, color: color, bold: bold) if options[:rule]
     end
 
-    aligned(title, :align => align, :width => width, :color => color, :bold => bold)
-    datetime(:align => align, :width => width, :color => color, :bold => bold) if options[:timestamp]
+    aligned(title, align: align, width: width, color: color, bold: bold)
+    datetime(align: align, width: width, color: color, bold: bold) if options[:timestamp]
 
     if type == :header
-      horizontal_rule(:char => options[:rule], :width => width, :color => color, :bold => bold) if options[:rule]
+      horizontal_rule(char: options[:rule], width: width, color: color, bold: bold) if options[:rule]
       vertical_spacing(lines)
     end
   end
 
-  def assign_section_properties options
+  def assign_section_properties(options)
     validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule, :color, :bold)
 
     title = options[:title] || 'Report'
@@ -175,6 +176,6 @@ module CommandLineReporter
     color = options[:color]
     bold = options[:bold] || false
 
-    return [title, width, align, lines, color, bold]
+    [title, width, align, lines, color, bold]
   end
 end
