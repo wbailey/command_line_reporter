@@ -6,18 +6,18 @@ module CommandLineReporter
     include Singleton
     include OptionsValidator
 
-    VALID_OPTIONS = [:message, :type, :complete, :indent_size, :color, :bold]
+    VALID_OPTIONS = [:message, :type, :complete, :indent_size, :color, :bold].freeze
     attr_accessor :indent_size, :complete_string, :message_string, :color, :bold
 
     def format(options, block)
-      self.validate_options(options, *VALID_OPTIONS)
+      validate_options(options, *VALID_OPTIONS)
 
       indent_level :incr
 
-      padding = ' ' * @indent_level * (options[:indent_size] || self.indent_size)
+      padding = ' ' * @indent_level * (options[:indent_size] || indent_size)
 
-      message_str = padding + (options[:message] || self.message_string)
-      complete_str = options[:complete] || self.complete_string
+      message_str = padding + (options[:message] || message_string)
+      complete_str = options[:complete] || complete_string
 
       if options[:type] == 'inline'
         colorize("#{message_str}...", true, options)
@@ -61,7 +61,7 @@ module CommandLineReporter
     def indent_level(value)
       case value
       when :incr
-        @indent_level = (@indent_level) ? @indent_level + 1 : 0
+        @indent_level = @indent_level ? @indent_level + 1 : 0
       when :decr
         @indent_level -= 1
       end

@@ -6,11 +6,11 @@ module CommandLineReporter
     include Singleton
     include OptionsValidator
 
-    VALID_OPTIONS = [:indicator, :color, :bold]
+    VALID_OPTIONS = [:indicator, :color, :bold].freeze
     attr_accessor *VALID_OPTIONS
 
     def format(options, block)
-      self.validate_options(options, *VALID_OPTIONS)
+      validate_options(options, *VALID_OPTIONS)
 
       self.indicator = options[:indicator] if options[:indicator]
       self.color = options[:color]
@@ -22,10 +22,10 @@ module CommandLineReporter
     end
 
     def progress(override = nil)
-      str = override || self.indicator
+      str = override || indicator
 
-      str = str.send(self.color) if self.color
-      str = str.send('bold') if self.bold
+      str = str.send(color) if color
+      str = str.send('bold') if bold
 
       print str
     end

@@ -1,3 +1,3 @@
 module CommandLineReporter
-  VERSION = '3.3.7'
+  VERSION = '3.3.7'.freeze
 end
