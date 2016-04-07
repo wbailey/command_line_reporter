@@ -3,9 +3,9 @@ require 'spec_helper'
 describe CommandLineReporter::Table do
   context 'creation' do
     it 'defaults options hash' do
-      expect {
+      expect do
         CommandLineReporter::Table.new
-      }.to_not raise_error
+      end.to_not raise_error
     end
 
     it 'defaults the border' do
@@ -13,11 +13,11 @@ describe CommandLineReporter::Table do
     end
 
     it 'accepts the border' do
-      expect(CommandLineReporter::Table.new(:border => true).border).to eq(true)
+      expect(CommandLineReporter::Table.new(border: true).border).to eq(true)
     end
 
     it 'output encoding should be ascii' do
-      expect(CommandLineReporter::Table.new(:encoding => :ascii).encoding).to eq(:ascii)
+      expect(CommandLineReporter::Table.new(encoding: :ascii).encoding).to eq(:ascii)
     end
 
     it 'output encoding should be unicode' do
@@ -29,33 +29,33 @@ describe CommandLineReporter::Table do
     it 'allows addition' do
       cols = [CommandLineReporter::Column.new('test1'), CommandLineReporter::Column.new('test2')]
       row = CommandLineReporter::Row.new
-      cols.each {|c| row.add(c)}
-      expect {
+      cols.each { |c| row.add(c) }
+      expect do
         CommandLineReporter::Table.new.add(row)
-      }.to_not raise_error
+      end.to_not raise_error
     end
 
     context 'inherits' do
       before :each do
         @table = CommandLineReporter::Table.new
-        row = CommandLineReporter::Row.new(:color => 'red')
+        row = CommandLineReporter::Row.new(color: 'red')
         (
           @cols1 = [
-            CommandLineReporter::Column.new('asdf', :width => 5),
-            CommandLineReporter::Column.new('qwer', :align => 'right', :color => 'purple'),
-            CommandLineReporter::Column.new('tutu', :color => 'green'),
-            CommandLineReporter::Column.new('uiui', :bold => true),
+            CommandLineReporter::Column.new('asdf', width: 5),
+            CommandLineReporter::Column.new('qwer', align: 'right', color: 'purple'),
+            CommandLineReporter::Column.new('tutu', color: 'green'),
+            CommandLineReporter::Column.new('uiui', bold: true)
           ]
-        ).each {|c| row.add(c)}
+        ).each { |c| row.add(c) }
         @table.add(row)
-        row = CommandLineReporter::Row.new
-        (@cols2 = [
+        row = CommandLineReporter::Row.new(
+          @cols2 = [
             CommandLineReporter::Column.new('test'),
             CommandLineReporter::Column.new('test'),
-            CommandLineReporter::Column.new('test', :color => 'blue'),
-            CommandLineReporter::Column.new('test'),
+            CommandLineReporter::Column.new('test', color: 'blue'),
+            CommandLineReporter::Column.new('test')
           ]
-        ).each {|c| row.add(c)}
+        ).each { |c| row.add(c) }
         @table.add(row)
       end
 
@@ -86,11 +86,11 @@ describe CommandLineReporter::Table do
       context 'with header row' do
         before :each do
           @table = CommandLineReporter::Table.new
-          row = CommandLineReporter::Row.new(:header => true)
-          @cols1.each {|c| row.add(c)}
+          row = CommandLineReporter::Row.new(header: true)
+          @cols1.each { |c| row.add(c) }
           @table.add(row)
           row = CommandLineReporter::Row.new
-          @cols2.each {|c| row.add(c)}
+          @cols2.each { |c| row.add(c) }
           @table.add(row)
         end
 
@@ -119,7 +119,7 @@ describe CommandLineReporter::Table do
           CommandLineReporter::Row.new.tap do |r|
             r.add CommandLineReporter::Column.new('medium length')
             r.add CommandLineReporter::Column.new('i am pretty long') # longest column
-            r.add CommandLineReporter::Column.new('short', :padding => 100)
+            r.add CommandLineReporter::Column.new('short', padding: 100)
           end
         )
 
@@ -137,9 +137,8 @@ describe CommandLineReporter::Table do
       table.rows.each do |row|
         expect(row.columns[0].width).to eq(CommandLineReporter::Column.new('longer than medium length').required_width)
         expect(row.columns[1].width).to eq(CommandLineReporter::Column.new('i am pretty long').required_width)
-        expect(row.columns[2].width).to eq(CommandLineReporter::Column.new('longer than short', :padding => 100).required_width)
+        expect(row.columns[2].width).to eq(CommandLineReporter::Column.new('longer than short', padding: 100).required_width)
       end
     end
   end
-
 end

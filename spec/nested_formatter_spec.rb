@@ -5,9 +5,9 @@ describe CommandLineReporter::NestedFormatter do
 
   let(:controls) do
     {
-      :clear => "\e[0m",
-      :bold => "\e[1m",
-      :red => "\e[31m",
+      clear: "\e[0m",
+      bold: "\e[1m",
+      red: "\e[31m"
     }
   end
 
@@ -40,25 +40,25 @@ describe CommandLineReporter::NestedFormatter do
       end
 
       it 'raises exception when there is an invalid argument' do
-        expect {
-          subject.format({:asdf => true}, lambda { })
-        }.to raise_exception ArgumentError
+        expect do
+          subject.format({ asdf: true }, -> {})
+        end.to raise_exception ArgumentError
       end
 
       it 'raises an exception when a block is not given' do
-        expect {
-          subject.format({:message => 'test'})
-        }.to raise_exception
+        expect do
+          subject.format(message: 'test')
+        end.to raise_exception
       end
 
       it 'accepts valid arguments' do
         expect(subject).to receive(:puts).with('test')
         expect(subject).to receive(:puts).with('complete')
 
-        expect {
-          subject.format({:message => 'test'}, lambda { }) do
+        expect do
+          subject.format({ message: 'test' }, -> {}) do
           end
-        }.not_to raise_exception
+        end.not_to raise_exception
       end
     end
 
@@ -78,28 +78,28 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('working')
         expect(subject).to receive(:puts).with('complete')
 
-        subject.format({ }, lambda { })
+        subject.format({}, -> {})
       end
 
       it 'performs a wrapped report with color' do
         expect(subject).to receive(:puts).with("#{controls[:red]}working#{controls[:clear]}")
         expect(subject).to receive(:puts).with("#{controls[:red]}complete#{controls[:clear]}")
 
-        subject.format({:color => 'red'}, lambda { })
+        subject.format({ color: 'red' }, -> {})
       end
 
       it 'performs a wrapped report with color' do
         expect(subject).to receive(:puts).with("#{controls[:bold]}working#{controls[:clear]}")
         expect(subject).to receive(:puts).with("#{controls[:bold]}complete#{controls[:clear]}")
 
-        subject.format({:bold => true}, lambda { })
+        subject.format({ bold: true }, -> {})
       end
 
       it 'performs a wrapped report overriding the message' do
         expect(subject).to receive(:puts).with('test')
         expect(subject).to receive(:puts).with('complete')
 
-        subject.format({:message => 'test'}, lambda { })
+        subject.format({ message: 'test' }, -> {})
       end
 
       it 'performs an inline report' do
@@ -108,8 +108,8 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:print).with('test2...')
         expect(subject).to receive(:puts).with('complete')
 
-        subject.format({:message => 'test', :type => 'inline'}, lambda { })
-        subject.format({:message => 'test2', :type => 'inline'}, lambda { })
+        subject.format({ message: 'test', type: 'inline' }, -> {})
+        subject.format({ message: 'test2', type: 'inline' }, -> {})
       end
 
       it 'overrides the default for all invocations of a wrapped report' do
@@ -119,8 +119,8 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('test2')
         expect(subject).to receive(:puts).with('done')
 
-        subject.format({:message => 'test'}, lambda { })
-        subject.format({:message => 'test2'}, lambda { })
+        subject.format({ message: 'test' }, -> {})
+        subject.format({ message: 'test2' }, -> {})
       end
 
       it 'overrides the default complete string for a wrapped report' do
@@ -129,8 +129,8 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('test2')
         expect(subject).to receive(:puts).with('finally')
 
-        subject.format({:message => 'test', :complete => 'done'}, lambda { })
-        subject.format({:message => 'test2', :complete => 'finally'}, lambda { })
+        subject.format({ message: 'test', complete: 'done' }, -> {})
+        subject.format({ message: 'test2', complete: 'finally' }, -> {})
       end
 
       it 'overrides the default complete string for an inline report' do
@@ -139,8 +139,8 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:print).with('test2...')
         expect(subject).to receive(:puts).with('finally')
 
-        subject.format({:message => 'test', :type => 'inline', :complete => 'done'}, lambda { })
-        subject.format({:message => 'test2', :type => 'inline', :complete => 'finally'}, lambda { })
+        subject.format({ message: 'test', type: 'inline', complete: 'done' }, -> {})
+        subject.format({ message: 'test2', type: 'inline', complete: 'finally' }, -> {})
       end
 
       it 'performs another wrapped report to ensure defaul behavior' do
@@ -149,8 +149,8 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('test2')
         expect(subject).to receive(:puts).with('complete')
 
-        subject.format({:message => 'test'}, lambda { })
-        subject.format({:message => 'test2'}, lambda { })
+        subject.format({ message: 'test' }, -> {})
+        subject.format({ message: 'test2' }, -> {})
       end
     end
 
@@ -170,9 +170,9 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('  complete')
         expect(subject).to receive(:puts).with('complete')
 
-        subject.format({:message => 'test'}, lambda {
-          subject.format({:message => 'test2'}, lambda {})
-        })
+        subject.format({ message: 'test' }, lambda do
+          subject.format({ message: 'test2' }, -> {})
+        end)
       end
 
       it 'indents the nested wrapped messages and outputs color' do
@@ -181,9 +181,9 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with("#{controls[:red]}  complete#{controls[:clear]}")
         expect(subject).to receive(:puts).with("#{controls[:red]}complete#{controls[:clear]}")
 
-        subject.format({:message => 'test', :color => 'red'}, lambda {
-          subject.format({:message => 'test2', :color => 'red'}, lambda {})
-        })
+        subject.format({ message: 'test', color: 'red' }, lambda do
+          subject.format({ message: 'test2', color: 'red' }, -> {})
+        end)
       end
 
       it 'indents the nested wrapped messages and outputs bold' do
@@ -192,9 +192,9 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with("#{controls[:bold]}  complete#{controls[:clear]}")
         expect(subject).to receive(:puts).with("#{controls[:bold]}complete#{controls[:clear]}")
 
-        subject.format({:message => 'test', :bold => true}, lambda {
-          subject.format({:message => 'test2', :bold => true}, lambda {})
-        })
+        subject.format({ message: 'test', bold: true }, lambda do
+          subject.format({ message: 'test2', bold: true }, -> {})
+        end)
       end
 
       it 'indents the multiple nested wrapped messages' do
@@ -205,11 +205,11 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('  complete')
         expect(subject).to receive(:puts).with('complete')
 
-        subject.format({:message => 'test'}, lambda {
-          subject.format({:message => 'test2'}, lambda {
-            subject.format({:message => 'test3'}, lambda { })
-          })
-        })
+        subject.format({ message: 'test' }, lambda do
+          subject.format({ message: 'test2' }, lambda do
+            subject.format({ message: 'test3' }, -> {})
+          end)
+        end)
       end
 
       it 'indents the nested wrapped and inline messages' do
@@ -218,9 +218,9 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('complete')
         expect(subject).to receive(:puts).with('complete')
 
-        subject.format({:message => 'test'}, lambda {
-          subject.format({:message => 'test2', :type => 'inline'}, lambda { })
-        })
+        subject.format({ message: 'test' }, lambda do
+          subject.format({ message: 'test2', type: 'inline' }, -> {})
+        end)
       end
 
       it 'indents the multiple nested wrapped messages' do
@@ -231,11 +231,11 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('  complete')
         expect(subject).to receive(:puts).with('complete')
 
-        subject.format({:message => 'test'}, lambda {
-          subject.format({:message => 'test2'}, lambda {
-            subject.format({:message => 'test3', :type => 'inline'}, lambda { })
-          })
-        })
+        subject.format({ message: 'test' }, lambda do
+          subject.format({ message: 'test2' }, lambda do
+            subject.format({ message: 'test3', type: 'inline' }, -> {})
+          end)
+        end)
       end
 
       it 'overrides the indent spacing of all messages' do
@@ -248,11 +248,11 @@ describe CommandLineReporter::NestedFormatter do
 
         subject.indent_size = 4
 
-        subject.format({:message => 'test'}, lambda {
-          subject.format({:message => 'test2'}, lambda {
-            subject.format({:message => 'test3', :type => 'inline'}, lambda { })
-          })
-        })
+        subject.format({ message: 'test' }, lambda do
+          subject.format({ message: 'test2' }, lambda do
+            subject.format({ message: 'test3', type: 'inline' }, -> {})
+          end)
+        end)
       end
 
       it 'overrides the indent spacing of specific message' do
@@ -265,15 +265,15 @@ describe CommandLineReporter::NestedFormatter do
 
         subject.indent_size = 4
 
-        subject.format({:message => 'test'}, lambda {
-          subject.format({:message => 'test2', :indent_size => 6}, lambda {
-            subject.format({:message => 'test3', :type => 'inline', :indent_size => 3}, lambda { })
-          }) 
-        })
+        subject.format({ message: 'test' }, lambda do
+          subject.format({ message: 'test2', indent_size: 6 }, lambda do
+            subject.format({ message: 'test3', type: 'inline', indent_size: 3 }, -> {})
+          end)
+        end)
       end
 
       it 'performs the sums specified in the block' do
-        x,y,z = 0,0,0
+        x, y, z = 0, 0, 0
 
         expect(subject).to receive(:puts).with('sum x and 10')
         expect(subject).to receive(:puts).with('  y is the difference of 20 and x')
@@ -282,15 +282,15 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('  complete')
         expect(subject).to receive(:puts).with('complete')
 
-        subject.format({:message => 'sum x and 10'}, lambda {
-          x = x + 10
-          subject.format({:message => 'y is the difference of 20 and x'}, lambda {
+        subject.format({ message: 'sum x and 10' }, lambda do
+          x += 10
+          subject.format({ message: 'y is the difference of 20 and x' }, lambda do
             y = 20 - x
-            subject.format({:message => 'z = x + y'}, lambda {
+            subject.format({ message: 'z = x + y' }, lambda do
               z = x + y
-            })
-          })
-        })
+            end)
+          end)
+        end)
 
         expect(x).to eq(10)
         expect(y).to eq(10)

@@ -1,5 +1,8 @@
 Metrics/LineLength:
   Enabled: false
 
+Style/ParallelAssignment:
+  Enabled: false
+
 Documentation:
   Enabled: false

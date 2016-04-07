@@ -1,29 +1,28 @@
 require 'spec_helper'
 
 describe CommandLineReporter::Row do
-  let(:cols) { 10.times.map {|v| CommandLineReporter::Column.new("test#{v}")} }
+  let(:cols) { Array.new(10) { |v| CommandLineReporter::Column.new("test#{v}") } }
 
   describe '#initialize' do
     it 'accepts header' do
-      expect(CommandLineReporter::Row.new(:header => true).header).to be true
+      expect(CommandLineReporter::Row.new(header: true).header).to be true
     end
 
     it 'accepts color' do
-      expect(CommandLineReporter::Row.new(:color => 'red').color).to eq('red')
+      expect(CommandLineReporter::Row.new(color: 'red').color).to eq('red')
     end
 
     it 'accepts bold' do
-      expect(CommandLineReporter::Row.new(:bold => true).bold).to be true
+      expect(CommandLineReporter::Row.new(bold: true).bold).to be true
     end
 
     it 'output encoding should be ascii' do
-      expect(CommandLineReporter::Row.new(:encoding => :ascii).encoding).to eq(:ascii)
+      expect(CommandLineReporter::Row.new(encoding: :ascii).encoding).to eq(:ascii)
     end
 
     it 'output encoding should be unicode' do
       expect(CommandLineReporter::Row.new.encoding).to eq(:unicode)
     end
-
   end
 
   describe '#add' do
@@ -34,11 +33,11 @@ describe CommandLineReporter::Row do
       expect(subject.columns.size).to eq(1)
       expect(subject.columns[0]).to eq(cols[0])
       subject.add(cols[1])
-      expect(subject.columns).to eq(cols[0,2])
+      expect(subject.columns).to eq(cols[0, 2])
     end
 
     it 'defaults colors on columns' do
-      row = CommandLineReporter::Row.new(:color => 'red')
+      row = CommandLineReporter::Row.new(color: 'red')
       row.add(cols[0])
       expect(row.columns[0].color).to eq('red')
       row.add(cols[1])
@@ -46,14 +45,14 @@ describe CommandLineReporter::Row do
     end
 
     it 'allows columns to override the row color' do
-      col = CommandLineReporter::Column.new('test', :color => 'blue')
-      row = CommandLineReporter::Row.new(:color => 'red')
+      col = CommandLineReporter::Column.new('test', color: 'blue')
+      row = CommandLineReporter::Row.new(color: 'red')
       row.add(col)
       expect(row.columns[0].color).to eq('blue')
     end
 
     it 'supercedes bold on columns' do
-      row = CommandLineReporter::Row.new(:bold => true)
+      row = CommandLineReporter::Row.new(bold: true)
       row.add(cols[0])
       expect(row.columns[0].bold).to be true
       row.add(cols[1])
@@ -65,11 +64,11 @@ describe CommandLineReporter::Row do
     let :cols do
       [
         CommandLineReporter::Column.new('asdf'),
-        CommandLineReporter::Column.new('qwer', :align => 'center'),
-        CommandLineReporter::Column.new('zxcv', :align => 'right'),
-        CommandLineReporter::Column.new('x' * 25, :align => 'left', :width => 10),
-        CommandLineReporter::Column.new('x' * 25, :align => 'center', :width => 10),
-        CommandLineReporter::Column.new('x' * 35, :align => 'left', :width => 10),
+        CommandLineReporter::Column.new('qwer', align: 'center'),
+        CommandLineReporter::Column.new('zxcv', align: 'right'),
+        CommandLineReporter::Column.new('x' * 25, align: 'left', width: 10),
+        CommandLineReporter::Column.new('x' * 25, align: 'center', width: 10),
+        CommandLineReporter::Column.new('x' * 35, align: 'left', width: 10)
       ]
     end
 
