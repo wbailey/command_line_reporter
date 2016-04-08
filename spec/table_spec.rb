@@ -5,7 +5,7 @@ describe CommandLineReporter::Table do
     it 'defaults options hash' do
       expect do
         CommandLineReporter::Table.new
-      end.to_not raise_error
+      end.to_not raise_error Exception
     end
 
     it 'defaults the border' do
@@ -32,7 +32,7 @@ describe CommandLineReporter::Table do
       cols.each { |c| row.add(c) }
       expect do
         CommandLineReporter::Table.new.add(row)
-      end.to_not raise_error
+      end.to_not raise_error Exception
     end
 
     context 'inherits' do
@@ -48,7 +48,8 @@ describe CommandLineReporter::Table do
           ]
         ).each { |c| row.add(c) }
         @table.add(row)
-        row = CommandLineReporter::Row.new(
+        row = CommandLineReporter::Row.new
+        (
           @cols2 = [
             CommandLineReporter::Column.new('test'),
             CommandLineReporter::Column.new('test'),

@@ -48,7 +48,7 @@ describe CommandLineReporter::NestedFormatter do
       it 'raises an exception when a block is not given' do
         expect do
           subject.format(message: 'test')
-        end.to raise_exception
+        end.to raise_exception Exception
       end
 
       it 'accepts valid arguments' do

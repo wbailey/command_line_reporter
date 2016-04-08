@@ -79,7 +79,7 @@ describe CommandLineReporter do
         expect do
           allow(subject).to receive(:puts)
           subject.header(title: 'test')
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'does not allow a title > width' do
@@ -92,7 +92,7 @@ describe CommandLineReporter do
         expect do
           allow(subject).to receive(:puts)
           subject.header(width: 100)
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'ensure width is a number' do
@@ -105,7 +105,7 @@ describe CommandLineReporter do
         expect do
           allow(subject).to receive(:puts)
           subject.header(align: 'center')
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'ensure align is a valid value' do
@@ -118,28 +118,28 @@ describe CommandLineReporter do
         expect do
           allow(subject).to receive(:puts)
           subject.header(spacing: 2)
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'accepts timestamp' do
         expect do
           allow(subject).to receive(:puts)
           subject.header(timestamp: true)
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'accepts color' do
         expect do
           allow(subject).to receive(:puts)
           subject.header(color: 'red')
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'accepts bold' do
         expect do
           allow(subject).to receive(:puts)
           subject.header(bold: true)
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
     end
 
@@ -281,14 +281,14 @@ describe CommandLineReporter do
         expect do
           expect(subject).to receive(:puts)
           subject.horizontal_rule(char: '*')
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'accepts width' do
         expect do
           expect(subject).to receive(:puts)
           subject.horizontal_rule(width: 10)
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
     end
 
@@ -347,21 +347,21 @@ describe CommandLineReporter do
         expect do
           expect(subject).to receive(:puts)
           subject.datetime(align: 'left')
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'accepts width' do
         expect do
           expect(subject).to receive(:puts)
           subject.datetime(width: 70)
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'accepts format' do
         expect do
           expect(subject).to receive(:puts)
           subject.datetime(format: '%m/%d/%Y')
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'does not allow invalid width' do
@@ -422,7 +422,7 @@ describe CommandLineReporter do
         expect do
           allow(subject).to receive(:puts)
           subject.aligned('test', align: 'left')
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'does not allow invalid align values' do
@@ -462,14 +462,14 @@ describe CommandLineReporter do
         expect do
           allow(subject).to receive(:puts)
           subject.footer(title: 'test')
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'accepts align' do
         expect do
           allow(subject).to receive(:puts)
           subject.footer(align: 'right')
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'does not accept invalid align' do
@@ -482,7 +482,7 @@ describe CommandLineReporter do
         expect do
           allow(subject).to receive(:puts)
           subject.footer(width: 50)
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
 
       it 'does not accept invalid width' do
@@ -501,7 +501,7 @@ describe CommandLineReporter do
         expect do
           allow(subject).to receive(:puts)
           subject.footer(spacing: 3)
-        end.to_not raise_error
+        end.to_not raise_error Exception
       end
     end
 
@@ -631,7 +631,7 @@ describe CommandLineReporter do
     it 'accepts valid options' do
       expect do
         subject.table(border: true) {}
-      end.to_not raise_error
+      end.to_not raise_error Exception
     end
 
     it 'rejects invalid options' do

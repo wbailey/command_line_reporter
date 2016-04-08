@@ -6,7 +6,7 @@ describe OptionsValidator do
   it 'accepts single key options' do
     expect do
       subject.validate_options({ valid: true }, :valid)
-    end.to_not raise_error
+    end.to_not raise_error Exception
   end
 
   it 'rejects invalid option hashes' do
@@ -19,6 +19,6 @@ describe OptionsValidator do
     expect do
       valid = [:valid, :another]
       subject.validate_options({ valid: true, another: true }, *valid)
-    end.to_not raise_error
+    end.to_not raise_error Exception
   end
 end

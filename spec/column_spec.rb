@@ -11,7 +11,7 @@ describe CommandLineReporter::Column do
     it 'defaults options hash' do
       expect do
         CommandLineReporter::Column.new('test')
-      end.to_not raise_error
+      end.to_not raise_error Exception
     end
 
     it 'defaults the width' do
