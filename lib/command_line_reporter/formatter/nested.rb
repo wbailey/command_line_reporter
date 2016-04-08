@@ -51,11 +51,7 @@ module CommandLineReporter
       str = str.send(options[:color]) if options[:color]
       str = str.bold if options[:bold]
 
-      if inline
-        print str
-      else
-        puts str
-      end
+      inline ? print(str) : puts(str)
     end
 
     def indent_level(value)
