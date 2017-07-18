@@ -2,7 +2,10 @@ GEM
   remote: http://rubygems.org/
   specs:
     RedCloth (4.3.2)
+    ZenTest (4.11.1)
     ast (2.3.0)
+    autotest (4.4.6)
+      ZenTest (>= 4.4.1)
     autotest-standalone (4.5.11)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -128,6 +131,7 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth
+  autotest
   autotest-standalone
   byebug
   colored
@@ -136,11 +140,11 @@ DEPENDENCIES
   kramdown
   pry
   rake
-  redcarpet (= 1.17.2)
+  redcarpet
   reek
   rspec
   rubocop
   simplecov
 
 BUNDLED WITH
-   1.15.1
+   1.15.2

@@ -7,5 +7,5 @@ rvm:
   - 2.4.0
 matrix:
   allow_failures:
-    - rvm: jruby
+    # - rvm: jruby
 script: bundle exec rspec spec

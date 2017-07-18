@@ -222,7 +222,7 @@ module CommandLineReporter
   end
 
   def validate_width(width)
-    raise ArgumentError unless width.to_s.match?(/\d+/)
+    raise ArgumentError unless width.to_s =~ /\d+/
   end
 
   def validate_align(align)

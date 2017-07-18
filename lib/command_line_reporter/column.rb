@@ -18,7 +18,7 @@ module CommandLineReporter
         raise ArgumentError
       end
 
-      raise ArgumentError unless padding.to_s.match?(/^\d+$/)
+      raise ArgumentError unless padding.to_s =~ /^\d+$/
 
       self.text = text.to_s
     end
