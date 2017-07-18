@@ -6,7 +6,7 @@ module CommandLineReporter
     include Singleton
     include OptionsValidator
 
-    VALID_OPTIONS = [:indicator, :color, :bold].freeze
+    VALID_OPTIONS = %i[indicator color bold].freeze
     attr_accessor *VALID_OPTIONS
 
     def format(options, block)

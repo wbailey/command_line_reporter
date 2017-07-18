@@ -97,7 +97,7 @@ describe CommandLineReporter do
 
       it 'ensure width is a number' do
         expect do
-          subject.header(width: '100')
+          subject.header(width: 'adf')
         end.to raise_error ArgumentError
       end
 
@@ -428,7 +428,7 @@ describe CommandLineReporter do
       it 'does not allow invalid align values' do
         expect do
           subject.aligned('test', align: 1234)
-        end.to raise_error ArgumentError
+        end.to raise_error NoMethodError
       end
 
       it 'accepts width' do
@@ -475,7 +475,7 @@ describe CommandLineReporter do
       it 'does not accept invalid align' do
         expect do
           subject.header(align: 1234)
-        end.to raise_error ArgumentError
+        end.to raise_error NoMethodError
       end
 
       it 'accepts width' do

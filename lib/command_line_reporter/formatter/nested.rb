@@ -6,7 +6,7 @@ module CommandLineReporter
     include Singleton
     include OptionsValidator
 
-    VALID_OPTIONS = [:message, :type, :complete, :indent_size, :color, :bold].freeze
+    VALID_OPTIONS = %i[message type complete indent_size color bold].freeze
     attr_accessor :indent_size, :complete_string, :message_string, :color, :bold
 
     def format(options, block)

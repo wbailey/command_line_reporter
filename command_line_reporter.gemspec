@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.summary = 'A tool for providing interactive command line applications'
   gem.description = 'This gem makes it easy to provide a report while your ruby script is executing'
 
-  gem.authors  = %w(Wes Bailey)
+  gem.authors  = %w[Wes Bailey]
   gem.email    = 'baywes@gmail.com'
   gem.homepage = 'http://github.com/wbailey/command_line_reporter'
 

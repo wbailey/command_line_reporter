@@ -2,7 +2,7 @@ module CommandLineReporter
   class Row
     include OptionsValidator
 
-    VALID_OPTIONS = [:header, :color, :bold, :encoding].freeze
+    VALID_OPTIONS = %i[header color bold encoding].freeze
     attr_accessor :columns, :border, *VALID_OPTIONS
 
     def initialize(options = {})

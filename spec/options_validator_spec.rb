@@ -17,7 +17,7 @@ describe OptionsValidator do
 
   it 'accepts multi-key options' do
     expect do
-      valid = [:valid, :another]
+      valid = %i[valid another]
       subject.validate_options({ valid: true, another: true }, *valid)
     end.to_not raise_error Exception
   end

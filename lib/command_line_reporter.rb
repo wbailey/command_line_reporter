@@ -39,7 +39,7 @@ module CommandLineReporter
   def formatter=(type = 'nested')
     return type if type.class != String
     name = type.capitalize + 'Formatter'
-    klass = %W(CommandLineReporter #{name}).inject(Kernel) { |a, e| a.const_get(e) }
+    klass = %W[CommandLineReporter #{name}].inject(Kernel) { |a, e| a.const_get(e) }
 
     # Each formatter is a singleton that responds to #instance
     @formatter = klass.instance
@@ -80,7 +80,7 @@ module CommandLineReporter
     lines = Integer(lines)
 
     # because puts "\n" * 0 produces an unwanted newline
-    if lines == 0
+    if lines.zero?
       print "\0"
     else
       puts "\n" * lines
@@ -89,47 +89,25 @@ module CommandLineReporter
 
   def datetime(options = {})
     validate_options(options, :align, :width, :format, :color, :bold)
-    format, align, width = default_datetime_options(options)
 
+    format = default_options_date_format(options[:format])
     text = Time.now.strftime(format)
 
-    raise Exception if text.size > width
-
-    aligned(text, align: align, width: width, color: options[:color], bold: options[:bold])
-  end
-
-  def define_alignment_defaults(options)
-    align = options[:align] || DEFAULTS[:align]
-    width = options[:width] || DEFAULTS[:width]
-    color = options[:color]
-    bold = options[:bold] || false
-    [align, width, color, bold]
+    aligned(text, options)
   end
 
   def aligned(text, options = {})
-    validate_options(options, :align, :width, :color, :bold)
-    align, width, color, bold = define_alignment_defaults(options)
+    validate_options(options, :align, :width, :format, :color, :bold)
 
-    # align = options[:align] || DEFAULTS[:align]
-    # width = options[:width] || DEFAULTS[:width]
-    # color = options[:color]
-    # bold = options[:bold] || false
+    options[:align] = default_options_align(options[:align])
+    options[:width] = default_options_width(options[:width])
+    options[:bold] = default_options_bold(options[:bold])
 
-    line = case align
-           when 'left'
-             text
-           when 'right'
-             text.rjust(width)
-           when 'center'
-             text.rjust((width - text.size) / 2 + text.size)
-           else
-             raise ArgumentError
-           end
+    raise Exception if text.size > options[:width]
 
-    line = line.send(color) if color
-    line = line.send('bold') if bold
+    line = align_line(text, options)
 
-    puts line
+    puts apply_color(line, options)
   end
 
   def table(options = {})
@@ -152,55 +130,102 @@ module CommandLineReporter
 
   private
 
-  def default_datetime_options(options)
-    format = define_format(options)
-    align = define_align(options)
-    width = define_width(options)
-    [format, align, width]
+  def align_line(text, options)
+    case options[:align]
+    when 'left'
+      text
+    when 'right'
+      text.rjust(options[:width])
+    when 'center'
+      text.rjust((options[:width] - text.size) / 2 + text.size)
+    end
   end
 
-  def define_width(options)
-    options[:width] || DEFAULTS[:width]
+  def apply_color(line, options)
+    line = line.send(options[:color]) if options[:color]
+    line = line.send('bold') if options[:bold]
+    line
   end
 
-  def define_format(options)
-    options[:format] || '%Y-%m-%d - %l:%M:%S%p'
-  end
+  # def default_datetime_options(options)
+  #   format = define_format(options)
+  #   align = default_options_align(options[:align])
+  #   width = default_options_width(options[:width])
+  #   [format, align, width]
+  # end
 
-  def define_align(options)
-    align = options[:align] || DEFAULTS[:align]
+  def default_options_date_format(format)
+    format || '%Y-%m-%d - %l:%M:%S%p'
   end
 
   def section(type, options)
-    title, width, align, lines, color, bold = assign_section_properties(options)
+    options = define_section_values(options)
 
-    # This also ensures that width is a Fixnum
-    raise ArgumentError if title.size > width
+    raise ArgumentError if options[:title].size > options[:width]
 
-    if type == :footer
-      vertical_spacing(lines)
-      horizontal_rule(char: options[:rule], width: width, color: color, bold: bold) if options[:rule]
-    end
-
-    aligned(title, align: align, width: width, color: color, bold: bold)
-    datetime(align: align, width: width, color: color, bold: bold) if options[:timestamp]
-
-    if type == :header
-      horizontal_rule(char: options[:rule], width: width, color: color, bold: bold) if options[:rule]
-      vertical_spacing(lines)
-    end
+    print_header(type, options)
+    print_body(options)
+    print_footer(type, options)
   end
 
-  def assign_section_properties(options)
+  def print_header(type, options)
+    return unless type == :header
+    vertical_spacing(options[:lines])
+    horizontal_rule(char: options[:rule], width: options[:width], color: options[:color], bold: options[:bold]) if options[:rule]
+  end
+
+  def print_body(options)
+    aligned(options[:title], align: options[:align], width: options[:width], color: options[:color], bold: options[:bold])
+    datetime(align: options[:align], width: options[:width], color: options[:color], bold: options[:bold]) if options[:timestamp]
+  end
+
+  def print_footer(type, options)
+    return unless type == :footer
+    horizontal_rule(char: options[:rule], width: options[:width], color: options[:color], bold: options[:bold]) if options[:rule]
+    vertical_spacing(options[:lines])
+  end
+
+  def define_section_values(options)
     validate_options(options, :title, :width, :align, :spacing, :timestamp, :rule, :color, :bold)
 
-    title = options[:title] || 'Report'
-    width = options[:width] || DEFAULTS[:width]
-    align = options[:align] || DEFAULTS[:align]
-    lines = options[:spacing] || 1
-    color = options[:color]
-    bold = options[:bold] || false
+    options[:title] = default_options_title(options[:title])
+    options[:width] = default_options_width(options[:width])
+    options[:align] = default_options_align(options[:align])
+    options[:lines] = default_options_lines(options[:spacing])
+    options[:bold] = default_options_bold(options[:bold])
 
-    [title, width, align, lines, color, bold]
+    options
+  end
+
+  def default_options_title(title)
+    title || 'Report'
+  end
+
+  def default_options_width(width)
+    width ||= DEFAULTS[:width]
+    validate_width(width)
+    width
+  end
+
+  def default_options_align(align)
+    align ||= DEFAULTS[:align]
+    validate_align(align)
+    align
+  end
+
+  def default_options_lines(lines)
+    lines || 1
+  end
+
+  def default_options_bold(bold)
+    bold || false
+  end
+
+  def validate_width(width)
+    raise ArgumentError unless width.to_s.match?(/\d+/)
+  end
+
+  def validate_align(align)
+    raise ArgumentError unless %i[left center right].include?(align.to_sym)
   end
 end

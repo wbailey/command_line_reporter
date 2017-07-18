@@ -2,7 +2,7 @@ module CommandLineReporter
   class Table
     include OptionsValidator
 
-    VALID_OPTIONS = [:border, :width, :encoding].freeze
+    VALID_OPTIONS = %i[border width encoding].freeze
     attr_accessor :rows, *VALID_OPTIONS
 
     def initialize(options = {})
@@ -14,7 +14,7 @@ module CommandLineReporter
 
       @rows = []
 
-      raise ArgumentError, 'Invalid encoding' unless [:ascii, :unicode].include? encoding
+      raise ArgumentError, 'Invalid encoding' unless %i[ascii unicode].include? encoding
     end
 
     def add(row)
@@ -32,10 +32,12 @@ module CommandLineReporter
       auto_adjust_widths if width == :auto
 
       puts separator('first') if border
+
       rows.each_with_index do |row, index|
         row.output
         puts separator('middle') if border && (index != rows.size - 1)
       end
+
       puts separator('last') if border
     end
 
@@ -99,7 +101,7 @@ module CommandLineReporter
     def use_positional_attrs(c, i)
       # The positional attributes are always required to inheret to make sure the table
       # displays properly
-      %w(align padding width).each do |attr|
+      %w[align padding width].each do |attr|
         val = rows[0].columns[i].send(attr)
         c.send(attr + '=', val)
       end

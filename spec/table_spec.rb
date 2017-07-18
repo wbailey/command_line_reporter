@@ -61,7 +61,7 @@ describe CommandLineReporter::Table do
       end
 
       it 'positional attributes' do
-        [:align, :width, :size, :padding].each do |m|
+        %i[align width size padding].each do |m|
           4.times do |i|
             expect(@table.rows[1].columns[i].send(m)).to eq(@table.rows[0].columns[i].send(m))
           end

@@ -1,1 +1,2 @@
---color --format p
+--require spec_helper
+--format documentation

@@ -4,7 +4,7 @@ module CommandLineReporter
   class Column
     include OptionsValidator
 
-    VALID_OPTIONS = [:width, :padding, :align, :color, :bold, :underline, :reversed].freeze
+    VALID_OPTIONS = %i[width padding align color bold underline reversed].freeze
     attr_accessor :text, :size, *VALID_OPTIONS
 
     def initialize(text = nil, options = {})
@@ -12,8 +12,13 @@ module CommandLineReporter
       assign_alignment_defaults(options)
       assign_color_defaults(options)
 
-      raise ArgumentError unless width > 0
-      raise ArgumentError unless padding.to_s =~ /^\d+$/
+      begin
+        width.positive?
+      rescue
+        raise ArgumentError
+      end
+
+      raise ArgumentError unless padding.to_s.match?(/^\d+$/)
 
       self.text = text.to_s
     end
