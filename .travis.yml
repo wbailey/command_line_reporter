@@ -3,10 +3,8 @@ bundler_args: --without development
 before_install:
   - sudo apt-get install -qq libicu-dev
 rvm:
-  - 1.9.3
-  - jruby
-  - 2.0.0
-  - 2.1.0
+  - 2.3.0
+  - 2.4.0
 matrix:
   allow_failures:
     - rvm: jruby
