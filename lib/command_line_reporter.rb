@@ -203,7 +203,7 @@ module CommandLineReporter
 
   def default_options_width(width)
     width ||= DEFAULTS[:width]
-    validate_width(width)
+    Integer(width)
     width
   end
 
@@ -219,10 +219,6 @@ module CommandLineReporter
 
   def default_options_bold(bold)
     bold || false
-  end
-
-  def validate_width(width)
-    raise ArgumentError unless width.to_s =~ /\d+/
   end
 
   def validate_align(align)

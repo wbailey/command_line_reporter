@@ -1,77 +1,142 @@
 require 'spec_helper'
 
 describe CommandLineReporter::Column do
-  describe '#initialize' do
+  subject { CommandLineReporter::Column }
+
+  context '#initialize' do
     it 'rejects invalid options' do
       expect do
-        CommandLineReporter::Column.new('test', asdf: '1234')
+        subject.new('test', asdf: '1234')
       end.to raise_error ArgumentError
     end
 
     it 'defaults options hash' do
       expect do
-        CommandLineReporter::Column.new('test')
+        subject.new('test')
       end.to_not raise_error Exception
     end
 
     it 'defaults the width' do
-      expect(CommandLineReporter::Column.new('test').width).to eq(10)
+      c = subject.new('test')
+      expect(c.width).to eq(10)
     end
 
     it 'accepts the width' do
-      expect(CommandLineReporter::Column.new('test', width: 50).width).to eq(50)
+      c = subject.new('test', width: 50)
+      expect(c.width).to eq(50)
     end
 
     it 'requires valid width' do
       expect do
-        CommandLineReporter::Column.new('test', width: 'asdf')
+        subject.new('test', width: 'asdf')
       end.to raise_error ArgumentError
     end
 
     it 'accepts text' do
-      expect(CommandLineReporter::Column.new('asdf').text).to eq('asdf')
+      c = subject.new('asdf')
+      expect(c.text).to eq('asdf')
     end
 
     it 'accepts color' do
-      expect(CommandLineReporter::Column.new('asdf', color: 'red').color).to eq('red')
+      c = subject.new('asdf', color: 'red')
+      expect(c.color).to eq('red')
     end
 
     it 'accepts bold' do
-      expect(CommandLineReporter::Column.new('asdf', bold: true).bold).to be true
+      c = subject.new('asdf', bold: true)
+      expect(c.bold).to be true
     end
 
     it 'defaults the padding' do
-      expect(CommandLineReporter::Column.new('test').padding).to eq(0)
+      c = subject.new('test')
+      expect(c.padding).to eq(0)
     end
 
     it 'accepts the padding' do
-      expect(CommandLineReporter::Column.new('test', padding: 5).padding).to eq(5)
+      c = subject.new('test', padding: 5)
+      expect(c.padding).to eq(5)
     end
 
     it 'requires valid width' do
       expect do
-        CommandLineReporter::Column.new('test', padding: 'asdf')
+        subject.new('test', padding: 'asdf')
       end.to raise_error ArgumentError
     end
   end
 
-  describe '#size' do
-    it 'is the width less twice the padding' do
-      expect(CommandLineReporter::Column.new('test').size).to eq(10)
-      expect(CommandLineReporter::Column.new('test', width: 5).size).to eq(5)
-      expect(CommandLineReporter::Column.new('test', width: 5, padding: 1).size).to eq(3)
+  context '#size' do
+    it 'should have default width' do
+      c = subject.new('test')
+      expect(c.size).to eq(10)
+    end
+
+    it 'should have custom width' do
+      c = subject.new('test', width: 5)
+      expect(c.size).to eq(5)
+    end
+
+    it 'should be reduced by the padding' do
+      c = subject.new('test', width: 5, padding: 1)
+      expect(c.size).to eq(3)
     end
   end
 
-  describe '#required_width' do
+  context '#required_width' do
     it 'is the length of the text plus twice the padding' do
-      expect(CommandLineReporter::Column.new('test').required_width).to eq(4)
-      expect(CommandLineReporter::Column.new('test', padding: 1).required_width).to eq(6)
-      expect(CommandLineReporter::Column.new('test', padding: 5).required_width).to eq(14)
+      c = subject.new('test')
+      expect(c.required_width).to eq(4)
+    end
+
+    it 'should be length of string plus twice default padding' do
+      c = subject.new('test', padding: 1)
+      expect(c.required_width).to eq(6)
+    end
+
+    it 'should be length of string plus twice custom padding' do
+      c = subject.new('test', padding: 5)
+      expect(c.required_width).to eq(14)
     end
   end
 
-  describe '#screen_rows' do
+  context 'spanning columns' do
+    it 'should adjust width for 2 default columns' do
+      col = subject.new('test', span: 2)
+      expect(col.width).to eq(20)
+      expect(col.size).to eq(23)
+    end
+
+    it 'should adjust width for 2 custom sized columns' do
+      col = subject.new('test', width: 20, span: 2)
+      expect(col.width).to eq(40)
+      expect(col.size).to eq(43)
+    end
+
+    it 'should adjust width for 3 default columns' do
+      col = subject.new('test', span: 3)
+      expect(col.width).to eq(30)
+      expect(col.size).to eq(36)
+    end
+
+    it 'should adjust width for 3 custom sized columns' do
+      col = subject.new('test', width: 20, span: 3)
+      expect(col.width).to eq(60)
+      expect(col.size).to eq(66)
+    end
+
+    it 'should adjust width for 4 default columns' do
+      col = subject.new('test', span: 4)
+      expect(col.width).to eq(40)
+      expect(col.size).to eq(49)
+    end
+
+    it 'should adjust width for 2 custom sized columns' do
+      col = subject.new('test', width: 20, span: 4)
+      expect(col.width).to eq(80)
+      expect(col.size).to eq(89)
+    end
+  end
+
+  context '#screen_rows' do
     let :controls do
       {
         clear: "\e[0m",
@@ -83,12 +148,12 @@ describe CommandLineReporter::Column do
     context 'no wrapping' do
       context 'no padding' do
         it 'gives a single row' do
-          c = CommandLineReporter::Column.new('x' * 5)
+          c = subject.new('x' * 5)
           c.screen_rows.size == 1
         end
 
         it 'handles empty text' do
-          c = CommandLineReporter::Column.new
+          c = subject.new
           expect(c.screen_rows[0]).to eq(' ' * 10)
         end
 
@@ -97,17 +162,17 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 10 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, width: 20)
+            c = subject.new(text, width: 20)
             expect(c.screen_rows[0]).to eq(text + filler)
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, align: 'left', width: 20, color: 'red')
+            c = subject.new(text, align: 'left', width: 20, color: 'red')
             expect(c.screen_rows[0]).to eq(controls[:red] + text + filler + controls[:clear])
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, align: 'left', width: 20, bold: true)
+            c = subject.new(text, align: 'left', width: 20, bold: true)
             expect(c.screen_rows[0]).to eq(controls[:bold] + text + filler + controls[:clear])
           end
         end
@@ -117,17 +182,17 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 10 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, align: 'right', width: 20)
+            c = subject.new(text, align: 'right', width: 20)
             expect(c.screen_rows[0]).to eq(filler + text)
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, align: 'right', width: 20, color: 'red')
+            c = subject.new(text, align: 'right', width: 20, color: 'red')
             expect(c.screen_rows[0]).to eq(controls[:red] + filler + text + controls[:clear])
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, align: 'right', width: 20, bold: true)
+            c = subject.new(text, align: 'right', width: 20, bold: true)
             expect(c.screen_rows[0]).to eq(controls[:bold] + filler + text + controls[:clear])
           end
         end
@@ -137,17 +202,17 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 5 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, align: 'center', width: 20)
+            c = subject.new(text, align: 'center', width: 20)
             expect(c.screen_rows[0]).to eq(filler + text + filler)
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, align: 'center', width: 20, color: 'red')
+            c = subject.new(text, align: 'center', width: 20, color: 'red')
             expect(c.screen_rows[0]).to eq(controls[:red] + filler + text + filler + controls[:clear])
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, align: 'center', width: 20, bold: true)
+            c = subject.new(text, align: 'center', width: 20, bold: true)
             expect(c.screen_rows[0]).to eq(controls[:bold] + filler + text + filler + controls[:clear])
           end
         end
@@ -160,17 +225,17 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 10 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, padding: 5, width: 30)
+            c = subject.new(text, padding: 5, width: 30)
             expect(c.screen_rows[0]).to eq(padding + text + filler + padding)
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, padding: 5, width: 30, color: 'red')
+            c = subject.new(text, padding: 5, width: 30, color: 'red')
             expect(c.screen_rows[0]).to eq(padding + controls[:red] + text + filler + controls[:clear] + padding)
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, padding: 5, width: 30, bold: true)
+            c = subject.new(text, padding: 5, width: 30, bold: true)
             expect(c.screen_rows[0]).to eq(padding + controls[:bold] + text + filler + controls[:clear] + padding)
           end
         end
@@ -181,17 +246,17 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 10 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, align: 'right', padding: 5, width: 30)
+            c = subject.new(text, align: 'right', padding: 5, width: 30)
             expect(c.screen_rows[0]).to eq(padding + filler + text + padding)
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, align: 'right', padding: 5, width: 30, color: 'red')
+            c = subject.new(text, align: 'right', padding: 5, width: 30, color: 'red')
             expect(c.screen_rows[0]).to eq(padding + controls[:red] + filler + text + controls[:clear] + padding)
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, align: 'right', padding: 5, width: 30, bold: true)
+            c = subject.new(text, align: 'right', padding: 5, width: 30, bold: true)
             expect(c.screen_rows[0]).to eq(padding + controls[:bold] + filler + text + controls[:clear] + padding)
           end
         end
@@ -202,17 +267,17 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 5 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, align: 'center', padding: 5, width: 30)
+            c = subject.new(text, align: 'center', padding: 5, width: 30)
             expect(c.screen_rows[0]).to eq(padding + filler + text + filler + padding)
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, align: 'center', padding: 5, width: 30, color: 'red')
+            c = subject.new(text, align: 'center', padding: 5, width: 30, color: 'red')
             expect(c.screen_rows[0]).to eq(padding + controls[:red] + filler + text + filler + controls[:clear] + padding)
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, align: 'center', padding: 5, width: 30, bold: true)
+            c = subject.new(text, align: 'center', padding: 5, width: 30, bold: true)
             expect(c.screen_rows[0]).to eq(padding + controls[:bold] + filler + text + filler + controls[:clear] + padding)
           end
         end
@@ -228,12 +293,12 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 5 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, width: 10)
+            c = subject.new(text, width: 10)
             expect(c.screen_rows).to eq([full_line, full_line, remainder + filler])
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, width: 10, color: 'red')
+            c = subject.new(text, width: 10, color: 'red')
             expect(c.screen_rows).to eq(
               [
                 controls[:red] + full_line + controls[:clear],
@@ -244,7 +309,7 @@ describe CommandLineReporter::Column do
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, width: 10, bold: true)
+            c = subject.new(text, width: 10, bold: true)
             expect(c.screen_rows).to eq(
               [
                 controls[:bold] + full_line + controls[:clear],
@@ -262,12 +327,12 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 5 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, align: 'right', width: 10)
+            c = subject.new(text, align: 'right', width: 10)
             expect(c.screen_rows).to eq([full_line, full_line, filler + remainder])
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, align: 'right', width: 10, color: 'red')
+            c = subject.new(text, align: 'right', width: 10, color: 'red')
             expect(c.screen_rows).to eq(
               [
                 controls[:red] + full_line + controls[:clear],
@@ -278,7 +343,7 @@ describe CommandLineReporter::Column do
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, align: 'right', width: 10, bold: true)
+            c = subject.new(text, align: 'right', width: 10, bold: true)
             expect(c.screen_rows).to eq(
               [
                 controls[:bold] + full_line + controls[:clear],
@@ -297,12 +362,12 @@ describe CommandLineReporter::Column do
           let(:right_filler) { ' ' * 2 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, align: 'center', width: 10)
+            c = subject.new(text, align: 'center', width: 10)
             expect(c.screen_rows).to eq([full_line, full_line, ' ' * 3 + remainder + right_filler])
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, align: 'center', width: 10, color: 'red')
+            c = subject.new(text, align: 'center', width: 10, color: 'red')
             expect(c.screen_rows).to eq(
               [
                 controls[:red] + full_line + controls[:clear],
@@ -313,7 +378,7 @@ describe CommandLineReporter::Column do
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, align: 'center', width: 10, bold: true)
+            c = subject.new(text, align: 'center', width: 10, bold: true)
             expect(c.screen_rows).to eq(
               [
                 controls[:bold] + full_line + controls[:clear],
@@ -334,7 +399,7 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 7 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, padding: 2, width: 20)
+            c = subject.new(text, padding: 2, width: 20)
             expect(c.screen_rows).to eq(
               [
                 padding + full_line + padding,
@@ -344,7 +409,7 @@ describe CommandLineReporter::Column do
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, padding: 2, width: 20, color: 'red')
+            c = subject.new(text, padding: 2, width: 20, color: 'red')
             expect(c.screen_rows).to eq(
               [
                 padding + controls[:red] + full_line + controls[:clear] + padding,
@@ -354,7 +419,7 @@ describe CommandLineReporter::Column do
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, padding: 2, width: 20, bold: true)
+            c = subject.new(text, padding: 2, width: 20, bold: true)
             expect(c.screen_rows).to eq(
               [
                 padding + controls[:bold] + full_line + controls[:clear] + padding,
@@ -372,7 +437,7 @@ describe CommandLineReporter::Column do
           let(:filler) { ' ' * 7 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, padding: 2, align: 'right', width: 20)
+            c = subject.new(text, padding: 2, align: 'right', width: 20)
             expect(c.screen_rows).to eq(
               [
                 padding + full_line + padding,
@@ -382,7 +447,7 @@ describe CommandLineReporter::Column do
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, align: 'right', padding: 2, width: 20, color: 'red')
+            c = subject.new(text, align: 'right', padding: 2, width: 20, color: 'red')
             expect(c.screen_rows).to eq(
               [
                 padding + controls[:red] + full_line + controls[:clear] + padding,
@@ -392,7 +457,7 @@ describe CommandLineReporter::Column do
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, align: 'right', padding: 2, width: 20, bold: true)
+            c = subject.new(text, align: 'right', padding: 2, width: 20, bold: true)
             expect(c.screen_rows).to eq(
               [
                 padding + controls[:bold] + full_line + controls[:clear] + padding,
@@ -411,7 +476,7 @@ describe CommandLineReporter::Column do
           let(:right_filler) { ' ' * 3 }
 
           it 'plain text' do
-            c = CommandLineReporter::Column.new(text, padding: 2, align: 'center', width: 20)
+            c = subject.new(text, padding: 2, align: 'center', width: 20)
             expect(c.screen_rows).to eq(
               [
                 padding + full_line + padding,
@@ -421,7 +486,7 @@ describe CommandLineReporter::Column do
           end
 
           it 'outputs red' do
-            c = CommandLineReporter::Column.new(text, padding: 2, align: 'center', width: 20, color: 'red')
+            c = subject.new(text, padding: 2, align: 'center', width: 20, color: 'red')
             expect(c.screen_rows).to eq(
               [
                 padding + controls[:red] + full_line + controls[:clear] + padding,
@@ -431,7 +496,7 @@ describe CommandLineReporter::Column do
           end
 
           it 'outputs bold' do
-            c = CommandLineReporter::Column.new(text, padding: 2, align: 'center', width: 20, bold: true)
+            c = subject.new(text, padding: 2, align: 'center', width: 20, bold: true)
             expect(c.screen_rows).to eq(
               [
                 padding + controls[:bold] + full_line + controls[:clear] + padding,

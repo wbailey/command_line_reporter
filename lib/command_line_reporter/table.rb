@@ -27,6 +27,9 @@ module CommandLineReporter
       rows << row
     end
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/MethodLength
     def output
       return if rows.empty? # we got here with nothing to print to the screen
       auto_adjust_widths if width == :auto
@@ -41,6 +44,7 @@ module CommandLineReporter
       puts separator('last') if border
     end
 
+    # TODO: This doesn't appear to be used and if it is, it will not handle span appropriately
     def auto_adjust_widths
       column_widths = []
 
@@ -99,12 +103,16 @@ module CommandLineReporter
     end
 
     def use_positional_attrs(c, i)
-      # The positional attributes are always required to inheret to make sure the table
+      # The positional attributes are always required to inherit to make sure the table
       # displays properly
-      %w[align padding width].each do |attr|
+      %w[align padding].each do |attr|
         val = rows[0].columns[i].send(attr)
         c.send(attr + '=', val)
       end
+
+      # spanning columns overrides inheritance for width
+      val = rows[0].columns[i].width
+      c.width = val unless c.span > 1
     end
 
     def inherit_from

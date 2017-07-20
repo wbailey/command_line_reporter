@@ -4,7 +4,7 @@ module CommandLineReporter
   class Column
     include OptionsValidator
 
-    VALID_OPTIONS = %i[width padding align color bold underline reversed].freeze
+    VALID_OPTIONS = %i[width padding align color bold underline reversed span].freeze
     attr_accessor :text, :size, *VALID_OPTIONS
 
     def initialize(text = nil, options = {})
@@ -12,19 +12,11 @@ module CommandLineReporter
       assign_alignment_defaults(options)
       assign_color_defaults(options)
 
-      begin
-        width.positive?
-      rescue
-        raise ArgumentError
-      end
-
-      raise ArgumentError unless padding.to_s =~ /^\d+$/
-
       self.text = text.to_s
     end
 
     def size
-      width - 2 * padding
+      width - (2 * padding) + (3 * (span - 1))
     end
 
     def required_width
@@ -42,9 +34,16 @@ module CommandLineReporter
     private
 
     def assign_alignment_defaults(options)
+      self.span = options[:span] || 1
+
       self.width = options[:width] || 10
+      self.width = Integer(width)
+      self.width *= span
+
       self.align = options[:align] || 'left'
+
       self.padding = options[:padding] || 0
+      self.padding = Integer(padding)
     end
 
     def assign_color_defaults(options)

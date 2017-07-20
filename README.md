@@ -134,7 +134,7 @@ There are several methods the mixin provides that do not depend on the formatter
 
 ### License
 
-Copyright (c) 2011-2015 Wes Bailey
+Copyright (c) 2011-2017 Wes Bailey
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 associated documentation files (the "Software"), to deal in the Software without restriction,

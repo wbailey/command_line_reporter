@@ -32,8 +32,8 @@ module CommandLineReporter
           col = columns[mc]
           # Account for the fact that some columns will have more screen rows than their
           # counterparts in the row.  An example being:
-          # c1 = Column.new('x' * 50, :width => 10)
-          # c2 = Column.new('x' * 20, :width => 10)
+          # c1 = Column.new('x' * 50, width: 10)
+          # c2 = Column.new('x' * 20, width: 10)
           #
           # c1.screen_rows.size == 5
           # c2.screen_rows.size == 2
