@@ -103,16 +103,18 @@ module CommandLineReporter
     end
 
     def use_positional_attrs(c, i)
+      return if c.span > 1
+
       # The positional attributes are always required to inherit to make sure the table
       # displays properly
-      %w[align padding].each do |attr|
+      %w[align padding width].each do |attr|
         val = rows[0].columns[i].send(attr)
         c.send(attr + '=', val)
       end
 
       # spanning columns overrides inheritance for width
-      val = rows[0].columns[i].width
-      c.width = val unless c.span > 1
+      # val = rows[0].columns[i].width
+      # c.width = val unless c.span > 1
     end
 
     def inherit_from
