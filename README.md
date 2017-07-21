@@ -106,6 +106,7 @@ There are several methods the mixin provides that do not depend on the formatter
 * _column(string, hash)_
   * _text_ - String to display in the table cell
   * _options_ - The options to define the column
+    * :span - defines the number of columns to span across in the table
     * :width - defines the width of the column
     * :padding - The number of spaces to put on both the left and right of the text.
     * :align - Allowed values are left|right|center
@@ -118,7 +119,6 @@ There are several methods the mixin provides that do not depend on the formatter
 ### To Do
 
 * Add a formatter that supports html output
-* Add the ability for a column to span across others in a table
 
 ### Contributors
 
