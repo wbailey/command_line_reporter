@@ -112,6 +112,7 @@ There are several methods the mixin provides that do not depend on the formatter
     * :align - Allowed values are left|right|center
     * :color - The color to use for the terminal output i.e. 'red' or 'blue' or 'green'
     * :bold - true|false to boldface the font
+    * :wrap - character|word to break multi-line cells on character or word boundary.
 * _suppress_output_ - Suppresses output stream that goes to STDOUT
 * _capture_output_ - Captures all of the output stream to a string and restores output to STDOUT
 * _restore_output_ - Restores the output stream to STDOUT
