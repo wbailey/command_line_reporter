@@ -4,7 +4,7 @@ module CommandLineReporter
   class Column
     include OptionsValidator
 
-    VALID_OPTIONS = %i[width padding align color bold underline reversed span].freeze
+    VALID_OPTIONS = %i[width padding align color bold underline reversed span wrap].freeze
     attr_accessor :text, :size, *VALID_OPTIONS
 
     def initialize(text = nil, options = {})
@@ -13,6 +13,9 @@ module CommandLineReporter
       assign_color_defaults(options)
 
       self.text = text.to_s
+
+      self.wrap = (options.fetch(:wrap, :character).to_s)
+      raise(ArgumentError, ":wrap must be word or character (got #{options[:wrap].inspect})") unless %w(word character).include?(self.wrap)
     end
 
     def size
@@ -27,11 +30,31 @@ module CommandLineReporter
       if text.nil? || text.empty?
         [' ' * width]
       else
-        text.scan(/.{1,#{size}}/m).map { |s| to_cell(s) }
+        reformat_wrapped(text).map { |line| to_cell(line) }
       end
     end
 
     private
+
+    def reformat_wrapped(text)
+      lines = []
+      text.lines.each do |line|
+        line_words = (wrap == 'word') ? line.split(/\s+/) : [line]
+        line_words.each do |word|
+          current_line = lines.last
+          if current_line.nil? || current_line.size + word.size >= size
+            # word does not fit on current line. Add new line(s) handling the case where current
+            # word is longer than line width.
+            lines.concat(word.scan(/.{1,#{size}}/))
+          else
+            # Word fits on current line.
+            (current_line << ' ' << word).strip!
+          end
+        end
+        lines << ''
+      end
+      lines[0..-2]
+    end
 
     def assign_alignment_defaults(options)
       self.span = options[:span] || 1

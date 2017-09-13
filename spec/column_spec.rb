@@ -3,6 +3,10 @@ require 'spec_helper'
 describe CommandLineReporter::Column do
   subject { CommandLineReporter::Column }
 
+  def screen_rows(args = {})
+    described_class.new(text, {width: 5}.merge(args)).screen_rows
+  end
+
   context '#initialize' do
     it 'rejects invalid options' do
       expect do
@@ -287,36 +291,42 @@ describe CommandLineReporter::Column do
     context 'with wrapping' do
       context 'no padding' do
         context 'left justifies' do
-          let(:text) { 'x' * 25 }
-          let(:full_line) { 'x' * 10 }
-          let(:remainder) { 'x' * 5 }
-          let(:filler) { ' ' * 5 }
+          let(:text) { "one cooperative\n\nbag copy" }
 
-          it 'plain text' do
-            c = subject.new(text, width: 10)
-            expect(c.screen_rows).to eq([full_line, full_line, remainder + filler])
+          describe 'line-breaks' do
+            it 'do not break output' do
+              expect(screen_rows(width: 20)).to eq(['one cooperative     ', ' ' * 20, 'bag copy            '])
+            end
           end
 
-          it 'outputs red' do
-            c = subject.new(text, width: 10, color: 'red')
-            expect(c.screen_rows).to eq(
-              [
-                controls[:red] + full_line + controls[:clear],
-                controls[:red] + full_line + controls[:clear],
-                controls[:red] + remainder + filler + controls[:clear]
-              ]
-            )
+          describe 'wrap: word' do
+            it 'tries to break lines between words' do
+              expect(screen_rows(wrap: :word)).to eq(['one  ', 'coope', 'rativ', 'e    ', '     ', 'bag  ', 'copy '])
+            end
+          end
+
+          describe 'wrap: character' do
+            it 'uses "character"-based wrapping by default' do
+              expect(screen_rows).to eq(screen_rows(wrap: :character))
+            end
+
+            it 'ignores word-breaks' do
+              expect(screen_rows).to eq(['one c', 'ooper', 'ative', '     ', '     ', 'bag c', 'opy  '])
+            end
+          end
+
+          it 'outputs color' do
+            screen_rows(color: 'red').each do |row|
+              expect(row).to start_with(controls[:red])
+              expect(row).to end_with(controls[:clear])
+            end
           end
 
           it 'outputs bold' do
-            c = subject.new(text, width: 10, bold: true)
-            expect(c.screen_rows).to eq(
-              [
-                controls[:bold] + full_line + controls[:clear],
-                controls[:bold] + full_line + controls[:clear],
-                controls[:bold] + remainder + filler + controls[:clear]
-              ]
-            )
+            screen_rows(bold: true).each do |row|
+              expect(row).to start_with(controls[:bold])
+              expect(row).to end_with(controls[:clear])
+            end
           end
         end
 
