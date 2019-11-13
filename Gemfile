@@ -4,11 +4,8 @@ gem 'colored'
 gem 'gollum'
 gem 'redcarpet' #, '1.17.2'
 gem 'RedCloth'
-gem 'reek'
 
 group :test do
-  gem 'autotest'
-  gem 'autotest-standalone'
   gem 'rspec'
   gem 'simplecov'
 end
@@ -20,4 +17,5 @@ group :development do
   gem 'pry'
   gem 'rake'
   gem 'rubocop'
+  gem 'reek'
 end
