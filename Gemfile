@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 gem 'colored'
-gem 'gollum'
 gem 'redcarpet' #, '1.17.2'
 gem 'RedCloth'
 
