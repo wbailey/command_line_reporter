@@ -11,7 +11,7 @@ GEM
     faraday (1.2.0)
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
-    kramdown (2.3.0)
+    kramdown (2.3.1)
       rexml
     kwalify (0.7.2)
     method_source (1.0.0)
