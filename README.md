@@ -1,6 +1,9 @@
-## Command Line Reporter [![Build Status](https://travis-ci.org/wbailey/command_line_reporter.png)](https://travis-ci.org/wbailey/command_line_reporter)  [![Code Climate](https://codeclimate.com/github/wbailey/command_line_reporter.png)](https://codeclimate.com/github/wbailey/command_line_reporter) [![Gem Version](https://badge.fury.io/rb/command_line_reporter.png)](http://badge.fury.io/rb/command_line_reporter)
+# Command Line Reporter
+[![Build Status](https://travis-ci.org/wbailey/command_line_reporter.png)](https://travis-ci.org/wbailey/command_line_reporter)
+[![Code Climate](https://codeclimate.com/github/wbailey/command_line_reporter.png)](https://codeclimate.com/github/wbailey/command_line_reporter)
+[![Gem Version](https://badge.fury.io/rb/command_line_reporter.png)](https://badge.fury.io/rb/command_line_reporter)
 
-This gem provides a DSL that makes it easy to write reports of various types in ruby.  It eliminates
+This gem provides a DSL that makes it easy to write reports of various types in Ruby. It eliminates
 the need to litter your source with *puts* statements, instead providing a more readable, expressive
 interface to your application.  Some of the best features include:
 
@@ -10,18 +13,17 @@ interface to your application.  Some of the best features include:
 * Output suppression that makes it easy for your script to support a _quiet_ flag
 * Capture report output as a string
 
-The latest release, thanks to a contribution from [Josh Brown](https://github.com/tobijb), allows you
-to choose between UTF8 or ASCII for drawing tables.  By default it will use UTF8 if your system
-supports it. Here is an example of output you can generate easily with "the reporter":
+Tables can be rendered in Unicode or ASCII. The default is Unicode when available. Here is an
+example of output you can generate with "the reporter":
 
 ![Screenshot](http://i.imgur.com/5izCf.png)
 
 ### Installation
 
-It is up on rubygems.org so add it to your bundle in the Gemfile
+It is up on rubygems.org so add it to your bundle in the Gemfile:
 
 ```bash
-gem 'command_line_reporter', '>=3.0'
+gem 'command_line_reporter', '~> 5.0'
 ```
 
 or do it the old fashioned way:
@@ -41,6 +43,19 @@ class MyReport
   include CommandLineReporter
   ...
 end
+```
+
+### Requirements
+
+- Ruby 3.4 or newer (see `.ruby-version` for the repo target).
+
+### Development
+
+```bash
+bundle install
+bundle exec rspec
+bundle exec rubocop
+bundle exec reek
 ```
 
 ### [Wiki](https://github.com/wbailey/command_line_reporter/wiki)
@@ -121,17 +136,13 @@ There are several methods the mixin provides that do not depend on the formatter
 
 * Add a formatter that supports html output
 
-### Contributors
+### Contributing
 
-* [Dennis Ideler](https://github.com/dideler) submitted pull requests getting CLR up to date and
-  fixing issues with border colors
-* [Josh Brown](https://github.com/tobijb) added the ability to encode tables in either ascii or utf8
-* [Stefan Frank](https://github.com/mugwump) for raising the issue that he could not capture report
-  output in a variable as a string
-* [Mike Gunderloy](https://github.com/ffmike) for suggesting the need for suppressing output and
-  putting together a fantastic pull request and discussion
-* [Jason Rogers](https://github.com/jacaetevha) and [Peter Suschlik](https://github.com/splattael)
-  for their contributions as well on items I missed
+See `AGENTS.md` for contributor guidelines and `CONTRIBUTING.md` for how to get started.
+
+### Acknowledgements
+
+See `ACKNOWLEDGEMENTS.md` for contributor credits.
 
 ### License
 
