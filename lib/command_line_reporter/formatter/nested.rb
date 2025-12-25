@@ -1,5 +1,5 @@
 require 'singleton'
-require 'colored'
+require 'colorize'
 
 module CommandLineReporter
   class NestedFormatter
@@ -7,8 +7,10 @@ module CommandLineReporter
     include OptionsValidator
 
     VALID_OPTIONS = %i[message type complete indent_size color bold].freeze
-    attr_accessor :indent_size, :complete_string, :message_string, :color, :bold
+    attr_accessor :color, :bold
+    attr_writer :indent_size, :complete_string, :message_string
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def format(options, block)
       validate_options(options, *VALID_OPTIONS)
 
@@ -32,6 +34,7 @@ module CommandLineReporter
 
       indent_level :decr
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def message_string
       @message_string ||= 'working'

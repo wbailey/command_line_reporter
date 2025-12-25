@@ -1,8 +1,6 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'colored'
-gem 'redcarpet' #, '1.17.2'
-gem 'RedCloth'
+gemspec
 
 group :test do
   gem 'rspec'
@@ -10,11 +8,13 @@ group :test do
 end
 
 group :development do
-  gem 'byebug'
+  gem 'debug'
   gem 'faraday'
   gem 'kramdown'
   gem 'pry'
   gem 'rake'
-  gem 'rubocop'
+  gem 'redcarpet'
+  gem 'RedCloth'
   gem 'reek'
+  gem 'rubocop'
 end

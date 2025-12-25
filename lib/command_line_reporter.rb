@@ -37,13 +37,17 @@ module CommandLineReporter
   end
 
   def formatter=(type = 'nested')
-    return type if type.class != String
-    name = type.capitalize + 'Formatter'
+    unless type.is_a?(String)
+      @formatter = type
+      return
+    end
+
+    name = "#{type.capitalize}Formatter"
     klass = %W[CommandLineReporter #{name}].inject(Kernel) { |a, e| a.const_get(e) }
 
     # Each formatter is a singleton that responds to #instance
     @formatter = klass.instance
-  rescue
+  rescue StandardError
     raise ArgumentError, 'Invalid formatter specified'
   end
 
@@ -103,7 +107,7 @@ module CommandLineReporter
     options[:width] = default_options_width(options[:width])
     options[:bold] = default_options_bold(options[:bold])
 
-    raise Exception if text.size > options[:width]
+    raise ArgumentError, 'Text is wider than the available width' if text.size > options[:width]
 
     line = align_line(text, options)
 
@@ -137,7 +141,7 @@ module CommandLineReporter
     when 'right'
       text.rjust(options[:width])
     when 'center'
-      text.rjust((options[:width] - text.size) / 2 + text.size)
+      text.rjust(((options[:width] - text.size) / 2) + text.size)
     end
   end
 
@@ -170,6 +174,7 @@ module CommandLineReporter
 
   def print_header(type, options)
     return unless type == :header
+
     vertical_spacing(options[:lines])
     horizontal_rule(char: options[:rule], width: options[:width], color: options[:color], bold: options[:bold]) if options[:rule]
   end
@@ -181,6 +186,7 @@ module CommandLineReporter
 
   def print_footer(type, options)
     return unless type == :footer
+
     horizontal_rule(char: options[:rule], width: options[:width], color: options[:color], bold: options[:bold]) if options[:rule]
     vertical_spacing(options[:lines])
   end
@@ -225,3 +231,4 @@ module CommandLineReporter
     raise ArgumentError unless %i[left center right].include?(align.to_sym)
   end
 end
+# rubocop:enable Metrics/ModuleLength

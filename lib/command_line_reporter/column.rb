@@ -1,11 +1,11 @@
-require 'colored'
+require 'colorize'
 
 module CommandLineReporter
   class Column
     include OptionsValidator
 
     VALID_OPTIONS = %i[width padding align color bold underline reversed span wrap].freeze
-    attr_accessor :text, :size, *VALID_OPTIONS
+    attr_accessor :text, *VALID_OPTIONS
 
     def initialize(text = nil, options = {})
       validate_options(options, *VALID_OPTIONS)
@@ -14,8 +14,8 @@ module CommandLineReporter
 
       self.text = text.to_s
 
-      self.wrap = (options.fetch(:wrap, :character).to_s)
-      raise(ArgumentError, ":wrap must be word or character (got #{options[:wrap].inspect})") unless %w(word character).include?(self.wrap)
+      self.wrap = options.fetch(:wrap, :character).to_s
+      raise(ArgumentError, ":wrap must be word or character (got #{options[:wrap].inspect})") unless %w[word character].include?(wrap)
     end
 
     def size
@@ -23,7 +23,7 @@ module CommandLineReporter
     end
 
     def required_width
-      text.to_s.size + 2 * padding
+      text.to_s.size + (2 * padding)
     end
 
     def screen_rows
@@ -36,10 +36,11 @@ module CommandLineReporter
 
     private
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def reformat_wrapped(text)
       lines = []
       text.lines.each do |line|
-        line_words = (wrap == 'word') ? line.split(/\s+/) : [line]
+        line_words = wrap == 'word' ? line.split(/\s+/) : [line]
         line_words.each do |word|
           current_line = lines.last
           if current_line.nil? || current_line.size + word.size >= size
@@ -55,7 +56,9 @@ module CommandLineReporter
       end
       lines[0..-2]
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+    # rubocop:disable Metrics/AbcSize
     def assign_alignment_defaults(options)
       self.span = options[:span] || 1
 
@@ -68,6 +71,7 @@ module CommandLineReporter
       self.padding = options[:padding] || 0
       self.padding = Integer(padding)
     end
+    # rubocop:enable Metrics/AbcSize
 
     def assign_color_defaults(options)
       self.color = options[:color] || nil
@@ -80,7 +84,7 @@ module CommandLineReporter
       # NOTE: For making underline and reversed work Change so that based on the
       # unformatted text it determines how much spacing to add left and right
       # then colorize the cell text
-      cell =  str.empty? ? blank_cell : aligned_cell(str)
+      cell = str.empty? ? blank_cell : aligned_cell(str)
       padding_str = ' ' * padding
       padding_str + colorize(cell) + padding_str
     end
@@ -96,7 +100,7 @@ module CommandLineReporter
       when 'right'
         str.rjust(size)
       when 'center'
-        str.ljust((size - str.size) / 2.0 + str.size).rjust(size)
+        str.ljust(((size - str.size) / 2.0) + str.size).rjust(size)
       end
     end
 

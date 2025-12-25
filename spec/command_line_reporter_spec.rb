@@ -12,8 +12,8 @@ describe CommandLineReporter do
   let :controls do
     {
       clear: "\e[0m",
-      bold: "\e[1m",
-      red: "\e[31m"
+      bold: "\e[1;39;49m",
+      red: "\e[0;31;49m"
     }
   end
 
@@ -42,7 +42,7 @@ describe CommandLineReporter do
   describe '#report' do
     it 'uses the nested formatter as default' do
       capture_stdout do
-        subject.report {}
+        subject.report { :ok }
       end
 
       expect(subject.formatter.class).to eq(CommandLineReporter::NestedFormatter)
@@ -51,7 +51,7 @@ describe CommandLineReporter do
     it 'uses the progress formatter' do
       capture_stdout do
         subject.formatter = 'progress'
-        subject.report {}
+        subject.report { :ok }
       end
 
       expect(subject.formatter.class).to eq(CommandLineReporter::ProgressFormatter)
@@ -62,6 +62,7 @@ describe CommandLineReporter do
         subject.report do
           # rubocop:disable Style/RedundantSelf
           expect { self.some_method_that_does_not_exist }.to raise_error(NoMethodError)
+          # rubocop:enable Style/RedundantSelf
         end
       end
     end
@@ -151,35 +152,35 @@ describe CommandLineReporter do
       it 'left aligns title by default' do
         expect(subject).to receive(:puts).with(@title)
         expect(subject).to receive(:puts).with("\n")
-        subject.header(title: @title) {}
+        subject.header(title: @title)
       end
 
       it 'left aligns title' do
         expect(subject).to receive(:puts).with(@title)
         expect(subject).to receive(:puts).with("\n")
-        subject.header(title: @title, align: 'left') {}
+        subject.header(title: @title, align: 'left')
       end
 
       it 'right aligns title using default width' do
-        expect(subject).to receive(:puts).with(' ' * 90 + @title)
+        expect(subject).to receive(:puts).with((' ' * 90) + @title)
         expect(subject).to receive(:puts).with("\n")
         subject.header(title: @title, align: 'right')
       end
 
       it 'right aligns title using specified width' do
-        expect(subject).to receive(:puts).with(' ' * 40 + @title)
+        expect(subject).to receive(:puts).with((' ' * 40) + @title)
         expect(subject).to receive(:puts).with("\n")
         subject.header(title: @title, align: 'right', width: 50)
       end
 
       it 'center aligns title using default width' do
-        expect(subject).to receive(:puts).with(' ' * 45 + @title)
+        expect(subject).to receive(:puts).with((' ' * 45) + @title)
         expect(subject).to receive(:puts).with("\n")
         subject.header(title: @title, align: 'center')
       end
 
       it 'center aligns title using specified width' do
-        expect(subject).to receive(:puts).with(' ' * 35 + @title)
+        expect(subject).to receive(:puts).with((' ' * 35) + @title)
         expect(subject).to receive(:puts).with("\n")
         subject.header(title: @title, align: 'center', width: 80)
       end
@@ -240,14 +241,14 @@ describe CommandLineReporter do
 
     context 'color' do
       it 'single red line' do
-        expect(subject).to receive(:puts).with(controls[:red] + 'Report' + controls[:clear])
+        expect(subject).to receive(:puts).with("#{controls[:red]}Report#{controls[:clear]}")
         expect(subject).to receive(:puts)
         subject.header(color: 'red')
       end
 
       it 'multimple red lines' do
-        expect(subject).to receive(:puts).with(controls[:red] + 'Report' + controls[:clear])
-        expect(subject).to receive(:puts).with(controls[:red] + linechar * 100 + controls[:clear])
+        expect(subject).to receive(:puts).with("#{controls[:red]}Report#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:red]}#{linechar * 100}#{controls[:clear]}")
         expect(subject).to receive(:puts)
         subject.header(color: 'red', rule: true)
       end
@@ -255,14 +256,14 @@ describe CommandLineReporter do
 
     context 'bold' do
       it 'single line' do
-        expect(subject).to receive(:puts).with(controls[:bold] + 'Report' + controls[:clear])
+        expect(subject).to receive(:puts).with("#{controls[:bold]}Report#{controls[:clear]}")
         expect(subject).to receive(:puts)
         subject.header(bold: true)
       end
 
       it 'multimple lines' do
-        expect(subject).to receive(:puts).with(controls[:bold] + 'Report' + controls[:clear])
-        expect(subject).to receive(:puts).with(controls[:bold] + linechar * 100 + controls[:clear])
+        expect(subject).to receive(:puts).with("#{controls[:bold]}Report#{controls[:clear]}")
+        expect(subject).to receive(:puts).with("#{controls[:bold]}#{linechar * 100}#{controls[:clear]}")
         expect(subject).to receive(:puts)
         subject.header(bold: true, rule: true)
       end
@@ -310,12 +311,12 @@ describe CommandLineReporter do
     end
 
     it 'outputs color' do
-      expect(subject).to receive(:puts).with(controls[:red] + linechar * 100 + controls[:clear])
+      expect(subject).to receive(:puts).with("#{controls[:red]}#{linechar * 100}#{controls[:clear]}")
       subject.horizontal_rule(color: 'red')
     end
 
     it 'outputs bold' do
-      expect(subject).to receive(:puts).with(controls[:bold] + linechar * 100 + controls[:clear])
+      expect(subject).to receive(:puts).with("#{controls[:bold]}#{linechar * 100}#{controls[:clear]}")
       subject.horizontal_rule(bold: true)
     end
   end
@@ -406,12 +407,12 @@ describe CommandLineReporter do
     end
 
     it 'outputs color' do
-      expect(subject).to receive(:puts).with(/^\e\[31m#{timestamp_regex}\e\[0m/)
+      expect(subject).to receive(:puts).with(/^\e\[0;31;49m#{timestamp_regex}\e\[0m/)
       subject.datetime(color: 'red')
     end
 
     it 'outputs bold' do
-      expect(subject).to receive(:puts).with(/^\e\[1m#{timestamp_regex}\e\[0m/)
+      expect(subject).to receive(:puts).with(/^\e\[1;39;49m#{timestamp_regex}\e\[0m/)
       subject.datetime(bold: true)
     end
   end
@@ -446,12 +447,12 @@ describe CommandLineReporter do
     end
 
     it 'outputs color' do
-      expect(subject).to receive(:puts).with(controls[:red] + 'x' * 10 + controls[:clear])
+      expect(subject).to receive(:puts).with("#{controls[:red]}#{'x' * 10}#{controls[:clear]}")
       subject.aligned('x' * 10, color: 'red')
     end
 
     it 'outputs bold' do
-      expect(subject).to receive(:puts).with(controls[:bold] + 'x' * 10 + controls[:clear])
+      expect(subject).to receive(:puts).with("#{controls[:bold]}#{'x' * 10}#{controls[:clear]}")
       subject.aligned('x' * 10, bold: true)
     end
   end
@@ -524,25 +525,25 @@ describe CommandLineReporter do
 
       it 'right aligns the title' do
         expect(subject).to receive(:puts).with("\n")
-        expect(subject).to receive(:puts).with(' ' * 90 + @title)
+        expect(subject).to receive(:puts).with((' ' * 90) + @title)
         subject.footer(title: @title, align: 'right')
       end
 
       it 'right aligns the title using width' do
         expect(subject).to receive(:puts).with("\n")
-        expect(subject).to receive(:puts).with(' ' * 40 + @title)
+        expect(subject).to receive(:puts).with((' ' * 40) + @title)
         subject.footer(title: @title, align: 'right', width: 50)
       end
 
       it 'center aligns the title' do
         expect(subject).to receive(:puts).with("\n")
-        expect(subject).to receive(:puts).with(' ' * 45 + @title)
+        expect(subject).to receive(:puts).with((' ' * 45) + @title)
         subject.footer(title: @title, align: 'center')
       end
 
       it 'center aligns the title using width' do
         expect(subject).to receive(:puts).with("\n")
-        expect(subject).to receive(:puts).with(' ' * 35 + @title)
+        expect(subject).to receive(:puts).with((' ' * 35) + @title)
         subject.footer(title: @title, align: 'center', width: 80)
       end
     end
@@ -602,15 +603,15 @@ describe CommandLineReporter do
 
     it 'outputs red' do
       expect(subject).to receive(:puts).with("\n")
-      expect(subject).to receive(:puts).with(controls[:red] + 'title' + controls[:clear])
-      expect(subject).to receive(:puts).with(/^\e\[31m#{timestamp_regex}\e\[0m/)
+      expect(subject).to receive(:puts).with("#{controls[:red]}title#{controls[:clear]}")
+      expect(subject).to receive(:puts).with(/^\e\[0;31;49m#{timestamp_regex}\e\[0m/)
       subject.footer(title: 'title', timestamp: true, color: 'red')
     end
 
     it 'outputs bold' do
       expect(subject).to receive(:puts).with("\n")
-      expect(subject).to receive(:puts).with(controls[:bold] + 'title' + controls[:clear])
-      expect(subject).to receive(:puts).with(/^\e\[1m#{timestamp_regex}\e\[0m/)
+      expect(subject).to receive(:puts).with("#{controls[:bold]}title#{controls[:clear]}")
+      expect(subject).to receive(:puts).with(/^\e\[1;39;49m#{timestamp_regex}\e\[0m/)
       subject.footer(title: 'title', timestamp: true, bold: true)
     end
   end
@@ -619,7 +620,7 @@ describe CommandLineReporter do
     it 'instantiates the table class' do
       allow(subject).to receive(:puts)
       expect(subject).to receive(:table).once
-      subject.table {}
+      subject.table { :ok }
     end
 
     it 'requires a row to be defined' do
@@ -630,14 +631,14 @@ describe CommandLineReporter do
 
     it 'accepts valid options' do
       expect do
-        subject.table(border: true) {}
+        subject.table(border: true) { :ok }
       end.to_not raise_error Exception
     end
 
     it 'rejects invalid options' do
       expect do
         allow(subject).to receive(:puts)
-        subject.table(asdf: '100') {}
+        subject.table(asdf: '100') { :ok }
       end.to raise_error ArgumentError
     end
   end
@@ -648,8 +649,7 @@ describe CommandLineReporter do
       allow(subject).to receive(:puts)
 
       subject.table do
-        subject.row do
-        end
+        subject.row { :ok }
       end
     end
   end
