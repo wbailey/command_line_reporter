@@ -1,5 +1,4 @@
 # Command Line Reporter
-[![Build Status](https://travis-ci.org/wbailey/command_line_reporter.png)](https://travis-ci.org/wbailey/command_line_reporter)
 [![Gem Version](https://badge.fury.io/rb/command_line_reporter.png)](https://badge.fury.io/rb/command_line_reporter)
 
 This gem provides a DSL that makes it easy to write reports of various types in Ruby. It eliminates
