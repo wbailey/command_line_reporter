@@ -13,8 +13,8 @@ describe CommandLineReporter::ProgressFormatter do
   let :controls do
     {
       clear: "\e[0m",
-      bold: "\e[1m",
-      red: "\e[31m"
+      bold: "\e[1;39;49m",
+      red: "\e[0;31;49m"
     }
   end
 

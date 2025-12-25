@@ -22,6 +22,7 @@ module CommandLineReporter
       columns << column
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def output
       screen_count.times do |sr|
         border_char = use_utf8? ? "\u2503" : '|'
@@ -50,7 +51,7 @@ module CommandLineReporter
           # | xxxxxxxxxxx |            | (4)
           # +-------------+------------+
           if col.screen_rows[sr].nil?
-            line << ' ' * col.width << ' '
+            line << (' ' * col.width) << ' '
           else
             line << columns[mc].screen_rows[sr] << ' '
           end
@@ -64,11 +65,12 @@ module CommandLineReporter
         puts line
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     private
 
     def screen_count
-      @sc ||= columns.inject(0) { |a, e| e.screen_rows.size > a ? e.screen_rows.size : a }
+      @screen_count ||= columns.map { |column| column.screen_rows.size }.max.to_i
     end
 
     def use_utf8?

@@ -29,9 +29,9 @@ module CommandLineReporter
 
     # rubocop:disable Metrics/AbcSize
     # rubocop:disable Metrics/CyclomaticComplexity
-    # rubocop:disable Metrics/MethodLength
     def output
       return if rows.empty? # we got here with nothing to print to the screen
+
       auto_adjust_widths if width == :auto
 
       puts separator('first') if border
@@ -43,23 +43,28 @@ module CommandLineReporter
 
       puts separator('last') if border
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
 
     # TODO: This doesn't appear to be used and if it is, it will not handle span appropriately
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def auto_adjust_widths
       column_widths = []
 
       rows.each do |row|
         row.columns.each_with_index do |col, i|
-          column_widths[i] = [col.required_width, (column_widths[i] || 0)].max
+          column_widths[i] = [col.required_width, column_widths[i] || 0].max
         end
       end
 
+      # rubocop:disable Style/CombinableLoops
       rows.each do |row|
         row.columns.each_with_index do |col, i|
           col.width = column_widths[i]
         end
       end
+      # rubocop:enable Style/CombinableLoops
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     private
 
@@ -82,34 +87,32 @@ module CommandLineReporter
     def utf8_separator(type)
       bar = "\u2501"
 
-      left, center, right = case type
-                            when 'first'
-                              ["\u250F", "\u2533", "\u2513"]
-                            when 'middle'
-                              ["\u2523", "\u254A", "\u252B"]
-                            when 'last'
-                              ["\u2517", "\u253B", "\u251B"]
-                            end
+      parts = {
+        'first' => ["\u250F", "\u2533", "\u2513"],
+        'middle' => ["\u2523", "\u254A", "\u252B"],
+        'last' => ["\u2517", "\u253B", "\u251B"]
+      }
+      left, center, right = parts.fetch(type)
 
       [left, center, right, bar]
     end
 
     def inherit_column_attrs(row)
-      row.columns.each_with_index do |c, i|
-        use_positional_attrs(c, i)
-        use_color(row, c, i)
-        use_bold(row, c, i)
+      row.columns.each_with_index do |column, index|
+        use_positional_attrs(column, index)
+        use_color(row, column, index)
+        use_bold(row, column, index)
       end
     end
 
-    def use_positional_attrs(c, i)
-      return if c.span > 1
+    def use_positional_attrs(column, index)
+      return if column.span > 1
 
       # The positional attributes are always required to inherit to make sure the table
       # displays properly
       %w[align padding width].each do |attr|
-        val = rows[0].columns[i].send(attr)
-        c.send(attr + '=', val)
+        val = rows[0].columns[index].send(attr)
+        column.public_send("#{attr}=", val)
       end
 
       # spanning columns overrides inheritance for width
@@ -121,21 +124,21 @@ module CommandLineReporter
       rows[0].header ? 1 : 0
     end
 
-    def use_color(row, c, i)
-      if c.color
+    def use_color(row, column, index)
+      if column.color
         # keep default
       elsif row.color
-        c.color = row.color
+        column.color = row.color
       elsif inherit_from != 1
-        c.color = rows[inherit_from].columns[i].color
+        column.color = rows[inherit_from].columns[index].color
       end
     end
 
-    def use_bold(row, c, i)
+    def use_bold(row, column, index)
       if row.bold
-        c.bold = row.bold
+        column.bold = row.bold
       elsif inherit_from != 1
-        c.bold = rows[inherit_from].columns[i].bold
+        column.bold = rows[inherit_from].columns[index].bold
       end
     end
   end

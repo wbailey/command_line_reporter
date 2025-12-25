@@ -1,10 +1,14 @@
-Metrics/LineLength:
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+
+Layout/LineLength:
   Enabled: false
 
 Style/ParallelAssignment:
   Enabled: false
 
-Documentation:
+Style/Documentation:
   Enabled: false
 
 Style/FrozenStringLiteralComment:

@@ -1,5 +1,5 @@
 require 'singleton'
-require 'colored'
+require 'colorize'
 
 module CommandLineReporter
   class ProgressFormatter
@@ -7,7 +7,7 @@ module CommandLineReporter
     include OptionsValidator
 
     VALID_OPTIONS = %i[indicator color bold].freeze
-    attr_accessor *VALID_OPTIONS
+    attr_accessor(*VALID_OPTIONS)
 
     def format(options, block)
       validate_options(options, *VALID_OPTIONS)

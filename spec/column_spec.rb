@@ -4,7 +4,7 @@ describe CommandLineReporter::Column do
   subject { CommandLineReporter::Column }
 
   def screen_rows(args = {})
-    described_class.new(text, {width: 5}.merge(args)).screen_rows
+    described_class.new(text, { width: 5 }.merge(args)).screen_rows
   end
 
   context '#initialize' do
@@ -144,8 +144,8 @@ describe CommandLineReporter::Column do
     let :controls do
       {
         clear: "\e[0m",
-        bold: "\e[1m",
-        red: "\e[31m"
+        bold: "\e[1;39;49m",
+        red: "\e[0;31;49m"
       }
     end
 
@@ -373,7 +373,7 @@ describe CommandLineReporter::Column do
 
           it 'plain text' do
             c = subject.new(text, align: 'center', width: 10)
-            expect(c.screen_rows).to eq([full_line, full_line, ' ' * 3 + remainder + right_filler])
+            expect(c.screen_rows).to eq([full_line, full_line, (' ' * 3) + remainder + right_filler])
           end
 
           it 'outputs red' do

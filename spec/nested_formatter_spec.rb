@@ -6,8 +6,8 @@ describe CommandLineReporter::NestedFormatter do
   let(:controls) do
     {
       clear: "\e[0m",
-      bold: "\e[1m",
-      red: "\e[31m"
+      bold: "\e[1;39;49m",
+      red: "\e[0;31;49m"
     }
   end
 
@@ -56,8 +56,7 @@ describe CommandLineReporter::NestedFormatter do
         expect(subject).to receive(:puts).with('complete')
 
         expect do
-          subject.format({ message: 'test' }, -> {}) do
-          end
+          subject.format({ message: 'test' }, -> {})
         end.not_to raise_exception
       end
     end
